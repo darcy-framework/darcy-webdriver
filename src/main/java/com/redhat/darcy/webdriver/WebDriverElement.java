@@ -17,31 +17,27 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsElement;
 
-import com.redhat.uiautotool.ui.elements.Link;
+import com.redhat.darcy.ui.elements.Element;
 
-public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(WebElement source) {
-        super(source);
-    }
-
-    @Override
-    public void click() {
-        me.click();
+public class WebDriverElement implements Element, WrapsElement {
+    protected final WebElement me;
+    
+    public WebDriverElement(WebElement source) {
+        this.me = source;
     }
     
     @Override
-    public String getLinkText() {
-        return me.getText();
+    public boolean isDisplayed() {
+        return me.isDisplayed();
     }
 
-    public static class WebDriverLinkFactory implements WebDriverElementFactory<Link> {
-        @Override
-        public Link element(WebElement source) {
-            return new WebDriverLink(source);
-        }
+    @Override
+    public WebElement getWrappedElement() {
+        return me;
     }
 }

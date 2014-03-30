@@ -17,17 +17,17 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.redhat.uiautotool.ui.FindsByChained;
-import com.redhat.uiautotool.ui.FindsById;
-import com.redhat.uiautotool.ui.ViewContext;
-import com.redhat.uiautotool.ui.elements.Element;
-import com.redhat.uiautotool.web.BrowserContext;
+import com.redhat.darcy.ui.FindsByChained;
+import com.redhat.darcy.ui.FindsById;
+import com.redhat.darcy.ui.ViewContext;
+import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.web.BrowserContext;
 
 public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
 
@@ -36,7 +36,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public <T extends Element> T findElement(Class<T> type, com.redhat.uiautotool.ui.By locator) {
+    public <T extends Element> T findElement(Class<T> type, com.redhat.darcy.ui.By locator) {
         return locator.find(type, this);
     }
 
@@ -48,7 +48,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public ViewContext findContext(com.redhat.uiautotool.ui.By locator) {
+    public ViewContext findContext(com.redhat.darcy.ui.By locator) {
         return ((WebDriverBrowserManager) manager).findContext(locator);
     }
     
@@ -57,7 +57,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public <T> T findByChained(Class<T> type, com.redhat.uiautotool.ui.By... bys) {
+    public <T> T findByChained(Class<T> type, com.redhat.darcy.ui.By... bys) {
         // TODO Implement this: it is necessary for NestedViewContext to work
         // Also need to make sure if one of the elements is a frame, that searching within that
         // element switches to the frame in the driver

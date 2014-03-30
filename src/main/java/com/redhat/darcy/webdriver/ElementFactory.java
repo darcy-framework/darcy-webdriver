@@ -17,27 +17,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsElement;
+import com.redhat.darcy.ui.elements.Element;
 
-import com.redhat.uiautotool.ui.elements.Element;
-
-public class WebDriverElement implements Element, WrapsElement {
-    protected final WebElement me;
-    
-    public WebDriverElement(WebElement source) {
-        this.me = source;
-    }
-    
-    @Override
-    public boolean isDisplayed() {
-        return me.isDisplayed();
-    }
-
-    @Override
-    public WebElement getWrappedElement() {
-        return me;
-    }
+public interface ElementFactory<R, T extends Element> {
+    public T element(R source);
 }

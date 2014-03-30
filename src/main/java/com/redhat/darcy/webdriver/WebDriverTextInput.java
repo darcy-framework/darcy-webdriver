@@ -17,16 +17,34 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import org.openqa.selenium.WebElement;
 
-import com.redhat.uiautotool.ui.elements.Button;
+import com.redhat.darcy.ui.elements.TextInput;
 
-public class WebDriverButton extends WebDriverElement implements Button {
-    
-    public WebDriverButton(WebElement source) {
+public class WebDriverTextInput extends WebDriverElement implements TextInput {
+    public WebDriverTextInput(WebElement source) {
         super(source);
+    }
+    
+    @Override
+    public void clearAndType(String stringToType) {
+        click();
+        me.clear();
+        me.sendKeys(stringToType);
+        // TODO: send TAB key to trigger blur events
+    }
+    
+    @Override
+    public void sendKeys(CharSequence... keysToSend) {
+        click();
+        me.sendKeys(keysToSend);
+    }
+    
+    @Override
+    public String readValue() {
+        return me.getAttribute("value");
     }
     
     @Override
@@ -34,10 +52,10 @@ public class WebDriverButton extends WebDriverElement implements Button {
         me.click();
     }
     
-    public static class WebDriverButtonFactory implements WebDriverElementFactory<Button> {
+    public static class WebDriverTextInputFactory implements WebDriverElementFactory<TextInput> {
         @Override
-        public Button element(WebElement source) {
-            return new WebDriverButton(source);
+        public TextInput element(WebElement source) {
+            return new WebDriverTextInput(source);
         }
     }
 }

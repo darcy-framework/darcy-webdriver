@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,8 +26,8 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.redhat.uiautotool.web.Browser;
-import com.redhat.uiautotool.web.BrowserFactory;
+import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.web.BrowserFactory;
 
 public class RemoteBrowserFactory implements BrowserFactory {
     private DesiredCapabilities desired;

@@ -17,17 +17,17 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
 
-import com.redhat.uiautotool.ui.elements.Button;
-import com.redhat.uiautotool.ui.elements.Element;
-import com.redhat.uiautotool.ui.elements.Link;
-import com.redhat.uiautotool.ui.elements.TextInput;
+import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.elements.Link;
+import com.redhat.darcy.ui.elements.TextInput;
 
 public class WebDriverElementFactoryMap {
     private static final Map<Class<? extends Element>, WebDriverElementFactory<? extends Element>> classMap = 

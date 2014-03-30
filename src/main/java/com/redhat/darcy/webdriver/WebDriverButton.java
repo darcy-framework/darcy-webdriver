@@ -17,13 +17,27 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import org.openqa.selenium.WebElement;
 
-import com.redhat.uiautotool.webdriver.ElementFactory;
-import com.redhat.uiautotool.ui.elements.Element;
+import com.redhat.darcy.ui.elements.Button;
 
-public interface WebDriverElementFactory<T extends Element> extends ElementFactory<WebElement, T> {
+public class WebDriverButton extends WebDriverElement implements Button {
     
+    public WebDriverButton(WebElement source) {
+        super(source);
+    }
+    
+    @Override
+    public void click() {
+        me.click();
+    }
+    
+    public static class WebDriverButtonFactory implements WebDriverElementFactory<Button> {
+        @Override
+        public Button element(WebElement source) {
+            return new WebDriverButton(source);
+        }
+    }
 }

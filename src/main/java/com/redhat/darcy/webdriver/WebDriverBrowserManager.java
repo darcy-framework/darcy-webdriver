@@ -17,19 +17,19 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.uiautotool.webdriver;
+package com.redhat.darcy.webdriver;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 
-import com.redhat.uiautotool.ui.By;
-import com.redhat.uiautotool.ui.FindsByName;
-import com.redhat.uiautotool.ui.ParentContext;
-import com.redhat.uiautotool.ui.ViewContext;
-import com.redhat.uiautotool.web.Browser;
-import com.redhat.uiautotool.web.BrowserManager;
+import com.redhat.darcy.ui.By;
+import com.redhat.darcy.ui.FindsByName;
+import com.redhat.darcy.ui.ParentContext;
+import com.redhat.darcy.ui.ViewContext;
+import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.web.BrowserManager;
 
 public class WebDriverBrowserManager implements BrowserManager, ParentContext, FindsByName {
     private WebDriver driver;
