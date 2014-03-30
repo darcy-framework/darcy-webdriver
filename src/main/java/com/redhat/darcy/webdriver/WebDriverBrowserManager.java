@@ -26,6 +26,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.redhat.darcy.ui.By;
 import com.redhat.darcy.ui.FindsByName;
+import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ParentContext;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.web.Browser;
@@ -70,7 +71,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
     }
 
     @Override
-    public ViewContext findContext(By locator) {
+    public ViewContext findContext(Locator locator) {
         return locator.find(WebDriverBrowserContext.class, this);
     }
 

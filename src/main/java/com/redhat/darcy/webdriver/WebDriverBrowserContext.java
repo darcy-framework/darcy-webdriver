@@ -25,6 +25,7 @@ import org.openqa.selenium.WebElement;
 
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
+import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.web.BrowserContext;
@@ -36,7 +37,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public <T extends Element> T findElement(Class<T> type, com.redhat.darcy.ui.By locator) {
+    public <T extends Element> T findElement(Class<T> type, Locator locator) {
         return locator.find(type, this);
     }
 
@@ -48,7 +49,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public ViewContext findContext(com.redhat.darcy.ui.By locator) {
+    public ViewContext findContext(Locator locator) {
         return ((WebDriverBrowserManager) manager).findContext(locator);
     }
     
@@ -57,7 +58,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     }
 
     @Override
-    public <T> T findByChained(Class<T> type, com.redhat.darcy.ui.By... bys) {
+    public <T> T findByChained(Class<T> type, Locator... bys) {
         // TODO Implement this: it is necessary for NestedViewContext to work
         // Also need to make sure if one of the elements is a frame, that searching within that
         // element switches to the frame in the driver
