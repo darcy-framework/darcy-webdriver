@@ -19,10 +19,7 @@
 
 package com.redhat.darcy.webdriver;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.Locator;
@@ -30,38 +27,74 @@ import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.web.BrowserContext;
 
-public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
+    private final WebDriverBrowserManager manager;
+    
     public WebDriverBrowserContext(WebDriverBrowserManager manager) {
         super(manager);
+        
+        this.manager = manager;
     }
 
     @Override
-    public <T extends Element> T findElement(Class<T> type, Locator locator) {
-        return locator.find(type, this);
+    public ViewContext findContext(Locator locator) {
+        return manager.findContext(locator);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findById(Class<T> type, String id) {
-        WebElement source = By.id(id).findElement(getDriver());
-        return (T) WebDriverElementFactoryMap.get((Class<? extends Element>)type, source);
+        WebElement source = getDriver().findElement(By.id(id));
+        return (T) WebDriverElementFactoryMap.get((Class<? extends Element>) type, source);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public ViewContext findContext(Locator locator) {
-        return ((WebDriverBrowserManager) manager).findContext(locator);
+    public <T> List<T> findAllById(Class<T> type, String id) {
+        List<WebElement> sources = getDriver().findElements(By.id(id));
+        List<T> impls = new ArrayList<>(sources.size());
+        
+        for (WebElement source : sources) {
+            impls.add((T) WebDriverElementFactoryMap.get((Class<? extends Element>) type, source));
+        }
+        
+        return impls;
+    }
+    
+    @Override
+    public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
+        if (locators.length == 0) {
+            return new ArrayList<T>(0);
+        }
+        
+        List<T> elements = null;
+        List<T> subElements = new LinkedList<>();
+        
+        for (Locator locator : locators) {
+            if (elements == null) {
+                elements = locator.findAll(type, this);
+            } else {
+                for (T element : elements) {
+                    subElements.addAll(locator.findAll(type, (ElementContext) element));
+                }
+                
+                elements = subElements;
+                subElements.clear();
+            }
+        }
+        
+        return elements;
     }
     
     private WebDriver getDriver() {
-        return ((WebDriverBrowserManager) manager).getDriver(this);
-    }
-
-    @Override
-    public <T> T findByChained(Class<T> type, Locator... bys) {
-        // TODO Implement this: it is necessary for NestedViewContext to work
-        // Also need to make sure if one of the elements is a frame, that searching within that
-        // element switches to the frame in the driver
-        return null;
+        return manager.getDriver(this);
     }
 }

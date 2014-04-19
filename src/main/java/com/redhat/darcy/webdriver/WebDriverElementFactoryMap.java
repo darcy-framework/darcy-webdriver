@@ -28,6 +28,9 @@ import com.redhat.darcy.ui.elements.Button;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.ui.elements.Link;
 import com.redhat.darcy.ui.elements.TextInput;
+import com.redhat.darcy.webdriver.elements.WebDriverButton;
+import com.redhat.darcy.webdriver.elements.WebDriverLink;
+import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
 
 public class WebDriverElementFactoryMap {
     private static final Map<Class<? extends Element>, WebDriverElementFactory<? extends Element>> classMap = 

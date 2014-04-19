@@ -17,14 +17,21 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
+import com.redhat.darcy.ui.ElementContext;
+import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.webdriver.WebDriverElementFactoryMap;
 
-public class WebDriverElement implements Element, WrapsElement {
+public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById {
     protected final WebElement me;
     
     public WebDriverElement(WebElement source) {
@@ -39,5 +46,18 @@ public class WebDriverElement implements Element, WrapsElement {
     @Override
     public WebElement getWrappedElement() {
         return me;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllById(Class<T> type, String id) {
+        List<WebElement> sources = By.id(id).findElements(me);
+        List<T> impls = new ArrayList<>(sources.size());
+        
+        for (WebElement source : sources) {
+            impls.add((T) WebDriverElementFactoryMap.get((Class<? extends Element>)type, source));
+        }
+        
+        return impls;
     }
 }

@@ -17,11 +17,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.elements;
 
 import org.openqa.selenium.WebElement;
 
 import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.webdriver.WebDriverElementFactory;
 
 public class WebDriverButton extends WebDriverElement implements Button {
     

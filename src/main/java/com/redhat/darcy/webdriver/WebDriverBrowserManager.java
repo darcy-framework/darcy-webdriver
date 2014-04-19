@@ -19,18 +19,20 @@
 
 package com.redhat.darcy.webdriver;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.openqa.selenium.WebDriver;
-
-import com.redhat.darcy.ui.By;
 import com.redhat.darcy.ui.FindsByName;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ParentContext;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.BrowserManager;
+
+import org.openqa.selenium.WebDriver;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class WebDriverBrowserManager implements BrowserManager, ParentContext, FindsByName {
     private WebDriver driver;
@@ -83,6 +85,20 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
         
         return (T) getBrowserForHandle(driver.getWindowHandle());
     }
+
+    @Override
+    public <T> List<T> findAllByName(Class<T> type, String name) {
+        Set<String> handles = driver.getWindowHandles();
+        List<T> contexts = new LinkedList<>();
+        
+        for (String handle : handles) {
+            if (driver.switchTo().window(handle).getTitle().equals(name)) {
+                contexts.add((T) getBrowserForHandle(handle));
+            }
+        }
+        
+        return contexts;
+    }
     
     public WebDriverBrowserContext getBrowserForHandle(String handle) {
         WebDriverBrowserContext browser = new WebDriverBrowserContext(this);
@@ -105,6 +121,8 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             throw new IllegalStateException();
         }
         
+        // TODO: Keep track of current handle so we can make this check without calling out to the
+        // driver, which for remote drivers would be a little much
         if (!handle.equals(driver.getWindowHandle())) {
             driver.switchTo().window(handle);
         }
