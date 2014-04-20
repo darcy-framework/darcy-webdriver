@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import org.openqa.selenium.WebElement;
-
 import com.redhat.darcy.ui.elements.Button;
-import com.redhat.darcy.webdriver.WebDriverElementFactory;
+
+import org.openqa.selenium.WebElement;
 
 public class WebDriverButton extends WebDriverElement implements Button {
     
@@ -33,12 +32,5 @@ public class WebDriverButton extends WebDriverElement implements Button {
     @Override
     public void click() {
         me.click();
-    }
-    
-    public static class WebDriverButtonFactory implements WebDriverElementFactory<Button> {
-        @Override
-        public Button element(WebElement source) {
-            return new WebDriverButton(source);
-        }
     }
 }

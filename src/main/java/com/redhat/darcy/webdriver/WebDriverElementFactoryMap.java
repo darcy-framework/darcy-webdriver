@@ -37,9 +37,9 @@ public class WebDriverElementFactoryMap {
             new HashMap<>();
     
     static {
-        registerFactory(TextInput.class, new WebDriverTextInput.WebDriverTextInputFactory());
-        registerFactory(Button.class, new WebDriverButton.WebDriverButtonFactory());
-        registerFactory(Link.class, new WebDriverLink.WebDriverLinkFactory());
+        registerFactory(TextInput.class, WebDriverTextInput::new);
+        registerFactory(Button.class, WebDriverButton::new);
+        registerFactory(Link.class, WebDriverLink::new);
     }
     
     @SuppressWarnings("unchecked")

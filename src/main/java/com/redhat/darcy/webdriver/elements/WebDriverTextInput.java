@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import org.openqa.selenium.WebElement;
-
 import com.redhat.darcy.ui.elements.TextInput;
-import com.redhat.darcy.webdriver.WebDriverElementFactory;
+
+import org.openqa.selenium.WebElement;
 
 public class WebDriverTextInput extends WebDriverElement implements TextInput {
     public WebDriverTextInput(WebElement source) {
@@ -51,12 +50,5 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     @Override
     public void click() {
         me.click();
-    }
-    
-    public static class WebDriverTextInputFactory implements WebDriverElementFactory<TextInput> {
-        @Override
-        public TextInput element(WebElement source) {
-            return new WebDriverTextInput(source);
-        }
     }
 }

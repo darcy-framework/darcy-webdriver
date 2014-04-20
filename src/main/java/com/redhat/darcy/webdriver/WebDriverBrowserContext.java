@@ -38,7 +38,7 @@ import java.util.List;
 public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
     private final WebDriverBrowserManager manager;
     
-    public WebDriverBrowserContext(WebDriverBrowserManager manager) {
+    WebDriverBrowserContext(WebDriverBrowserManager manager) {
         super(manager);
         
         this.manager = manager;

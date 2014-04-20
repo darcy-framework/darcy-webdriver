@@ -19,11 +19,10 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.ui.elements.Element;
+
 import org.openqa.selenium.WebElement;
 
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.ElementFactory;
-
-public interface WebDriverElementFactory<T extends Element> extends ElementFactory<WebElement, T> {
-    
+public interface WebDriverElementFactory<T extends Element> {
+    T element(WebElement source);
 }

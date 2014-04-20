@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import org.openqa.selenium.WebElement;
-
 import com.redhat.darcy.ui.elements.Link;
-import com.redhat.darcy.webdriver.WebDriverElementFactory;
+
+import org.openqa.selenium.WebElement;
 
 public class WebDriverLink extends WebDriverElement implements Link {
     public WebDriverLink(WebElement source) {
@@ -37,12 +36,5 @@ public class WebDriverLink extends WebDriverElement implements Link {
     @Override
     public String getLinkText() {
         return me.getText();
-    }
-
-    public static class WebDriverLinkFactory implements WebDriverElementFactory<Link> {
-        @Override
-        public Link element(WebElement source) {
-            return new WebDriverLink(source);
-        }
     }
 }

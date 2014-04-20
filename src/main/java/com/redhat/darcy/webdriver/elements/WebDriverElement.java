@@ -51,7 +51,7 @@ public class WebDriverElement implements Element, WrapsElement, ElementContext, 
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
-        List<WebElement> sources = By.id(id).findElements(me);
+        List<WebElement> sources = me.findElements(By.id(id));
         List<T> impls = new ArrayList<>(sources.size());
         
         for (WebElement source : sources) {
