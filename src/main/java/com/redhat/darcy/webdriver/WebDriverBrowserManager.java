@@ -26,29 +26,41 @@ import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.BrowserManager;
 
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class WebDriverBrowserManager implements BrowserManager, ParentContext, FindsByName {
     private WebDriver driver;
-    private Map<Browser, String> handles = new HashMap<>();
+    private Map<WebDriverBrowserContext, String> handles = new HashMap<>();
+    
+    /**
+     * A cache of the window handle the driver is currently working with. This must be updated 
+     * whenever the driver's focus in changed.
+     * @see #updateHandle()
+     * @see #updateHandle(String)
+     */
+    private String currentHandle;
     
     public static WebDriverBrowserContext newManagedBrowser(WebDriver driver) {
-        return new WebDriverBrowserManager(driver).getBrowserForHandle(driver.getWindowHandle());
+        return new WebDriverBrowserManager(driver).getBrowser();
     }
     
     private WebDriverBrowserManager(WebDriver driver) {
-        this.driver = driver;
-        
         if (driver.getWindowHandles().size() > 1) {
             throw new IllegalStateException("Don't initialize a new WebDriverBrowserManager with a"
                     + " driver that already has multiple windows open.");
         }
+        
+        this.driver = driver;
+        
+        updateHandle();
     }
     
     @Override
@@ -82,8 +94,9 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
     @Override
     public <T> T findByName(Class<T> type, String name) {
         driver.switchTo().window(name);
+        updateHandle();
         
-        return (T) getBrowserForHandle(driver.getWindowHandle());
+        return (T) getBrowser();
     }
 
     @Override
@@ -92,28 +105,58 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
         List<T> contexts = new LinkedList<>();
         
         for (String handle : handles) {
-            if (driver.switchTo().window(handle).getTitle().equals(name)) {
-                contexts.add((T) getBrowserForHandle(handle));
+            try {
+                driver.switchTo().window(handle);
+                updateHandle(handle);
+                
+                if (driver.getTitle().equals(name)) {
+                    contexts.add((T) getBrowser());
+                }
+            } catch (NoSuchWindowException e) {
+                // This shouldn't happen because we just got the available window handles from the
+                // driver. But just in case, we can just ignore it. Perhaps it was closed by 
+                // something.
             }
         }
         
         return contexts;
     }
     
-    public WebDriverBrowserContext getBrowserForHandle(String handle) {
-        WebDriverBrowserContext browser = new WebDriverBrowserContext(this);
-        
-        handles.put(browser, handle);
-        
-        return browser;
-    }
-    
-    public WebDriver getDriver(Browser me) {
+    public WebDriver getDriver(WebDriverBrowserContext me) {
         switchTo(me);
         
         return driver;
     }
     
+    /**
+     * Returns a WebDriverBrowserContext corresponding to the currently "focused" window. If the
+     * currently focused window does not yet have a browser context, this will instantiate one for
+     * it.
+     * <P>
+     * It is expected that {@link WebDriverBrowserManager#currentHandle} is accurate when this 
+     * method is called.
+     * @return
+     */
+    private WebDriverBrowserContext getBrowser() {
+        // First check if we already know about this window
+        for (Entry<WebDriverBrowserContext, String> entry : handles.entrySet()) {
+            if (entry.getValue().equals(currentHandle)) {
+                return entry.getKey();
+            }
+        }
+        
+        WebDriverBrowserContext browser = new WebDriverBrowserContext(this);
+        
+        handles.put(browser, currentHandle);
+        
+        return browser;
+    }
+    
+    /**
+     * Focus the driver on the browser object we want to work with. Checks {@link #currentHandle} to
+     * see if a switch is actually required.
+     * @param browser
+     */
     private void switchTo(Browser browser) {
         String handle = handles.get(browser);
         
@@ -121,10 +164,24 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             throw new IllegalStateException();
         }
         
-        // TODO: Keep track of current handle so we can make this check without calling out to the
-        // driver, which for remote drivers would be a little much
-        if (!handle.equals(driver.getWindowHandle())) {
+        if (!handle.equals(currentHandle)) {
             driver.switchTo().window(handle);
+            updateHandle(handle);
         }
+    }
+    
+    private String updateHandle(String handle) {
+        currentHandle = handle;
+        
+        return currentHandle;
+    }
+    
+    /**
+     * Updates the current handle by asking the driver what the current window handle is. Returns 
+     * it. Prefer {@link #updateHandle(String)} if you already know the handle you're switching to.
+     * @return
+     */
+    private String updateHandle() {
+        return updateHandle(driver.getWindowHandle());
     }
 }
