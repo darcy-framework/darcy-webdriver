@@ -37,11 +37,13 @@ import java.util.List;
 
 public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
     private final WebDriverBrowserManager manager;
+    private final ElementFactoryMap elements;
     
-    WebDriverBrowserContext(WebDriverBrowserManager manager) {
+    WebDriverBrowserContext(WebDriverBrowserManager manager, ElementFactoryMap elements) {
         super(manager);
         
         this.manager = manager;
+        this.elements = elements;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     @Override
     public <T> T findById(Class<T> type, String id) {
         WebElement source = getDriver().findElement(By.id(id));
-        return (T) WebDriverElementFactoryMap.get((Class<? extends Element>) type, source);
+        return (T) elements.getElement((Class<Element>) type, source);
     }
 
     @SuppressWarnings("unchecked")
@@ -63,7 +65,7 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
         List<T> impls = new ArrayList<>(sources.size());
         
         for (WebElement source : sources) {
-            impls.add((T) WebDriverElementFactoryMap.get((Class<? extends Element>) type, source));
+            impls.add((T) elements.getElement((Class<Element>) type, source));
         }
         
         return impls;

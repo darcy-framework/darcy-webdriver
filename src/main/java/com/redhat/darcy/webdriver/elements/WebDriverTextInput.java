@@ -20,12 +20,13 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.elements.TextInput;
+import com.redhat.darcy.webdriver.ElementFactoryMap;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverTextInput extends WebDriverElement implements TextInput {
-    public WebDriverTextInput(WebElement source) {
-        super(source);
+    public WebDriverTextInput(WebElement source, ElementFactoryMap elements) {
+        super(source, elements);
     }
     
     @Override

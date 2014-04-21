@@ -23,6 +23,6 @@ import com.redhat.darcy.ui.elements.Element;
 
 import org.openqa.selenium.WebElement;
 
-public interface WebDriverElementFactory<T extends Element> {
-    T element(WebElement source);
+public interface ElementFactory<T extends Element> {
+    T newElement(WebElement source, ElementFactoryMap elements);
 }

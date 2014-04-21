@@ -19,42 +19,53 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.DarcyException;
+import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.elements.Link;
+import com.redhat.darcy.ui.elements.Select;
+import com.redhat.darcy.ui.elements.SelectOption;
+import com.redhat.darcy.ui.elements.TextInput;
+import com.redhat.darcy.webdriver.elements.WebDriverButton;
+import com.redhat.darcy.webdriver.elements.WebDriverLink;
+import com.redhat.darcy.webdriver.elements.WebDriverSelect;
+import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
+import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
 
-import com.redhat.darcy.ui.elements.Button;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.ui.elements.Link;
-import com.redhat.darcy.ui.elements.TextInput;
-import com.redhat.darcy.webdriver.elements.WebDriverButton;
-import com.redhat.darcy.webdriver.elements.WebDriverLink;
-import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
-
-public class WebDriverElementFactoryMap {
-    private static final Map<Class<? extends Element>, WebDriverElementFactory<? extends Element>> classMap = 
+public class WebDriverElementFactoryMap implements ElementFactoryMap {
+    private final Map<Class<? extends Element>, ElementFactory<? extends Element>> classMap = 
             new HashMap<>();
     
-    static {
-        registerFactory(TextInput.class, WebDriverTextInput::new);
-        registerFactory(Button.class, WebDriverButton::new);
-        registerFactory(Link.class, WebDriverLink::new);
+    public static ElementFactoryMap defaultElementFactoryMap() {
+        ElementFactoryMap map = new WebDriverElementFactoryMap();
+        
+        map.registerFactory(TextInput.class, WebDriverTextInput::new);
+        map.registerFactory(Button.class, WebDriverButton::new);
+        map.registerFactory(Link.class, WebDriverLink::new);
+        map.registerFactory(Select.class, WebDriverSelect::new);
+        map.registerFactory(SelectOption.class, WebDriverSelectOption::new);
+        
+        return map;
     }
     
     @SuppressWarnings("unchecked")
-    public static <T extends Element> T get(Class<T> type, WebElement source) {
-        WebDriverElementFactory<? extends Element> factory = classMap.get(type);
+    public <T extends Element> T getElement(Class<T> type, WebElement source) {
+        ElementFactory<? extends Element> factory = classMap.get(type);
         
         if (factory == null) {
-            throw new RuntimeException("No element factory registered for " + type);
+            throw new DarcyException("No element factory registered for " + type);
         }
         
-        return (T) classMap.get(type).element(source);
+        return (T) factory.newElement(source, this);
     }
     
-    public static <T extends Element> void registerFactory(Class<T> elementType, 
-            WebDriverElementFactory<T> factory) {
+    public <T extends Element> void registerFactory(Class<T> elementType, 
+            ElementFactory<T> factory) {
         classMap.put(elementType, factory);
     }
 }

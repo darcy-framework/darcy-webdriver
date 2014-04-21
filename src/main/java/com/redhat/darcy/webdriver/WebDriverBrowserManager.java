@@ -37,8 +37,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class WebDriverBrowserManager implements BrowserManager, ParentContext, FindsByName {
-    private WebDriver driver;
-    private Map<WebDriverBrowserContext, String> handles = new HashMap<>();
+    private final WebDriver driver;
+    private final Map<WebDriverBrowserContext, String> handles = new HashMap<>();
+    private final ElementFactoryMap elements;
     
     /**
      * A cache of the window handle the driver is currently working with. This must be updated 
@@ -48,19 +49,40 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
      */
     private String currentHandle;
     
-    public static WebDriverBrowserContext newManagedBrowser(WebDriver driver) {
-        return new WebDriverBrowserManager(driver).getBrowser();
-    }
-    
-    private WebDriverBrowserManager(WebDriver driver) {
+    public WebDriverBrowserManager(WebDriver driver, ElementFactoryMap elements) {
         if (driver.getWindowHandles().size() > 1) {
             throw new IllegalStateException("Don't initialize a new WebDriverBrowserManager with a"
                     + " driver that already has multiple windows open.");
         }
         
         this.driver = driver;
+        this.elements = elements;
         
         updateHandle();
+    }
+    
+    /**
+     * Returns a WebDriverBrowserContext corresponding to the currently "focused" window. If the
+     * currently focused window does not yet have a browser context, this will instantiate one for
+     * it.
+     * <P>
+     * It is expected that {@link WebDriverBrowserManager#currentHandle} is accurate when this 
+     * method is called.
+     * @return
+     */
+    public WebDriverBrowserContext getBrowser() {
+        // First check if we already know about this window
+        for (Entry<WebDriverBrowserContext, String> entry : handles.entrySet()) {
+            if (entry.getValue().equals(currentHandle)) {
+                return entry.getKey();
+            }
+        }
+        
+        WebDriverBrowserContext browser = new WebDriverBrowserContext(this, elements);
+        
+        handles.put(browser, currentHandle);
+        
+        return browser;
     }
     
     @Override
@@ -126,30 +148,6 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
         switchTo(me);
         
         return driver;
-    }
-    
-    /**
-     * Returns a WebDriverBrowserContext corresponding to the currently "focused" window. If the
-     * currently focused window does not yet have a browser context, this will instantiate one for
-     * it.
-     * <P>
-     * It is expected that {@link WebDriverBrowserManager#currentHandle} is accurate when this 
-     * method is called.
-     * @return
-     */
-    private WebDriverBrowserContext getBrowser() {
-        // First check if we already know about this window
-        for (Entry<WebDriverBrowserContext, String> entry : handles.entrySet()) {
-            if (entry.getValue().equals(currentHandle)) {
-                return entry.getKey();
-            }
-        }
-        
-        WebDriverBrowserContext browser = new WebDriverBrowserContext(this);
-        
-        handles.put(browser, currentHandle);
-        
-        return browser;
     }
     
     /**

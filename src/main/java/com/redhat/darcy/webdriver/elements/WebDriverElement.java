@@ -19,23 +19,25 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.redhat.darcy.ui.ElementContext;
+import com.redhat.darcy.ui.FindsById;
+import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.webdriver.ElementFactoryMap;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.FindsById;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.WebDriverElementFactoryMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById {
     protected final WebElement me;
+    protected final ElementFactoryMap elements;
     
-    public WebDriverElement(WebElement source) {
+    public WebDriverElement(WebElement source, ElementFactoryMap elements) {
         this.me = source;
+        this.elements = elements;
     }
     
     @Override
@@ -55,7 +57,7 @@ public class WebDriverElement implements Element, WrapsElement, ElementContext, 
         List<T> impls = new ArrayList<>(sources.size());
         
         for (WebElement source : sources) {
-            impls.add((T) WebDriverElementFactoryMap.get((Class<? extends Element>)type, source));
+            impls.add((T) elements.getElement((Class<Element>) type, source));
         }
         
         return impls;
