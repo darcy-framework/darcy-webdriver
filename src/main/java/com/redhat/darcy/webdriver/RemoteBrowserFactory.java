@@ -49,7 +49,7 @@ public class RemoteBrowserFactory implements BrowserFactory {
         RemoteWebDriver driver = new RemoteWebDriver(hub, desired, required);
         
         WebDriverBrowserManager manager = new WebDriverBrowserManager(driver, 
-                WebDriverElementFactoryMap.defaultElementFactoryMap());
+                ElementFactoryMap.defaultElementFactoryMap());
         
         return manager.getBrowser();
     }

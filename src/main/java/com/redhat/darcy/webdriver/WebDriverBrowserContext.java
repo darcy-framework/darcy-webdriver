@@ -30,7 +30,6 @@ import com.redhat.darcy.web.BrowserContext;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,13 +38,13 @@ import java.util.List;
 public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained, 
 FindsByLinkText {
     private final WebDriverBrowserManager manager;
-    private final ElementFactoryMap elements;
+    private final ElementFinder finder;
     
-    WebDriverBrowserContext(WebDriverBrowserManager manager, ElementFactoryMap elements) {
+    WebDriverBrowserContext(WebDriverBrowserManager manager, ElementFinder finder) {
         super(manager);
         
         this.manager = manager;
-        this.elements = elements;
+        this.finder = finder;
     }
 
     @Override
@@ -56,21 +55,25 @@ FindsByLinkText {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findById(Class<T> type, String id) {
-        WebElement source = getDriver().findElement(By.id(id));
-        return (T) elements.getElement((Class<Element>) type, source);
+        return (T) finder.findElement((Class<Element>) type, By.id(id), getDriver());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
-        List<WebElement> sources = getDriver().findElements(By.id(id));
-        List<T> impls = new ArrayList<>(sources.size());
-        
-        for (WebElement source : sources) {
-            impls.add((T) elements.getElement((Class<Element>) type, source));
-        }
-        
-        return impls;
+        return (List<T>) finder.findElements((Class<Element>) type, By.id(id), getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByLinkText(Class<T> type, String text) {
+        return (T) finder.findElement((Class<Element>) type, By.linkText(text), getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByLinkText(Class<T> type, String text) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.linkText(text), getDriver());
     }
     
     @Override
@@ -100,17 +103,5 @@ FindsByLinkText {
     
     private WebDriver getDriver() {
         return manager.getDriver(this);
-    }
-
-    @Override
-    public <T> List<T> findAllByLinkText(Class<T> type, String text) {
-        List<WebElement> sources = getDriver().findElements(By.linkText(text));
-        List<T> impls = new ArrayList<>(sources.size());
-        
-        for (WebElement source : sources) {
-            impls.add((T) elements.getElement((Class<Element>) type, source));
-        }
-        
-        return impls;
     }
 }

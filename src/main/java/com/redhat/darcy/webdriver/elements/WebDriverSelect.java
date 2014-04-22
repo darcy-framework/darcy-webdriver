@@ -1,20 +1,19 @@
 package com.redhat.darcy.webdriver.elements;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.redhat.darcy.ui.Locator;
+import com.redhat.darcy.ui.elements.Select;
+import com.redhat.darcy.ui.elements.SelectOption;
+import com.redhat.darcy.webdriver.ElementFinder;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.elements.Select;
-import com.redhat.darcy.ui.elements.SelectOption;
-import com.redhat.darcy.webdriver.ElementFactoryMap;
+import java.util.List;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
     
-    public WebDriverSelect(WebElement source, ElementFactoryMap elements) {
-        super(source, elements);
+    public WebDriverSelect(WebElement source, ElementFinder finder) {
+        super(source, finder);
     }
 
     @Override
@@ -24,14 +23,7 @@ public class WebDriverSelect extends WebDriverElement implements Select {
     
     @Override
     public List<SelectOption> getOptions() {
-        List<WebElement> sources = me.findElements(By.tagName("option"));
-        List<SelectOption> options = new ArrayList<>(sources.size());
-        
-        for (WebElement source : sources) {
-            options.add(elements.getElement(SelectOption.class, source));
-        }
-        
-        return options;
+        return finder.findElements(SelectOption.class, By.tagName("option"), me);
     }
     
     @Override

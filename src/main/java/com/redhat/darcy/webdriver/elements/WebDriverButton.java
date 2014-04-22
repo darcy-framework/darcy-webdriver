@@ -20,14 +20,14 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.elements.Button;
-import com.redhat.darcy.webdriver.ElementFactoryMap;
+import com.redhat.darcy.webdriver.ElementFinder;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverButton extends WebDriverElement implements Button {
     
-    public WebDriverButton(WebElement source, ElementFactoryMap elements) {
-        super(source, elements);
+    public WebDriverButton(WebElement source, ElementFinder finder) {
+        super(source, finder);
     }
     
     @Override

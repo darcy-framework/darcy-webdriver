@@ -53,9 +53,8 @@ public class FirefoxBrowserFactory implements BrowserFactory {
         } else {
             driver = new FirefoxDriver();
         }
-        
         WebDriverBrowserManager manager = new WebDriverBrowserManager(driver, 
-                WebDriverElementFactoryMap.defaultElementFactoryMap());
+                ElementFactoryMap.defaultElementFactoryMap());
         
         return manager.getBrowser();
     }

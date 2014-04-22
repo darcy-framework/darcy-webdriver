@@ -22,22 +22,21 @@ package com.redhat.darcy.webdriver.elements;
 import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.ElementFactoryMap;
+import com.redhat.darcy.webdriver.ElementFinder;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById {
     protected final WebElement me;
-    protected final ElementFactoryMap elements;
+    protected final ElementFinder finder;
     
-    public WebDriverElement(WebElement source, ElementFactoryMap elements) {
+    public WebDriverElement(WebElement source, ElementFinder finder) {
         this.me = source;
-        this.elements = elements;
+        this.finder = finder;
     }
     
     @Override
@@ -53,13 +52,6 @@ public class WebDriverElement implements Element, WrapsElement, ElementContext, 
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
-        List<WebElement> sources = me.findElements(By.id(id));
-        List<T> impls = new ArrayList<>(sources.size());
-        
-        for (WebElement source : sources) {
-            impls.add((T) elements.getElement((Class<Element>) type, source));
-        }
-        
-        return impls;
+        return (List<T>) finder.findElements((Class<Element>) type, By.id(id), me);
     }
 }

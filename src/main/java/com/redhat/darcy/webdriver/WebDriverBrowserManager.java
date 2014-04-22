@@ -39,7 +39,7 @@ import java.util.Set;
 public class WebDriverBrowserManager implements BrowserManager, ParentContext, FindsByName {
     private final WebDriver driver;
     private final Map<WebDriverBrowserContext, String> handles = new HashMap<>();
-    private final ElementFactoryMap elements;
+    private final ElementFinder finder;
     
     /**
      * A cache of the window handle the driver is currently working with. This must be updated 
@@ -56,7 +56,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
         }
         
         this.driver = driver;
-        this.elements = elements;
+        this.finder = new ElementFinder(elements);
         
         updateHandle();
     }
@@ -78,7 +78,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             }
         }
         
-        WebDriverBrowserContext browser = new WebDriverBrowserContext(this, elements);
+        WebDriverBrowserContext browser = new WebDriverBrowserContext(this, finder);
         
         handles.put(browser, currentHandle);
         

@@ -24,5 +24,5 @@ import com.redhat.darcy.ui.elements.Element;
 import org.openqa.selenium.WebElement;
 
 public interface ElementFactory<T extends Element> {
-    T newElement(WebElement source, ElementFactoryMap elements);
+    T newElement(WebElement source, ElementFinder elements);
 }
