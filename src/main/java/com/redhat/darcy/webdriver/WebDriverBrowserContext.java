@@ -63,8 +63,16 @@ public class WebDriverBrowserContext extends ManagedBrowserContext implements Wr
         return manager.findContext(locator);
     }
     
+    /**
+     * Returns the wrapped WebDriver instance. Use judiciously. The original Browser instance may
+     * still be used safely, but will incur a performance penalty at the loss of strict control
+     * over the underlying WebDriver. If you open a new window by result of working with the driver
+     * directly, you may get a Browser from that by using 
+     * {@link com.redhat.darcy.ui.ParentContext#findContext(Locator)}, which the Browser implements.
+     */
     @Override
     public WebDriver getWrappedDriver() {
+        manager.flagWebDriverExposed();
         return getDriver();
     }
     
@@ -105,6 +113,7 @@ public class WebDriverBrowserContext extends ManagedBrowserContext implements Wr
         return (List<T>) finder.findElements((Class<Element>) type, By.xpath(xpath), getDriver());
     }
     
+    // TODO: If one of the elements along the way is a frame, switch to it
     @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
         if (locators.length == 0) {

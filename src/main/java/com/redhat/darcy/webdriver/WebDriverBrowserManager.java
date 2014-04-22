@@ -48,6 +48,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
      * @see #updateHandle(String)
      */
     private String currentHandle;
+    private boolean driverExposed = false;
     
     public WebDriverBrowserManager(WebDriver driver, ElementFactoryMap elements) {
         if (driver.getWindowHandles().size() > 1) {
@@ -151,6 +152,15 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
     }
     
     /**
+     * If the underlying driver is exposed, then the user can switchTo a new window unbeknownst to
+     * our cached currentHandle, invalidating it. This flag let's us know so we may force updating 
+     * of the current handle before acting with a Browser.
+     */
+    public void flagWebDriverExposed() {
+        driverExposed = true;
+    }
+    
+    /**
      * Focus the driver on the browser object we want to work with. Checks {@link #currentHandle} to
      * see if a switch is actually required.
      * @param browser
@@ -162,7 +172,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             throw new IllegalStateException();
         }
         
-        if (!handle.equals(currentHandle)) {
+        if (driverExposed || !handle.equals(currentHandle)) {
             driver.switchTo().window(handle);
             updateHandle(handle);
         }
