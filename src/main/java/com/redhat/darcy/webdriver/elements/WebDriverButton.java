@@ -34,4 +34,9 @@ public class WebDriverButton extends WebDriverElement implements Button {
     public void click() {
         me.click();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return me.isEnabled();
+    }
 }

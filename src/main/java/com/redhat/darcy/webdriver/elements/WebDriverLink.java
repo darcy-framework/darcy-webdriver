@@ -38,4 +38,9 @@ public class WebDriverLink extends WebDriverElement implements Link {
     public String getLinkText() {
         return me.getText();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return me.isEnabled();
+    }
 }

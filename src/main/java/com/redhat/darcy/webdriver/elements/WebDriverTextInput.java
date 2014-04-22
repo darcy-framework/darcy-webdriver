@@ -57,4 +57,9 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     public void clear() {
         me.clear();
     }
+
+    @Override
+    public boolean isEnabled() {
+        return me.isEnabled();
+    }
 }

@@ -56,5 +56,9 @@ public class WebDriverSelect extends WebDriverElement implements Select {
         // Should probably throw an exception instead of return null?
         return null;
     }
-    
+
+    @Override
+    public boolean isEnabled() {
+        return me.isEnabled();
+    }
 }
