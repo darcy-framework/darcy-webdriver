@@ -79,6 +79,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             }
         }
         
+        // If not, create a new Browser object for it and map it to the handle.
         WebDriverBrowserContext browser = new WebDriverBrowserContext(this, finder);
         
         handles.put(browser, currentHandle);
@@ -101,10 +102,38 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
     }
 
     @Override
+    public String getTitle(Browser me) {
+        return switchTo(me).getTitle();
+    }
+
+    @Override
+    public String getSource(Browser me) {
+        return switchTo(me).getPageSource();
+    }
+
+    @Override
+    public void back(Browser me) {
+        switchTo(me).navigate().back();
+    }
+
+    @Override
+    public void forward(Browser me) {
+        switchTo(me).navigate().forward();
+    }
+
+    @Override
+    public void refresh(Browser me) {
+        switchTo(me).navigate().refresh();
+    }
+
+    @Override
     public void close(Browser me) {
-        switchTo(me);
-        
-        driver.close();
+        switchTo(me).close();
+    }
+
+    @Override
+    public void closeAll() {
+        driver.quit();
     }
 
     @Override
@@ -165,7 +194,7 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
      * see if a switch is actually required.
      * @param browser
      */
-    private void switchTo(Browser browser) {
+    private WebDriver switchTo(Browser browser) {
         String handle = handles.get(browser);
         
         if (handle == null) {
@@ -176,6 +205,8 @@ public class WebDriverBrowserManager implements BrowserManager, ParentContext, F
             driver.switchTo().window(handle);
             updateHandle(handle);
         }
+        
+        return driver;
     }
     
     private String updateHandle(String handle) {
