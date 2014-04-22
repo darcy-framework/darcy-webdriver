@@ -23,6 +23,7 @@ import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.FindsByLinkText;
+import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
@@ -36,7 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained, 
-FindsByLinkText {
+FindsByLinkText, FindsByXPath {
     private final WebDriverBrowserManager manager;
     private final ElementFinder finder;
     
@@ -66,14 +67,27 @@ FindsByLinkText {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T findByLinkText(Class<T> type, String text) {
-        return (T) finder.findElement((Class<Element>) type, By.linkText(text), getDriver());
+    public <T> T findByLinkText(Class<T> type, String linkText) {
+        return (T) finder.findElement((Class<Element>) type, By.linkText(linkText), getDriver());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> findAllByLinkText(Class<T> type, String text) {
-        return (List<T>) finder.findElements((Class<Element>) type, By.linkText(text), getDriver());
+    public <T> List<T> findAllByLinkText(Class<T> type, String linkText) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.linkText(linkText), 
+                getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByXPath(Class<T> type, String xpath) {
+        return (T) finder.findElement((Class<Element>) type, By.xpath(xpath), getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.xpath(xpath), getDriver());
     }
     
     @Override
