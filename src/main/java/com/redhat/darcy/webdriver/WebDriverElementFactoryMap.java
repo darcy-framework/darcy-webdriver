@@ -27,6 +27,7 @@ import com.redhat.darcy.ui.elements.Select;
 import com.redhat.darcy.ui.elements.SelectOption;
 import com.redhat.darcy.ui.elements.TextInput;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.elements.WebDriverLink;
 import com.redhat.darcy.webdriver.elements.WebDriverSelect;
 import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
@@ -49,6 +50,7 @@ public class WebDriverElementFactoryMap implements ElementFactoryMap {
         map.registerFactory(Link.class, WebDriverLink::new);
         map.registerFactory(Select.class, WebDriverSelect::new);
         map.registerFactory(SelectOption.class, WebDriverSelectOption::new);
+        map.registerFactory(Element.class, WebDriverElement::new);
         
         return map;
     }
