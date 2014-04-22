@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver;
 import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
+import com.redhat.darcy.ui.FindsByLinkText;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
@@ -35,7 +36,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained {
+public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained, 
+FindsByLinkText {
     private final WebDriverBrowserManager manager;
     private final ElementFactoryMap elements;
     
@@ -98,5 +100,17 @@ public class WebDriverBrowserContext extends BrowserContext implements FindsById
     
     private WebDriver getDriver() {
         return manager.getDriver(this);
+    }
+
+    @Override
+    public <T> List<T> findAllByLinkText(Class<T> type, String text) {
+        List<WebElement> sources = getDriver().findElements(By.linkText(text));
+        List<T> impls = new ArrayList<>(sources.size());
+        
+        for (WebElement source : sources) {
+            impls.add((T) elements.getElement((Class<Element>) type, source));
+        }
+        
+        return impls;
     }
 }
