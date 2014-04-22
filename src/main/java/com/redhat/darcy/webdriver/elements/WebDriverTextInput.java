@@ -52,4 +52,9 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     public void click() {
         me.click();
     }
+
+    @Override
+    public void clear() {
+        me.clear();
+    }
 }
