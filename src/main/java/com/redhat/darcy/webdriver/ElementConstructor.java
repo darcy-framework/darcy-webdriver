@@ -19,16 +19,12 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Element;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
-
-/**
- * Translates from WebElement(s) to Darcy Elements.
- */
-public interface ElementFactory {
-    <T extends Element> T newElement(Class<T> type, WebElement source);
-    <T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources);
+public interface ElementConstructor<T extends Element> {
+    T newElement(WebElement source, WebDriver parent, ElementContext elementContext);
 }

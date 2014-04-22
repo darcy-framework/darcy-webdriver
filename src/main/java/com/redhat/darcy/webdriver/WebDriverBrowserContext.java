@@ -19,72 +19,198 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.ViewContext;
-import com.redhat.darcy.web.BrowserManager;
-import com.redhat.darcy.web.ManagedBrowserContext;
+import static com.redhat.synq.Synq.after;
+import static java.util.concurrent.TimeUnit.MINUTES;
 
-import org.openqa.selenium.SearchContext;
+import com.redhat.darcy.ui.Context;
+import com.redhat.darcy.ui.Locator;
+import com.redhat.darcy.ui.View;
+import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.web.BrowserContext;
+import com.redhat.darcy.web.FrameContext;
+import com.redhat.darcy.web.StaticUrl;
+import com.redhat.darcy.web.Url;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
+import java.util.List;
+
 /**
  * The main gateway between darcy code and WebDriver. This class takes the Browser API and forwards
- * the calls to the WebDriver operating behind the scenes. However, it is not entirely that
- * straightforward. In WebDriver, a single driver may refer to any number of open windows -- those
- * opened from the original browser window started with that driver. In darcy-web, however, a
- * Browser object must only correspond with one window, consistently. So, a {@link BrowserManager}
- * is used to silently switch between windows if different Browser objects are used that are owned
- * by the same driver. 
+ * the calls to the WebDriver operating behind the scenes.
  */
-public class WebDriverBrowserContext extends ManagedBrowserContext implements WrapsDriver,
-        WebDriverElementContext {
-    private final WebDriverBrowserManager manager;
-    private final ElementFinder finder;
+public class WebDriverBrowserContext implements BrowserContext, FrameContext, 
+        WebDriverElementContext, WrapsDriver {
+    private final WebDriver driver;
+    private final WebDriverParentContext parentContext;
+    private final WebDriverElementContext elementContext;
     
-    WebDriverBrowserContext(WebDriverBrowserManager manager, ElementFinder finder) {
-        super(manager);
-        
-        this.manager = manager;
-        this.finder = finder;
+    public WebDriverBrowserContext(WebDriver driver, WebDriverParentContext parentContext, 
+            WebDriverElementContext elementContext) {
+        this.driver = driver;
+        this.parentContext = parentContext;
+        this.elementContext = elementContext;
     }
     
     @Override
-    public ViewContext findContext(Locator locator) {
-        return manager.findContext(locator);
+    public <T extends View> T open(Url<T> url) {
+        return after(() -> driver.get(url.url()))
+                .expect(transition().to(url.destination()))
+                .waitUpTo(1, MINUTES);
     }
 
     @Override
-    public ElementFinder finder() {
-        return finder;
+    public <T extends View> T open(String url, T destination) {
+        return open(new StaticUrl<T>(url, destination));
     }
 
     @Override
-    public SearchContext searchContext() {
-        return getDriver();
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    @Override
+    public String getTitle() {
+        return driver.getTitle();
     }
     
-    /**
-     * Returns the wrapped WebDriver instance. Use judiciously. The original Browser instance may
-     * still be used safely, but will incur a performance penalty at the loss of strict control
-     * over the underlying WebDriver. If you open a new window by result of working with the driver
-     * directly, you may get a Browser from that by using 
-     * {@link com.redhat.darcy.ui.ParentContext#findContext(Locator)}, which the Browser implements.
-     */
+    @Override
+    public String getSource() {
+        return driver.getPageSource();
+    }
+
+    @Override
+    public <T extends View> T back(T destination) {
+        return after(() -> driver.navigate().back())
+                .expect(transition().to(destination))
+                .waitUpTo(1, MINUTES);
+    }
+
+    @Override
+    public <T extends View> T forward(T destination) {
+        return after(() -> driver.navigate().forward())
+                .expect(transition().to(destination))
+                .waitUpTo(1, MINUTES);
+    }
+
+    @Override
+    public <T extends View> T refresh(T destination) {
+        return after(() -> driver.navigate().refresh())
+                .expect(transition().to(destination))
+                .waitUpTo(1, MINUTES);
+    }
+    
+    @Override
+    public FrameContext frame(Locator locator) {
+        return findContext(FrameContext.class, locator);
+    }
+
+    @Override
+    public void close() {
+        driver.close();
+    }
+    
+    @Override
+    public void closeAll() {
+        driver.quit();
+    }
+
+    public <T extends Element> T findElement(Class<T> type, Locator locator) {
+        return elementContext.findElement(type, locator);
+    }
+
+    public <T extends Element> List<T> findElements(Class<T> type, Locator locator) {
+        return elementContext.findElements(type, locator);
+    }
+    
+    public <T> List<T> findAllById(Class<T> type, String id) {
+        return elementContext.findAllById(type, id);
+    }
+
+    public <T> List<T> findAllByName(Class<T> type, String name) {
+        return elementContext.findAllByName(type, name);
+    }
+
+    public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
+        return elementContext.findAllByXPath(type, xpath);
+    }
+
+    public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
+        return elementContext.findAllByChained(type, locators);
+    }
+
+    public <T> List<T> findAllByLinkText(Class<T> type, String linkText) {
+        return elementContext.findAllByLinkText(type, linkText);
+    }
+
+    public <T> List<T> findAllByTextContent(Class<T> type, String textContent) {
+        return elementContext.findAllByTextContent(type, textContent);
+    }
+
+    public <T> List<T> findAllByPartialTextContent(Class<T> type, String partialTextContent) {
+        return elementContext.findAllByPartialTextContent(type, partialTextContent);
+    }
+
+    public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
+        return elementContext.findAllByNested(type, parent, child);
+    }
+
+    public <T> T findById(Class<T> type, String id) {
+        return elementContext.findById(type, id);
+    }
+
+    public <T> List<T> findAllByHtmlTag(Class<T> type, String tag) {
+        return elementContext.findAllByHtmlTag(type, tag);
+    }
+
+    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
+        return elementContext.findAllByCssSelector(type, css);
+    }
+
+    public <T> T findByName(Class<T> type, String name) {
+        return elementContext.findByName(type, name);
+    }
+
+    public <T> T findByXPath(Class<T> type, String xpath) {
+        return elementContext.findByXPath(type, xpath);
+    }
+
+    public <T> T findByLinkText(Class<T> type, String linkText) {
+        return elementContext.findByLinkText(type, linkText);
+    }
+
+    public <T> T findByChained(Class<T> type, Locator... locators) {
+        return elementContext.findByChained(type, locators);
+    }
+
+    public <T> T findByTextContent(Class<T> type, String textContent) {
+        return elementContext.findByTextContent(type, textContent);
+    }
+
+    public <T> T findByPartialTextContent(Class<T> type, String partialTextContent) {
+        return elementContext.findByPartialTextContent(type, partialTextContent);
+    }
+
+    public <T> T findByHtmlTag(Class<T> type, String tag) {
+        return elementContext.findByHtmlTag(type, tag);
+    }
+
+    public <T> T findByCssSelector(Class<T> type, String css) {
+        return elementContext.findByCssSelector(type, css);
+    }
+
+    public <T> T findByNested(Class<T> type, Element parent, Locator child) {
+        return elementContext.findByNested(type, parent, child);
+    }
+
+    @Override
+    public <T extends Context> T findContext(Class<T> type, Locator locator) {
+        return parentContext.findContext(type, locator);
+    }
+    
     @Override
     public WebDriver getWrappedDriver() {
-        manager.flagWebDriverExposed();
-        return getDriver();
-    }
-    
-    /**
-     * Browser objects represent a single window, but a driver can represent many. So, this method
-     * not only returns the driver shrouded in the BrowserManager, but makes sure to switch to the
-     * window relevant to this Browser instance before returning it.
-     * 
-     * @return
-     */
-    private WebDriver getDriver() {
-        return manager.getDriver(this);
+        return driver;
     }
 }

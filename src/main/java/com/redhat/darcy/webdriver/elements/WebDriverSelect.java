@@ -19,30 +19,31 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.elements.Select;
 import com.redhat.darcy.ui.elements.SelectOption;
-import com.redhat.darcy.webdriver.ElementFinder;
+import com.redhat.darcy.web.By;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
     
-    public WebDriverSelect(WebElement source, ElementFinder finder) {
-        super(source, finder);
+    public WebDriverSelect(WebElement source, WebDriver parent, ElementContext elementContext) {
+        super(source, parent, elementContext);
     }
 
     @Override
     public void select(Locator locator) {
-        locator.find(SelectOption.class, this).select();
+        locator.find(SelectOption.class, getElementContext()).select();
     }
     
     @Override
     public List<SelectOption> getOptions() {
-        return finder.findElements(SelectOption.class, By.tagName("option"), me);
+        return getElementContext().findElements(SelectOption.class, By.htmlTag("option"));
     }
     
     @Override
@@ -59,6 +60,6 @@ public class WebDriverSelect extends WebDriverElement implements Select {
 
     @Override
     public boolean isEnabled() {
-        return me.isEnabled();
+        return getWrappedElement().isEnabled();
     }
 }

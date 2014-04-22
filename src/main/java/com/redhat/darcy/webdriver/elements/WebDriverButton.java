@@ -19,24 +19,25 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Button;
-import com.redhat.darcy.webdriver.ElementFinder;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class WebDriverButton extends WebDriverElement implements Button {
     
-    public WebDriverButton(WebElement source, ElementFinder finder) {
-        super(source, finder);
+    public WebDriverButton(WebElement source, WebDriver parent, ElementContext elementContext) {
+        super(source, parent, elementContext);
     }
     
     @Override
     public void click() {
-        me.click();
+        getWrappedElement().click();
     }
 
     @Override
     public boolean isEnabled() {
-        return me.isEnabled();
+        return getWrappedElement().isEnabled();
     }
 }

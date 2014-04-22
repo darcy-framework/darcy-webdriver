@@ -36,36 +36,36 @@ import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ElementFactoryMap {
-    private final Map<Class<? extends Element>, ElementFactory<? extends Element>> classMap = 
+public class ElementConstructorMap {
+    private final Map<Class<? extends Element>, ElementConstructor<? extends Element>> classMap = 
             new HashMap<>();
     
-    public static ElementFactoryMap defaultElementFactoryMap() {
-        ElementFactoryMap map = new ElementFactoryMap();
+    public static ElementConstructorMap defaultElementConstructorMap() {
+        ElementConstructorMap map = new ElementConstructorMap();
         
-        map.registerFactory(TextInput.class, WebDriverTextInput::new);
-        map.registerFactory(Button.class, WebDriverButton::new);
-        map.registerFactory(Link.class, WebDriverLink::new);
-        map.registerFactory(Select.class, WebDriverSelect::new);
-        map.registerFactory(SelectOption.class, WebDriverSelectOption::new);
-        map.registerFactory(Element.class, WebDriverElement::new);
+        map.registerConstructor(TextInput.class, WebDriverTextInput::new);
+        map.registerConstructor(Button.class, WebDriverButton::new);
+        map.registerConstructor(Link.class, WebDriverLink::new);
+        map.registerConstructor(Select.class, WebDriverSelect::new);
+        map.registerConstructor(SelectOption.class, WebDriverSelectOption::new);
+        map.registerConstructor(Element.class, WebDriverElement::new);
         
         return map;
     }
     
     @SuppressWarnings("unchecked")
-    public <T extends Element> ElementFactory<T> getFactory(Class<T> type) {
-        ElementFactory<? extends Element> factory = classMap.get(type);
+    public <T extends Element> ElementConstructor<T> getConstructor(Class<T> type) {
+        ElementConstructor<? extends Element> factory = classMap.get(type);
         
         if (factory == null) {
             throw new DarcyException("No element factory registered for " + type);
         }
         
-        return (ElementFactory<T>) factory;
+        return (ElementConstructor<T>) factory;
     }
     
-    public <T extends Element> void registerFactory(Class<T> elementType, 
-            ElementFactory<T> factory) {
+    public <T extends Element> void registerConstructor(Class<T> elementType, 
+            ElementConstructor<T> factory) {
         classMap.put(elementType, factory);
     }
 }

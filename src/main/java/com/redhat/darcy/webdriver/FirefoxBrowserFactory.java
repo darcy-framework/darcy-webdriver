@@ -20,7 +20,6 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.BrowserFactory;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -28,7 +27,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class FirefoxBrowserFactory implements BrowserFactory {
+public class FirefoxBrowserFactory implements WebDriverBrowserFactory {
     private DesiredCapabilities desired;
     private DesiredCapabilities required;
     private FirefoxProfile profile;
@@ -53,10 +52,8 @@ public class FirefoxBrowserFactory implements BrowserFactory {
         } else {
             driver = new FirefoxDriver();
         }
-        WebDriverBrowserManager manager = new WebDriverBrowserManager(driver, 
-                ElementFactoryMap.defaultElementFactoryMap());
         
-        return manager.getBrowser();
+        return makeBrowserContext(driver, ElementConstructorMap.defaultElementConstructorMap());
     }
     
     public FirefoxBrowserFactory desiring(Capabilities capabilities) {

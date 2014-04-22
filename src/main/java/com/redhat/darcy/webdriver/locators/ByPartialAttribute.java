@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.locators;
 
 import java.util.List;
 

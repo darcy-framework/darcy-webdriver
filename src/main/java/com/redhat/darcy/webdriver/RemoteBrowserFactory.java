@@ -19,17 +19,16 @@
 
 package com.redhat.darcy.webdriver;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.redhat.darcy.web.Browser;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.BrowserFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-public class RemoteBrowserFactory implements BrowserFactory {
+public class RemoteBrowserFactory implements WebDriverBrowserFactory {
     private DesiredCapabilities desired;
     private DesiredCapabilities required;
     private URL hub;
@@ -48,10 +47,7 @@ public class RemoteBrowserFactory implements BrowserFactory {
     public Browser newBrowser() {
         RemoteWebDriver driver = new RemoteWebDriver(hub, desired, required);
         
-        WebDriverBrowserManager manager = new WebDriverBrowserManager(driver, 
-                ElementFactoryMap.defaultElementFactoryMap());
-        
-        return manager.getBrowser();
+        return makeBrowserContext(driver, ElementConstructorMap.defaultElementConstructorMap());
     }
     
     public RemoteBrowserFactory desiring(Capabilities capabilities) {

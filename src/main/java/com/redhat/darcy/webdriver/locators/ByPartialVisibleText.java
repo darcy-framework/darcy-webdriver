@@ -1,4 +1,4 @@
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.locators;
 
 import java.util.List;
 
@@ -9,27 +9,31 @@ import org.openqa.selenium.internal.FindsByXPath;
 
 /**
  * {@link By} implementation that finds elements based on whether or not their
- * text node partially matches some text, ignoring case.
+ * text node partially matches some text.
  * 
  * @author ahenning
  */
-public class ByPartialVisibleTextIgnoreCase extends By {
+public class ByPartialVisibleText extends By {
     private final String text;
     
-    public ByPartialVisibleTextIgnoreCase(String text) {
+    public static By ignoringCase(String text) {
+        return new ByPartialVisibleTextIgnoreCase(text);
+    }
+    
+    public ByPartialVisibleText(String text) {
         this.text = text;
     }
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
         return ((FindsByXPath) context).findElementsByXPath(".//*["
-                + textContainsIgnoringCase(text) + "]");
+                + textContains(text) + "]");
     }
 
     @Override
     public WebElement findElement(SearchContext context) {
         return ((FindsByXPath) context).findElementByXPath(".//*["
-                + textContainsIgnoringCase(text) + "]");
+                + textContains(text) + "]");
     }
     
     @Override
@@ -39,7 +43,7 @@ public class ByPartialVisibleTextIgnoreCase extends By {
     
     @Override
     public String toString() {
-        return "ByPartialVisibleTextIgnoreCase: " + text;
+        return "ByPartialVisibleText: " + text;
     }
     
     /**
@@ -50,13 +54,7 @@ public class ByPartialVisibleTextIgnoreCase extends By {
      * @param text name
      * @return String Partial XPath expression
      */
-    private String textContainsIgnoringCase(String text) {
-        return String.format("contains(translate(text(),'%s','%s'),'%s')",
-                // Take any upper case letters in the text
-                text.toUpperCase(),
-                // Translate them to lower case
-                text.toLowerCase(),
-                // Compare this with the text, lower-cased
-                text.toLowerCase());
+    private String textContains(String text) {
+        return "contains(text(),'" + text + "')";
     }
 }

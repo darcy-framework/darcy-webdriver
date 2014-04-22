@@ -19,40 +19,41 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.ElementFinder;
-import com.redhat.darcy.webdriver.WebDriverElementContext;
 
-import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.internal.WrapsElement;
 
-public class WebDriverElement implements Element, WrapsElement, WebDriverElementContext {
-    protected final WebElement me;
-    protected final ElementFinder finder;
+public class WebDriverElement implements Element, WrapsElement, WrapsDriver {
+    private final WebElement source;
+    private final WebDriver parent;
+    private final ElementContext elementContext;
     
-    public WebDriverElement(WebElement source, ElementFinder finder) {
-        this.me = source;
-        this.finder = finder;
+    public WebDriverElement(WebElement source, WebDriver parent, ElementContext elementContext) {
+        this.source = source;
+        this.parent = parent;
+        this.elementContext = elementContext;
     }
     
     @Override
     public boolean isDisplayed() {
-        return me.isDisplayed();
+        return getWrappedElement().isDisplayed();
     }
 
     @Override
     public WebElement getWrappedElement() {
-        return me;
+        return source;
     }
 
     @Override
-    public ElementFinder finder() {
-        return finder;
+    public WebDriver getWrappedDriver() {
+        return parent;
     }
-
-    @Override
-    public SearchContext searchContext() {
-        return getWrappedElement();
+    
+    public ElementContext getElementContext() {
+        return elementContext;
     }
 }

@@ -1,4 +1,4 @@
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.locators;
 
 import java.util.List;
 

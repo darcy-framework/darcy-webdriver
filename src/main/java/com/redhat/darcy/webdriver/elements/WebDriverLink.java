@@ -19,28 +19,29 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Link;
-import com.redhat.darcy.webdriver.ElementFinder;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(WebElement source, ElementFinder finder) {
-        super(source, finder);
+    public WebDriverLink(WebElement source, WebDriver parent, ElementContext elementContext) {
+        super(source, parent, elementContext);
     }
 
     @Override
     public void click() {
-        me.click();
+        getWrappedElement().click();
     }
     
     @Override
     public String getLinkText() {
-        return me.getText();
+        return getWrappedElement().getText();
     }
 
     @Override
     public boolean isEnabled() {
-        return me.isEnabled();
+        return getWrappedElement().isEnabled();
     }
 }
