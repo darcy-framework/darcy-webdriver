@@ -27,8 +27,9 @@ import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.web.BrowserContext;
+import com.redhat.darcy.web.ManagedBrowserContext;
 
+import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -36,8 +37,17 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class WebDriverBrowserContext extends BrowserContext implements FindsById, FindsByChained, 
-FindsByLinkText, FindsByXPath {
+/**
+ * The main gateway between darcy code and WebDriver. This class takes the Browser API and forwards
+ * the calls to the WebDriver operating behind the scenes. However, it is not entirely that
+ * straightforward. In WebDriver, a single driver may refer to any number of open windows -- those
+ * opened from the original browser window started with that driver. In darcy-web, however, a
+ * Browser object must only correspond with one window, consistently. So, a {@link BrowserManager}
+ * is used to silently switch between windows if different Browser objects are used that are owned
+ * by the same driver. 
+ */
+public class WebDriverBrowserContext extends ManagedBrowserContext implements WrapsDriver,
+        FindsById, FindsByChained, FindsByLinkText, FindsByXPath {
     private final WebDriverBrowserManager manager;
     private final ElementFinder finder;
     
@@ -47,43 +57,48 @@ FindsByLinkText, FindsByXPath {
         this.manager = manager;
         this.finder = finder;
     }
-
+    
     @Override
     public ViewContext findContext(Locator locator) {
         return manager.findContext(locator);
     }
-
+    
+    @Override
+    public WebDriver getWrappedDriver() {
+        return getDriver();
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findById(Class<T> type, String id) {
         return (T) finder.findElement((Class<Element>) type, By.id(id), getDriver());
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
         return (List<T>) finder.findElements((Class<Element>) type, By.id(id), getDriver());
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findByLinkText(Class<T> type, String linkText) {
         return (T) finder.findElement((Class<Element>) type, By.linkText(linkText), getDriver());
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllByLinkText(Class<T> type, String linkText) {
-        return (List<T>) finder.findElements((Class<Element>) type, By.linkText(linkText), 
+        return (List<T>) finder.findElements((Class<Element>) type, By.linkText(linkText),
                 getDriver());
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findByXPath(Class<T> type, String xpath) {
         return (T) finder.findElement((Class<Element>) type, By.xpath(xpath), getDriver());
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
@@ -115,6 +130,13 @@ FindsByLinkText, FindsByXPath {
         return elements;
     }
     
+    /**
+     * Browser objects represent a single window, but a driver can represent many. So, this method
+     * not only returns the driver shrouded in the BrowserManager, but makes sure to switch to the
+     * window relevant to this Browser instance before returning it.
+     * 
+     * @return
+     */
     private WebDriver getDriver() {
         return manager.getDriver(this);
     }
