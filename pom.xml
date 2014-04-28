@@ -2,13 +2,34 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <groupId>com.redhat.darcy</groupId>
     <artifactId>darcy-webdriver</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>darcy-webdriver</name>
-    <url>https://github.com/rh-darcy/darcy-webdriver</url>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>An implementation of darcy and darcy-web that uses Selenium WebDriver as the automation library backend.</description>
+    <url>https://github.com/darcy-framework/darcy-webdriver</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License, Version 3</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/darcy-framework/darcy-webdriver.git</connection>
+        <developerConnection>scm:git:git@github.com:darcy-framework/darcy-webdriver.git</developerConnection>
+        <url>https://github.com/darcy-framework/darcy-webdriver</url>
+    </scm>
 
     <build>
         <plugins>
