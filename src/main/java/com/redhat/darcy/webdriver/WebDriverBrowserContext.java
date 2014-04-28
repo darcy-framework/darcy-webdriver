@@ -23,10 +23,14 @@ import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.FindsByLinkText;
+import com.redhat.darcy.ui.FindsByName;
+import com.redhat.darcy.ui.FindsByNested;
 import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.ViewContext;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.web.FindsByCssSelector;
+import com.redhat.darcy.web.FindsByHtmlTag;
 import com.redhat.darcy.web.ManagedBrowserContext;
 
 import org.openqa.selenium.internal.WrapsDriver;
@@ -47,7 +51,8 @@ import java.util.List;
  * by the same driver. 
  */
 public class WebDriverBrowserContext extends ManagedBrowserContext implements WrapsDriver,
-        FindsById, FindsByChained, FindsByLinkText, FindsByXPath {
+        FindsById, FindsByName, FindsByLinkText, FindsByXPath, FindsByCssSelector,
+        FindsByHtmlTag, FindsByChained, FindsByNested {
     private final WebDriverBrowserManager manager;
     private final ElementFinder finder;
     
@@ -87,6 +92,12 @@ public class WebDriverBrowserContext extends ManagedBrowserContext implements Wr
     public <T> List<T> findAllById(Class<T> type, String id) {
         return (List<T>) finder.findElements((Class<Element>) type, By.id(id), getDriver());
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByName(Class<T> type, String name) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.name(name), getDriver());
+    }
     
     @SuppressWarnings("unchecked")
     @Override
@@ -111,6 +122,18 @@ public class WebDriverBrowserContext extends ManagedBrowserContext implements Wr
     @Override
     public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
         return (List<T>) finder.findElements((Class<Element>) type, By.xpath(xpath), getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByHtmlTag(Class<T> type, String tag) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.tagName(tag), getDriver());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.cssSelector(css), getDriver());
     }
     
     // TODO: If one of the elements along the way is a frame, switch to it
@@ -137,6 +160,11 @@ public class WebDriverBrowserContext extends ManagedBrowserContext implements Wr
         }
         
         return elements;
+    }
+
+    @Override
+    public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
+        return child.findAll(type, (ElementContext) parent);
     }
     
     /**
