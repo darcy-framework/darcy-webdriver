@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsById;
+import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.webdriver.ElementFinder;
 
@@ -30,7 +31,8 @@ import org.openqa.selenium.internal.WrapsElement;
 
 import java.util.List;
 
-public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById {
+public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById, 
+FindsByXPath {
     protected final WebElement me;
     protected final ElementFinder finder;
     
@@ -53,5 +55,11 @@ public class WebDriverElement implements Element, WrapsElement, ElementContext, 
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
         return (List<T>) finder.findElements((Class<Element>) type, By.id(id), me);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
+        return (List<T>) finder.findElements((Class<Element>) type, By.xpath(xpath), me);
     }
 }
