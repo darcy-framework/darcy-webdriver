@@ -19,20 +19,15 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.FindsById;
-import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.webdriver.ElementFinder;
+import com.redhat.darcy.webdriver.WebDriverElementContext;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
-import java.util.List;
-
-public class WebDriverElement implements Element, WrapsElement, ElementContext, FindsById, 
-FindsByXPath {
+public class WebDriverElement implements Element, WrapsElement, WebDriverElementContext {
     protected final WebElement me;
     protected final ElementFinder finder;
     
@@ -51,15 +46,13 @@ FindsByXPath {
         return me;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> findAllById(Class<T> type, String id) {
-        return (List<T>) finder.findElements((Class<Element>) type, By.id(id), me);
+    public ElementFinder finder() {
+        return finder;
     }
-    
-    @SuppressWarnings("unchecked")
+
     @Override
-    public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
-        return (List<T>) finder.findElements((Class<Element>) type, By.xpath(xpath), me);
+    public SearchContext searchContext() {
+        return getWrappedElement();
     }
 }
