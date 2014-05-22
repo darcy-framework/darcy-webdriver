@@ -1,5 +1,7 @@
 package com.redhat.darcy.webdriver.internal;
 
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
@@ -20,7 +22,15 @@ public class TargetedWebElementInvocationHandler implements InvocationHandler {
     
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        target.switchTo(locator);
+        try {
+            target.switchTo(locator);
+        } catch (NoSuchWindowException | NoSuchFrameException e) {
+            if ("isDisplayed".equals(method.getName())) {
+                return false;
+            }
+            
+            throw e;
+        }
         
         return method.invoke(element, args);
     }

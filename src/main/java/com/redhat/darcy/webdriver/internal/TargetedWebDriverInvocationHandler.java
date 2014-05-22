@@ -2,6 +2,7 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.util.ReflectionUtil;
 
+import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
@@ -24,8 +25,6 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
         switch (method.getName()) {
         case "switchTo":
             return locator;
-        case "getUntargetedDriver":
-            return target.switchTo(locator);
         case "getWebDriverTarget":
             return target;
         case "createTargetedElement":
@@ -37,7 +36,7 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
             try {
                 target.switchTo(locator);
                 return true;
-            } catch (NoSuchWindowException e) {
+            } catch (NoSuchWindowException | NoSuchFrameException e) {
                 return false;
             }
         }

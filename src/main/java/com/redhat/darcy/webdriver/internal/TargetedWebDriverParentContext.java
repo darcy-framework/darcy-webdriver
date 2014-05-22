@@ -9,6 +9,7 @@ import com.redhat.darcy.webdriver.WebDriverParentContext;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Consider tracking reference of a frame's parent browser in order to forward certain methods
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
     private final TargetedDriverFactory targetedWdFactory;
