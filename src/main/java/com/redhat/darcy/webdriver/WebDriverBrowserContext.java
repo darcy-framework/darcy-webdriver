@@ -26,10 +26,12 @@ import com.redhat.darcy.ui.Context;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.View;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.BrowserContext;
 import com.redhat.darcy.web.FrameContext;
 import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;
+import com.redhat.darcy.webdriver.internal.WebDriverAlert;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
@@ -104,6 +106,11 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
     @Override
     public FrameContext frame(Locator locator) {
         return findContext(FrameContext.class, locator);
+    }
+    
+    @Override
+    public Alert alert() {
+        return new WebDriverAlert(driver);
     }
 
     @Override
