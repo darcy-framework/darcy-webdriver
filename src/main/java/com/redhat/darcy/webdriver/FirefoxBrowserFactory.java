@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -27,11 +28,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class FirefoxBrowserFactory implements WebDriverBrowserFactory {
+public class FirefoxBrowserFactory extends WebDriverBrowserFactory<FirefoxBrowserFactory> {
     private DesiredCapabilities desired;
     private DesiredCapabilities required;
     private FirefoxProfile profile;
     private FirefoxBinary binary;
+    private ElementConstructorMap elementImpls = ElementConstructorMap
+            .newElementConstructorMapWithDefaults();
     
     @Override
     public Browser newBrowser() {
@@ -53,7 +56,7 @@ public class FirefoxBrowserFactory implements WebDriverBrowserFactory {
             driver = new FirefoxDriver();
         }
         
-        return makeBrowserContext(driver, ElementConstructorMap.defaultElementConstructorMap());
+        return makeBrowserContext(driver, elementImpls);
     }
     
     public FirefoxBrowserFactory desiring(Capabilities capabilities) {
@@ -73,6 +76,13 @@ public class FirefoxBrowserFactory implements WebDriverBrowserFactory {
     
     public FirefoxBrowserFactory usingBinary(FirefoxBinary fb) {
         binary = fb;
+        return this;
+    }
+
+    @Override
+    public <E extends WebDriverElement> FirefoxBrowserFactory withElementImplementation(
+            Class<? super E> type, ElementConstructor<E> constructor) {
+        elementImpls.put(type, constructor);
         return this;
     }
 }

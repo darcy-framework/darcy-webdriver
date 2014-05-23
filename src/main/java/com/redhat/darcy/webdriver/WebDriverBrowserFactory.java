@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.BrowserFactory;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.CachingTargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.DefaultTargetedElementFactoryFactory;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
@@ -34,25 +35,46 @@ import com.redhat.darcy.webdriver.internal.WebDriverTargets;
 
 import org.openqa.selenium.WebDriver;
 
-public interface WebDriverBrowserFactory extends BrowserFactory {
+public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<T>> implements
+        BrowserFactory {
     /**
-     * Boiler plate code to take a freshly minted driver and spit out a Browser.
-     * @param driver
+     * Registers an element implementation to use for a given element type. A valid Element
+     * implementation must implement that element type, extend WebDriverElement, and accept its
+     * source WebElement, parent WebDriver, and its ElementContext in its constructor. Its
+     * ElementContext will only find elements within that source WebElement.
+     * 
+     * @see {@link ElementConstructor}
+     * @see {@link com.redhat.darcy.ui.ElementContext}
+     * @see {@link com.redhat.darcy.webdriver.elements.WebDriverElement}
+     * @param type
+     * @param constructor
      * @return
      */
-    default Browser makeBrowserContext(WebDriver driver, ElementConstructorMap constructorMap) {
+    public abstract <E extends WebDriverElement> T withElementImplementation(Class<? super E> type,
+            ElementConstructor<E> constructor);
+    
+    /**
+     * Boiler plate code to take a freshly minted driver and spit out a Browser.
+     * 
+     * @param driver
+     * @param constructorMap
+     * @return
+     */
+    static Browser makeBrowserContext(WebDriver driver, ElementConstructorMap constructorMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
         
-        TargetedDriverFactory targetedWdFactory = new CachingTargetedWebDriverFactory(driver, target);
+        TargetedDriverFactory targetedWdFactory = new CachingTargetedWebDriverFactory(driver,
+                target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedDriver(target);
         
-        TargetedElementFactoryFactory elementFactoryFactory =
-                new DefaultTargetedElementFactoryFactory(constructorMap);
-        TargetedElementFactory elementFactory = 
-                elementFactoryFactory.newTargetedElementFactory(targetedDriver);
+        TargetedElementFactoryFactory elementFactoryFactory = new DefaultTargetedElementFactoryFactory(
+                constructorMap);
+        TargetedElementFactory elementFactory = elementFactoryFactory
+                .newTargetedElementFactory(targetedDriver);
         
         return new WebDriverBrowserContext(targetedDriver, 
-                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, elementFactoryFactory),
+                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, 
+                        elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, elementFactory));
     }
 }

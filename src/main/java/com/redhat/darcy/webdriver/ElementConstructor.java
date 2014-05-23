@@ -20,11 +20,11 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public interface ElementConstructor<T extends Element> {
+public interface ElementConstructor<T extends WebDriverElement> {
     T newElement(WebElement source, WebDriver parent, ElementContext elementContext);
 }

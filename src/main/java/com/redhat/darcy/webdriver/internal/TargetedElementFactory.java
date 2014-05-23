@@ -39,7 +39,7 @@ public class TargetedElementFactory implements ElementFactory {
     
     @Override
     public <T extends Element> T newElement(Class<T> type, WebElement source) {
-        return elementMap.getConstructor(type).newElement(
+        return elementMap.get(type).newElement(
                 driver.createTargetedElement(source),
                 driver,
                 new DefaultWebDriverElementContext(source, this));
