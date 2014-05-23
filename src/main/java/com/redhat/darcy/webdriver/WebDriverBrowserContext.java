@@ -31,7 +31,6 @@ import com.redhat.darcy.web.BrowserContext;
 import com.redhat.darcy.web.FrameContext;
 import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;
-import com.redhat.darcy.webdriver.internal.WebDriverAlert;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
