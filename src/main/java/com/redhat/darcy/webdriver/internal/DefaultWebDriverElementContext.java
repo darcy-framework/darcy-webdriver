@@ -22,7 +22,6 @@ package com.redhat.darcy.webdriver.internal;
 import com.redhat.darcy.DarcyException;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.ElementFactory;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;

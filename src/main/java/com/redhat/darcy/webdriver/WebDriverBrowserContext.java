@@ -38,8 +38,21 @@ import org.openqa.selenium.internal.WrapsDriver;
 import java.util.List;
 
 /**
- * The main gateway between darcy code and WebDriver. This class takes the Browser API and forwards
- * the calls to the WebDriver operating behind the scenes.
+ * The main wrapper around a {@link org.openqa.selenium.WebDriver} in order to implement 
+ * {@link com.redhat.darcy.web.BrowserContext}. This class also implements 
+ * {@link com.redhat.darcy.web.FrameContext}, which is a subset of the Browser API.
+ * <P>
+ * There is one key difference between a Browser in Darcy and a WebDriver in Selenium. In Darcy, a
+ * Browser is one:one with a specific window/tab or frame. In WebDriver, a single WebDriver 
+ * connection may manage many resulting windows or frames. It is assumed that the WebDriver passed
+ * to this class is pointed at a specific target.
+ * <P>
+ * Implementation of {@link com.redhat.darcy.web.Browser} is straightforward, however, in addition
+ * to forwarding calls to the relevant WebDriver method, we will use our page object structure to
+ * wait for those page objects to load as is required by implementors.
+ * 
+ * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
+ * @see com.redhat.darcy.webdriver.internal.TargetedDriverFactory
  */
 public class WebDriverBrowserContext implements BrowserContext, FrameContext, 
         WebDriverElementContext, WrapsDriver {
@@ -47,6 +60,15 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
     private final WebDriverParentContext parentContext;
     private final WebDriverElementContext elementContext;
     
+    /**
+     * 
+     * @param driver A WebDriver implementation to wrap, pointed at some target (like a specific 
+     *               frame or window).
+     * @param parentContext A parent context that can find other contexts (windows, frames). This
+     *                      class implements ParentContext by forwarding to this implementation.
+     * @param elementContext An element context that can find other elements. This class implements
+     *                       ElementContext by forwarding to this implementation.
+     */
     public WebDriverBrowserContext(WebDriver driver, WebDriverParentContext parentContext, 
             WebDriverElementContext elementContext) {
         this.driver = driver;

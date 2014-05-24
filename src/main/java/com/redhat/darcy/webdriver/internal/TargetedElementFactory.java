@@ -21,7 +21,6 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
-import com.redhat.darcy.webdriver.ElementFactory;
 
 import org.openqa.selenium.WebElement;
 
