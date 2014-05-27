@@ -44,14 +44,14 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
     
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> findAllById(Class<T> type, String name) {
+    public <T> List<T> findAllById(Class<T> type, String nameOrId) {
         List<T> found = new ArrayList<>(1);
         WebDriverTarget target;
         
         if (Browser.class.isAssignableFrom(type)) {
-            target = WebDriverTargets.window(name);
+            target = WebDriverTargets.window(nameOrId);
         } else if (FrameContext.class.isAssignableFrom(type)) {
-            target = WebDriverTargets.frame(driver.getWebDriverTarget(), name);
+            target = WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId);
         } else {
             // TODO: check if viewcontext
             throw new DarcyException("Cannot find Contexts of type: " + type);
