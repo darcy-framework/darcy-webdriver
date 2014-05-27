@@ -19,6 +19,8 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import java.util.logging.Logger;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -32,6 +34,8 @@ import org.openqa.selenium.WebElement;
 public class CachingTargetLocator implements TargetLocator {
     private WebDriverTarget currentTarget;
     private WebDriver driver;
+    
+    private static final Logger logger = Logger.getLogger(CachingTargetLocator.class.toString());
     
     public CachingTargetLocator(WebDriverTarget currentTarget, WebDriver driver) {
         this.currentTarget = currentTarget;
@@ -94,7 +98,7 @@ public class CachingTargetLocator implements TargetLocator {
     
     private WebDriver switchTo(WebDriverTarget newTarget) {
         if (!newTarget.equals(currentTarget)) {
-            System.out.print("Switching to new target... " + newTarget.toString() + "\n");
+            logger.info("Switching to new target... " + newTarget.toString());
             newTarget.switchTo(driver.switchTo());
             currentTarget = newTarget;
         }
