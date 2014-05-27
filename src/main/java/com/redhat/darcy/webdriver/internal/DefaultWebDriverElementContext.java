@@ -127,7 +127,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
     
     @SuppressWarnings("unchecked")
-    public <T> T findElement(Class<T> type, By by) {
+    private <T> T findElement(Class<T> type, By by) {
         if (!Element.class.isAssignableFrom(type)) {
             throw new DarcyException("An ElementContext can only locate Element types: " 
                     + type.toString());
@@ -139,7 +139,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
   
     @SuppressWarnings("unchecked")
-    public <T> List<T> findElements(Class<T> type, By by) {
+    private <T> List<T> findElements(Class<T> type, By by) {
         if (!Element.class.isAssignableFrom(type)) {
             throw new DarcyException("An ElementContext can only locate Element types: " 
                     + type.toString());
