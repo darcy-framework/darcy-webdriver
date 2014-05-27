@@ -25,6 +25,13 @@ import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+/**
+ * A {@link FunctionalInterface} to represent {@link WebDriverElement}s' and subclasses'
+ * constructors.
+ * 
+ * @param <T>
+ */
+@FunctionalInterface
 public interface ElementConstructor<T extends WebDriverElement> {
     T newElement(WebElement source, WebDriver parent, ElementContext elementContext);
 }

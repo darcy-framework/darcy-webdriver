@@ -24,6 +24,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
+/**
+ * Factories for the various possible {@link WebDriverTarget}s.
+ */
 public abstract class WebDriverTargets {
     public static WebDriverTarget window(String nameOrHandle) {
         return new WindowWebDriverTarget(nameOrHandle);

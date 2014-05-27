@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.DarcyException;
+import com.redhat.darcy.ui.ParentContext;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.FrameContext;
 import com.redhat.darcy.webdriver.WebDriverBrowserContext;
@@ -28,6 +29,11 @@ import com.redhat.darcy.webdriver.WebDriverParentContext;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other 
+ * {@link WebDriverBrowserContext}s with {@link TargetedWebDriver}s assigned to them that point to
+ * the found driver.
+ */
 // TODO: Consider tracking reference of a frame's parent browser in order to forward certain methods
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;

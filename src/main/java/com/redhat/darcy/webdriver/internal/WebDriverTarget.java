@@ -23,6 +23,12 @@ import org.openqa.selenium.WebDriver;
 
 import org.openqa.selenium.WebDriver.TargetLocator;
 
+/**
+ * Represents a "target" within a {@link WebDriver}.
+ * 
+ * @see WebDriver.TargetLocator
+ * @see WebDriverTargets
+ */
 public interface WebDriverTarget {
     WebDriver switchTo(TargetLocator targetLocator);
 }

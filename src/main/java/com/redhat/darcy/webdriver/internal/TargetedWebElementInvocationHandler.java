@@ -27,6 +27,10 @@ import org.openqa.selenium.WebElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * InvocationHandler for "targeted" {@link WebElement}s. Switches the owning driver to the 
+ * appropriate target before trying to interact with the {@link WebElement}.
+ */
 public class TargetedWebElementInvocationHandler implements InvocationHandler {
     private final WebElement element;
     private final TargetLocator locator;

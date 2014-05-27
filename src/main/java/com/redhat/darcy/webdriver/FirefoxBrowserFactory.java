@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.web.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.Capabilities;
@@ -28,6 +29,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+/**
+ * Fluently describes a {@link BrowserFactory} that creates specifically configured 
+ * {@link FirefoxDriver}s.
+ */
 public class FirefoxBrowserFactory extends WebDriverBrowserFactory<FirefoxBrowserFactory> {
     private DesiredCapabilities desired;
     private DesiredCapabilities required;

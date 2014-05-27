@@ -19,6 +19,19 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+/**
+ * Wraps a vanilla {@link org.openqa.selenium.WebDriver} implementation, creating
+ * {@link TargetedWebDriver}s for given {@link WebDriverTarget}s found within the wrapped
+ * {@link org.openqa.selenium.WebDriver}.
+ * <P>
+ * {@link TargetedWebDriver}s are NOT thread safe.
+ */
 public interface TargetedDriverFactory {
+    /**
+     * Create a {@link TargetedWebDriver} for a given {@link WebDriverTarget}.
+     * 
+     * @param target
+     * @return
+     */
     TargetedWebDriver getTargetedDriver(WebDriverTarget target);
 }

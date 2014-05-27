@@ -19,6 +19,10 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+/**
+ * Creates {@link TargetedElementFactory TargetedElementFactories} for a given
+ * {@link TargetedWebDriver}.
+ */
 public interface TargetedElementFactoryFactory {
     TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver);
 }

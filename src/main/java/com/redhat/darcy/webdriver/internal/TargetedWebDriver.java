@@ -23,6 +23,17 @@ import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.WebDriver;
 
+/**
+ * Interface for {@link WebDriver} proxies that are "targeted", that is, every method invocation on
+ * the driver will be intercepted so that the driver may be switched to the appropriate
+ * <em>target</em> before proceeding with the method. In this way, every instance of a
+ * TargetedWebDriver is specific to a target (such as a window or frame) that a driver may point to.
+ * <P>
+ * The interface is implemented entirely in {@link TargetedWebDriverInvocationHandler} so any 
+ * changes must be reflected there as they will not cause compile time failures.
+ * 
+ * @see TargetedWebDriverInvocationHandler
+ */
 public interface TargetedWebDriver extends WebDriver {
     WebDriverTarget getWebDriverTarget();
     
@@ -32,6 +43,7 @@ public interface TargetedWebDriver extends WebDriver {
      * <P>
      * Note this is implemented in a Proxy by way of {@link TargetedWebDriverInvocationHandler}, so
      * if the signature is changed, that InvocationHandler will need to be updated.
+     * 
      * @param source
      * @return
      */

@@ -21,12 +21,23 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
+
+import org.openqa.selenium.WebDriver;
 
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Wraps a {@link TargetedWebDriver} and creates {@link WebDriverElement}s who's source 
+ * {@link WebElement}s and {@link WebDriver}s are "targeted" versions of each.
+ * 
+ * @see TargetedWebDriver
+ * @see TargetedWebDriver#createTargetedElement(WebElement)
+ * @see TargetedElement
+ */
 public class TargetedElementFactory implements ElementFactory {
     private final TargetedWebDriver driver;
     private final ElementConstructorMap elementMap;

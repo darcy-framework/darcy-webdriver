@@ -54,7 +54,8 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
             ElementConstructor<E> constructor);
     
     /**
-     * Boiler plate code to take a freshly minted driver and spit out a Browser.
+     * Boiler plate code to take a freshly minted driver, an {@link ElementConstructorMap}, and 
+     * spit out a Browser.
      * 
      * @param driver
      * @param constructorMap

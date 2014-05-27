@@ -20,14 +20,23 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.web.Alert;
+import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 
+/**
+ * Implements the darcy-web Alert interface by forwarding calls to WebDriver's
+ * {@link org.openqa.selenium.Alert} interface.
+ */
 public class WebDriverAlert implements Alert {
     private final WebDriver driver;
     private org.openqa.selenium.Alert cachedAlert;
     
+    /**
+     * 
+     * @param driver May be a {@link TargetedWebDriver}.
+     */
     public WebDriverAlert(WebDriver driver) {
         this.driver = driver;
     }

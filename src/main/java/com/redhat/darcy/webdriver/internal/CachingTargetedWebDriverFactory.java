@@ -26,6 +26,16 @@ import org.openqa.selenium.WebDriver;
 import java.lang.reflect.Proxy;
 import java.util.List;
 
+/**
+ * Creates {@link TargetedWebDriver}s for a given vanilla {@link WebDriver} implementation. These
+ * {@link TargetedWebDriver}s point to a specific {@link WebDriverTarget}; that is, methods on the
+ * {@link TargetedWebDriver} will only interact with the window or frame that driver is targeting.
+ * <P>
+ * This implementation uses a {@link CachingTargetLocator}. That is, when a targeted driver is 
+ * asking the parent {@link WebDriver} to switch to its target, the {@link CachingTargetLocator} 
+ * will only ask the parent driver to switch if it is not already known that the driver is pointing
+ * to the correct target already.
+ */
 public class CachingTargetedWebDriverFactory implements TargetedDriverFactory {
     private final CachingTargetLocator cachingTargetLocator;
     private final Class<?>[] interfaces;

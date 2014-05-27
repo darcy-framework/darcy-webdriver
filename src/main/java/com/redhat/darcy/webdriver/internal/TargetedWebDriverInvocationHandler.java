@@ -30,10 +30,23 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * InvocationHandler for TargetedWebDriver proxies.
+ * 
+ * @see TargetedWebDriver
+ * @see TargetedDriverFactory
+ */
 public class TargetedWebDriverInvocationHandler implements InvocationHandler {
     private final TargetLocator locator;
     private final WebDriverTarget target;
     
+    /**
+     * 
+     * @param locator A {@link TargetLocator} for the parent "vanilla" 
+     *                {@link org.openqa.selenium.WebDriver}. The proxy need not the driver, merely
+     *                something that can switch the driver to the appropriate target.
+     * @param target
+     */
     public TargetedWebDriverInvocationHandler(TargetLocator locator, WebDriverTarget target) {
         this.locator = locator;
         this.target = target;

@@ -36,6 +36,9 @@ import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A map of element interfaces to implementations.
+ */
 public class ElementConstructorMap {
     // Every key MUST map to a value that constructs an implementation of THAT KEY
     private final Map<Class<?>, ElementConstructor<? extends WebDriverElement>> classMap = 
