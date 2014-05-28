@@ -22,6 +22,8 @@ package com.redhat.darcy.webdriver.internal;
 /**
  * Creates {@link TargetedElementFactory TargetedElementFactories} for a given
  * {@link TargetedWebDriver}.
+ *
+ * "And a factory in Chicago, that makes miniature models... of factories."
  */
 public interface TargetedElementFactoryFactory {
     TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver);
