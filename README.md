@@ -7,9 +7,11 @@ maven
 =====
 
 ```xml
-<groupId>com.redhat.darcy</groupId>
-<artifactId>darcy-webdriver</artifactId>
-<version>0.1-SNAPSHOT</version>
+<dependency>
+    <groupId>com.redhat.darcy</groupId>
+    <artifactId>darcy-webdriver</artifactId>
+    <version>0.1-SNAPSHOT</version>
+</dependency>
 ```
 
 getting started
