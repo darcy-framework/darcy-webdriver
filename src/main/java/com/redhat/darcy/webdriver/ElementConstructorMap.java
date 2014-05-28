@@ -41,7 +41,7 @@ import java.util.Map;
  */
 public class ElementConstructorMap {
     // Every key MUST map to a value that constructs an implementation of THAT KEY
-    private final Map<Class<?>, ElementConstructor<? extends WebDriverElement>> classMap = 
+    private final Map<Class<?>, ElementConstructor<? extends Element>> classMap =
             new HashMap<>();
     
     public static ElementConstructorMap newElementConstructorMapWithDefaults() {
@@ -58,14 +58,14 @@ public class ElementConstructorMap {
     }
     
     @SuppressWarnings("unchecked")
-    public <E extends Element> ElementConstructor<? extends E> get(Class<E> type) {
+    public <E extends Element> ElementConstructor<E> get(Class<E> type) {
         ElementConstructor<? extends Element> factory = classMap.get(type);
         
         if (factory == null) {
             throw new DarcyException("No element factory registered for " + type);
         }
         
-        return (ElementConstructor<? extends E>) factory;
+        return (ElementConstructor<E>) factory;
     }
     
     /**
