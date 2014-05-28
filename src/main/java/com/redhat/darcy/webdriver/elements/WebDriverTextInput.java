@@ -33,8 +33,8 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     @Override
     public void clearAndType(String stringToType) {
         click();
-        getWrappedElement().clear();
-        getWrappedElement().sendKeys(stringToType);
+        clear();
+        sendKeys(stringToType);
         // TODO: send TAB key to trigger blur events
     }
     
