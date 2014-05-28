@@ -36,7 +36,6 @@ import java.util.List;
  * 
  * @see TargetedWebDriver
  * @see TargetedWebDriver#createTargetedElement(WebElement)
- * @see TargetedElement
  */
 public class TargetedElementFactory implements ElementFactory {
     private final TargetedWebDriver driver;
