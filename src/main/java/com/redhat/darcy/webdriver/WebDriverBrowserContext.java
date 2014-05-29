@@ -36,6 +36,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The main wrapper around a {@link org.openqa.selenium.WebDriver} in order to implement 
@@ -71,13 +72,15 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
      */
     public WebDriverBrowserContext(WebDriver driver, WebDriverParentContext parentContext, 
             WebDriverElementContext elementContext) {
-        this.driver = driver;
-        this.parentContext = parentContext;
-        this.elementContext = elementContext;
+        this.driver = Objects.requireNonNull(driver);
+        this.parentContext = Objects.requireNonNull(parentContext);
+        this.elementContext = Objects.requireNonNull(elementContext);
     }
     
     @Override
     public <T extends View> T open(Url<T> url) {
+        Objects.requireNonNull(url);
+
         return after(() -> driver.get(url.url()))
                 .expect(transition().to(url.destination()))
                 .waitUpTo(1, MINUTES);
@@ -85,6 +88,9 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
 
     @Override
     public <T extends View> T open(String url, T destination) {
+        Objects.requireNonNull(url);
+        Objects.requireNonNull(destination);
+
         return open(new StaticUrl<T>(url, destination));
     }
 
@@ -105,6 +111,8 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
 
     @Override
     public <T extends View> T back(T destination) {
+        Objects.requireNonNull(destination);
+
         return after(() -> driver.navigate().back())
                 .expect(transition().to(destination))
                 .waitUpTo(1, MINUTES);
@@ -112,6 +120,8 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
 
     @Override
     public <T extends View> T forward(T destination) {
+        Objects.requireNonNull(destination);
+
         return after(() -> driver.navigate().forward())
                 .expect(transition().to(destination))
                 .waitUpTo(1, MINUTES);
@@ -119,6 +129,8 @@ public class WebDriverBrowserContext implements BrowserContext, FrameContext,
 
     @Override
     public <T extends View> T refresh(T destination) {
+        Objects.requireNonNull(destination);
+
         return after(() -> driver.navigate().refresh())
                 .expect(transition().to(destination))
                 .waitUpTo(1, MINUTES);
