@@ -50,7 +50,7 @@ import java.util.Objects;
  * <P>
  * Implementation of {@link com.redhat.darcy.web.Browser} is straightforward, however, in addition
  * to forwarding calls to the relevant WebDriver method, we will use our page object structure to
- * wait for those page objects to load as is required by implementors.
+ * wait for those page objects to load as is required by implementers.
  * 
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
  * @see com.redhat.darcy.webdriver.internal.TargetedDriverFactory
