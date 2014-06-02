@@ -17,15 +17,19 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.doubles;
+package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.webdriver.WebDriverParentContext;
+import com.redhat.darcy.ui.View;
+import com.redhat.darcy.web.Url;
 
-import java.util.List;
-
-public class StubWebDriverParentContext implements WebDriverParentContext {
+public class StubUrl<T extends View> implements Url<T> {
     @Override
-    public <T> List<T> findAllById(Class<T> type, String id) {
-        throw new UnsupportedOperationException("findAllById");
+    public String url() {
+        throw new UnsupportedOperationException("url");
+    }
+
+    @Override
+    public T destination() {
+        throw new UnsupportedOperationException("destination");
     }
 }

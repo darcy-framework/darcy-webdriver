@@ -31,10 +31,10 @@ import static org.openqa.selenium.WebDriver.Navigation;
 
 import com.redhat.darcy.ui.View;
 import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.webdriver.doubles.AlwaysLoadedView;
-import com.redhat.darcy.webdriver.doubles.StubWebDriverElementContext;
-import com.redhat.darcy.webdriver.doubles.StubWebDriverParentContext;
-import com.redhat.darcy.webdriver.rules.TraceTestName;
+import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
+import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
+import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
+import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;
 import org.junit.Test;

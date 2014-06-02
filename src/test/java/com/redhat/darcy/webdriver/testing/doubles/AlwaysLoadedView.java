@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.doubles;
+package com.redhat.darcy.webdriver.testing.doubles;
 
 import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;

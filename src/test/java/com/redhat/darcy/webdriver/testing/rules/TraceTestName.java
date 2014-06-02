@@ -17,19 +17,26 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.doubles;
+package com.redhat.darcy.webdriver.testing.rules;
 
-import com.redhat.darcy.ui.View;
-import com.redhat.darcy.web.Url;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
-public class StubUrl<T extends View> implements Url<T> {
+import java.util.logging.Logger;
+
+public class TraceTestName extends TestWatcher {
+    private final Logger logger = Logger.getLogger(TraceTestName.class.getName());
+
     @Override
-    public String url() {
-        throw new UnsupportedOperationException("url");
+    protected void starting(Description description) {
+        super.starting(description);
+        logger.info("### Starting " + description);
     }
 
     @Override
-    public T destination() {
-        throw new UnsupportedOperationException("destination");
+    protected void finished(Description description) {
+        super.finished(description);
+        logger.info("### Finished " + description);
     }
+
 }

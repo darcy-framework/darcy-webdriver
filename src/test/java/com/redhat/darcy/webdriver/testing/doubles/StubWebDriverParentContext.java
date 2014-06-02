@@ -17,26 +17,15 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.rules;
+package com.redhat.darcy.webdriver.testing.doubles;
 
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import com.redhat.darcy.webdriver.WebDriverParentContext;
 
-import java.util.logging.Logger;
+import java.util.List;
 
-public class TraceTestName extends TestWatcher {
-    private final Logger logger = Logger.getLogger(TraceTestName.class.getName());
-
+public class StubWebDriverParentContext implements WebDriverParentContext {
     @Override
-    protected void starting(Description description) {
-        super.starting(description);
-        logger.info("### Starting " + description);
+    public <T> List<T> findAllById(Class<T> type, String id) {
+        throw new UnsupportedOperationException("findAllById");
     }
-
-    @Override
-    protected void finished(Description description) {
-        super.finished(description);
-        logger.info("### Finished " + description);
-    }
-
 }
