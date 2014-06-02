@@ -49,8 +49,6 @@ public abstract class WebDriverTargets {
         return new NestedWebDriverTarget(parent, child);
     }
     
-    // alert?
-    
     public static class WindowWebDriverTarget implements WebDriverTarget {
         private final String nameOrHandle;
         
