@@ -20,6 +20,8 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -29,6 +31,9 @@ import static org.openqa.selenium.WebDriver.TargetLocator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mockito;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -127,5 +132,67 @@ public class CachingTargetedWebDriverTest {
 
         verifyZeroInteractions(mockedTargetLocator);
         verify(mockedElement).getText();
+    }
+
+    @Test
+    public void shouldReturnFalseForIsPresentIfCannotSwitchToTargetWindow() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+        when(mockedTargetLocator.window("not-present"))
+                .thenThrow(new NoSuchWindowException("No such window"));
+
+        TargetedDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
+                mockedDriver, WebDriverTargets.window("test"));
+
+        TargetedWebDriver targetedDriver = targetedDriverFactory
+                .getTargetedDriver(WebDriverTargets.window("not-present"));
+
+        assertFalse(targetedDriver.isPresent());
+    }
+
+    @Test
+    public void shouldReturnFalseForIsPresentIfCannotSwitchToTargetFrame() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+        when(mockedTargetLocator.frame("not-present"))
+                .thenThrow(new NoSuchFrameException("No such window"));
+
+        TargetedDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
+                mockedDriver, WebDriverTargets.window("test"));
+
+        TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedDriver(
+                WebDriverTargets.frame(WebDriverTargets.window("test"), "not-present"));
+
+        assertFalse(targetedDriver.isPresent());
+    }
+
+    @Test
+    public void shouldReturnTrueForIsPresentIfCanSwitchToTargetWindow() {
+        WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
+
+        TargetedDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
+                mockedDriver, WebDriverTargets.window("test"));
+
+        TargetedWebDriver targetedDriver = targetedDriverFactory
+                .getTargetedDriver(WebDriverTargets.window("present"));
+
+        assertTrue(targetedDriver.isPresent());
+    }
+
+    @Test
+    public void shouldReturnTrueForIsPresentIfCanSwitchToTargetFrame() {
+        WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
+
+        TargetedDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
+                mockedDriver, WebDriverTargets.window("test"));
+
+        TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedDriver(
+                WebDriverTargets.frame(WebDriverTargets.window("test"), "present"));
+
+        assertTrue(targetedDriver.isPresent());
     }
 }
