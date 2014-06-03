@@ -53,7 +53,7 @@ import java.util.Objects;
  * wait for those page objects to load as is required by implementers.
  * 
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
- * @see com.redhat.darcy.webdriver.internal.TargetedDriverFactory
+ * @see com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory
  */
 public class WebDriverBrowserContext implements BrowserContext, FrameContext, 
         WebDriverElementContext, WrapsDriver {

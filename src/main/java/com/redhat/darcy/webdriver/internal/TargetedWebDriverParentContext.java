@@ -37,11 +37,11 @@ import java.util.List;
 // TODO: Consider tracking reference of a frame's parent browser in order to forward certain methods
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
-    private final TargetedDriverFactory targetedWdFactory;
+    private final TargetedWebDriverFactory targetedWdFactory;
     private final TargetedElementFactoryFactory elementFactoryFactory;
     
     public TargetedWebDriverParentContext(TargetedWebDriver driver, 
-            TargetedDriverFactory targetedWdFactory, 
+            TargetedWebDriverFactory targetedWdFactory,
             TargetedElementFactoryFactory elementFactoryFactory) {
         this.driver = driver;
         this.targetedWdFactory = targetedWdFactory;
@@ -63,9 +63,9 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
             throw new DarcyException("Cannot find Contexts of type: " + type);
         }
         
-        TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedDriver(target);
+        TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
         Browser newBrowser = new WebDriverBrowserContext(targetedDriver, 
-                new TargetedWebDriverParentContext(targetedWdFactory.getTargetedDriver(target), 
+                new TargetedWebDriverParentContext(targetedWdFactory.getTargetedWebDriver(target),
                         targetedWdFactory, elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, 
                         elementFactoryFactory.newTargetedElementFactory(targetedDriver)));

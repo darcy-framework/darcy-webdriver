@@ -35,7 +35,7 @@ import java.util.List;
  * {@link WebElement}s and {@link WebDriver}s are "targeted" versions of each.
  * 
  * @see TargetedWebDriver
- * @see TargetedWebDriver#createTargetedElement(WebElement)
+ * @see TargetedWebDriver#createTargetedWebElement(WebElement)
  */
 public class TargetedElementFactory implements ElementFactory {
     private final TargetedWebDriver driver;
@@ -49,7 +49,7 @@ public class TargetedElementFactory implements ElementFactory {
     @Override
     public <T extends Element> T newElement(Class<T> type, WebElement source) {
         return elementMap.get(type).newElement(
-                driver.createTargetedElement(source),
+                driver.createTargetedWebElement(source),
                 driver,
                 new DefaultWebDriverElementContext(source, this));
     }

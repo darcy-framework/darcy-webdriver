@@ -43,11 +43,11 @@ public class CachingTargetedWebDriverFactoryTest {
         TestDriver mockTestDriver = mock(TestDriver.class);
         when(mockTestDriver.doSomething()).thenReturn("did something");
 
-        TargetedDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
                 mockTestDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver = targetedDriverFactory
-                .getTargetedDriver(WebDriverTargets.window("test"));
+                .getTargetedWebDriver(WebDriverTargets.window("test"));
 
         assertThat(targetedWebDriver, instanceOf(TestDriver.class));
         assertEquals("did something", ((TestDriver) targetedWebDriver).doSomething());

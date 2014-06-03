@@ -34,7 +34,7 @@ import java.lang.reflect.Proxy;
  * InvocationHandler for TargetedWebDriver proxies.
  * 
  * @see TargetedWebDriver
- * @see TargetedDriverFactory
+ * @see TargetedWebDriverFactory
  */
 public class TargetedWebDriverInvocationHandler implements InvocationHandler {
     private final TargetLocator locator;
@@ -59,7 +59,7 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
             return locator;
         case "getWebDriverTarget":
             return target;
-        case "createTargetedElement":
+        case "createTargetedWebElement":
             return (WebElement) Proxy.newProxyInstance(
                     TargetedWebDriverInvocationHandler.class.getClassLoader(), 
                     ReflectionUtil.getAllInterfaces(args[0]).toArray(new Class[]{}), 

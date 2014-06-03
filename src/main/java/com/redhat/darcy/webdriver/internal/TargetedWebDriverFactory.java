@@ -26,12 +26,12 @@ package com.redhat.darcy.webdriver.internal;
  * <P>
  * {@link TargetedWebDriver}s are NOT thread safe.
  */
-public interface TargetedDriverFactory {
+public interface TargetedWebDriverFactory {
     /**
      * Create a {@link TargetedWebDriver} for a given {@link WebDriverTarget}.
      * 
      * @param target
      * @return
      */
-    TargetedWebDriver getTargetedDriver(WebDriverTarget target);
+    TargetedWebDriver getTargetedWebDriver(WebDriverTarget target);
 }

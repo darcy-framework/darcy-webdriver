@@ -48,7 +48,7 @@ public interface TargetedWebDriver extends WebDriver {
      * @param source
      * @return
      */
-    WebElement createTargetedElement(WebElement source);
+    WebElement createTargetedWebElement(WebElement source);
 
     /**
      *
