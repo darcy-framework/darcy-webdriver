@@ -42,7 +42,7 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
      * implementation must implement that element type, extend WebDriverElement, and accept its
      * source WebElement, parent WebDriver, and its ElementContext in its constructor. Its
      * ElementContext will only find elements within that source WebElement.
-     * 
+     *
      * @see ElementConstructor
      * @see com.redhat.darcy.ui.ElementContext
      * @see com.redhat.darcy.webdriver.elements.WebDriverElement
@@ -52,29 +52,29 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
      */
     public abstract <E extends WebDriverElement> T withElementImplementation(Class<? super E> type,
             ElementConstructor<E> constructor);
-    
+
     /**
-     * Boiler plate code to take a freshly minted driver, an {@link ElementConstructorMap}, and 
+     * Boiler plate code to take a freshly minted driver, an {@link ElementConstructorMap}, and
      * spit out a Browser.
-     * 
+     *
      * @param driver
      * @param constructorMap
      * @return
      */
     static Browser makeBrowserContext(WebDriver driver, ElementConstructorMap constructorMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
-        
+
         TargetedWebDriverFactory targetedWdFactory = new CachingTargetedWebWebDriverFactory(driver,
                 target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
-        
-        TargetedElementFactoryFactory elementFactoryFactory = new DefaultTargetedElementFactoryFactory(
-                constructorMap);
+
+        TargetedElementFactoryFactory elementFactoryFactory =
+                new DefaultTargetedElementFactoryFactory(constructorMap);
         TargetedElementFactory elementFactory = elementFactoryFactory
                 .newTargetedElementFactory(targetedDriver);
-        
-        return new WebDriverBrowserContext(targetedDriver, 
-                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, 
+
+        return new WebDriverBrowserContext(targetedDriver,
+                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
                         elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, elementFactory));
     }
