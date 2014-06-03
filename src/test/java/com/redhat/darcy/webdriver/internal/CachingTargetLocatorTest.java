@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -32,6 +33,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.Mockito;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(JUnit4.class)
@@ -50,10 +52,7 @@ public class CachingTargetLocatorTest {
 
     @Test
     public void shouldKeepTrackOfChangedTarget() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+        WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
 
         CachingTargetLocator targetLocator = new CachingTargetLocator(
                 WebDriverTargets.window("test1"),
@@ -121,7 +120,7 @@ public class CachingTargetLocatorTest {
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
         // Stub locator in case implementation uses the returned driver
-        when(mockedTargetLocator.window("testwindow2")).thenReturn(mockedDriver);
+        when(mockedTargetLocator.window(anyString())).thenReturn(mockedDriver);
 
         CachingTargetLocator targetLocator = new CachingTargetLocator(
                 WebDriverTargets.frame(WebDriverTargets.window("testwindow1"), "testframe"),
