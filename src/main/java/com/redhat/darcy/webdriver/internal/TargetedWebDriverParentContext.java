@@ -22,7 +22,7 @@ package com.redhat.darcy.webdriver.internal;
 import com.redhat.darcy.DarcyException;
 import com.redhat.darcy.ui.ParentContext;
 import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.FrameContext;
+import com.redhat.darcy.web.Frame;
 import com.redhat.darcy.webdriver.WebDriverBrowserContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
@@ -56,7 +56,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         
         if (Browser.class.isAssignableFrom(type)) {
             target = WebDriverTargets.window(nameOrId);
-        } else if (FrameContext.class.isAssignableFrom(type)) {
+        } else if (Frame.class.isAssignableFrom(type)) {
             target = WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId);
         } else {
             // TODO: check if viewcontext
@@ -65,8 +65,8 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
         Browser newBrowser = new WebDriverBrowserContext(targetedDriver, 
-                new TargetedWebDriverParentContext(targetedWdFactory.getTargetedWebDriver(target),
-                        targetedWdFactory, elementFactoryFactory),
+                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
+                        elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, 
                         elementFactoryFactory.newTargetedElementFactory(targetedDriver)));
         
