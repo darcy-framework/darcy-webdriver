@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static org.junit.Assert.assertSame;
 
+import com.redhat.darcy.DarcyException;
 import com.redhat.darcy.ui.elements.Button;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
@@ -43,5 +44,11 @@ public class ElementConstructorMapTest {
         elementConstructorMap.put(Button.class, buttonConstructor);
 
         assertSame(buttonConstructor, elementConstructorMap.get(Button.class));
+    }
+
+    @Test(expected = DarcyException.class)
+    public void shouldThrowDarcyExceptionIfNoElementConstructorIsRegisteredForAGivenType() {
+        ElementConstructorMap elementConstructorMap = new ElementConstructorMap();
+        elementConstructorMap.get(Button.class);
     }
 }

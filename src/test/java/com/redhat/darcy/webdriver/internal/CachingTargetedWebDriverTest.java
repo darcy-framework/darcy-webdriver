@@ -19,6 +19,8 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -163,6 +165,27 @@ public class CachingTargetedWebDriverTest {
     }
 
     @Test
+    public void shouldCreateTargetedWebElementsThatImplementAllInterfacesOfSourceWebElement() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+                mockedDriver, WebDriverTargets.window("test"));
+
+        TestElement mockedElement = mock(TestElement.class);
+        when(mockedElement.doSomething()).thenReturn("did something");
+
+        WebElement targetedWebElement = targetedDriverFactory
+                .getTargetedWebDriver(WebDriverTargets.window("test"))
+                .createTargetedWebElement(mockedElement);
+
+        assertThat(targetedWebElement, instanceOf(TestElement.class));
+        assertEquals("did something", ((TestElement) targetedWebElement).doSomething());
+    }
+
+    @Test
     public void shouldReturnFalseForIsPresentIfCannotSwitchToTargetWindow() {
         WebDriver mockedDriver = mock(WebDriver.class);
         TargetLocator mockedTargetLocator = mock(TargetLocator.class);
@@ -222,5 +245,9 @@ public class CachingTargetedWebDriverTest {
                 WebDriverTargets.frame(WebDriverTargets.window("test"), "present"));
 
         assertTrue(targetedDriver.isPresent());
+    }
+
+    interface TestElement extends WebElement {
+        String doSomething();
     }
 }
