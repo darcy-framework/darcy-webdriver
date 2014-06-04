@@ -39,7 +39,14 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
     private final TargetedWebDriverFactory targetedWdFactory;
     private final TargetedElementFactoryFactory elementFactoryFactory;
-    
+
+    /**
+     *
+     * @param driver The targeted driver for which this context is a parent of. (Frames will be
+     *               found within this target).
+     * @param targetedWdFactory
+     * @param elementFactoryFactory
+     */
     public TargetedWebDriverParentContext(TargetedWebDriver driver, 
             TargetedWebDriverFactory targetedWdFactory,
             TargetedElementFactoryFactory elementFactoryFactory) {
@@ -64,7 +71,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         }
         
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
-        Browser newBrowser = new WebDriverBrowserContext(targetedDriver, 
+        Browser newBrowser = new WebDriverBrowserContext(targetedDriver,
                 new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
                         elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, 

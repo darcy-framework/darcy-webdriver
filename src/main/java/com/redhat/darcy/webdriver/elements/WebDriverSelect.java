@@ -43,7 +43,7 @@ public class WebDriverSelect extends WebDriverElement implements Select {
     
     @Override
     public List<SelectOption> getOptions() {
-        return getElementContext().findElements(SelectOption.class, By.htmlTag("option"));
+        return getElementContext().element().listOfType(SelectOption.class, By.htmlTag("option"));
     }
     
     @Override

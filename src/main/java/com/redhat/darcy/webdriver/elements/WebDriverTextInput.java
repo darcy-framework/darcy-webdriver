@@ -32,7 +32,6 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     
     @Override
     public void clearAndType(String stringToType) {
-        click();
         clear();
         sendKeys(stringToType);
         // TODO: send TAB key to trigger blur events
@@ -40,7 +39,6 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     
     @Override
     public void sendKeys(CharSequence... keysToSend) {
-        click();
         getWrappedElement().sendKeys(keysToSend);
     }
     
