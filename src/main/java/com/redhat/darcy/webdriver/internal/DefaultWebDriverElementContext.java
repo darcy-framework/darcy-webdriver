@@ -50,6 +50,11 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
     
     @Override
+    public <T> T findById(Class<T> type, String id) {
+        return findElement(type, By.id(id));
+    }
+    
+    @Override
     public <T> List<T> findAllByName(Class<T> type, String name) {
         return findElements(type, By.name(name));
     }
