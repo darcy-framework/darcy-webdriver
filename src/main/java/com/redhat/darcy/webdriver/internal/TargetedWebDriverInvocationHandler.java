@@ -60,7 +60,7 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
         case "getWebDriverTarget":
             return target;
         case "createTargetedWebElement":
-            return (WebElement) Proxy.newProxyInstance(
+            return Proxy.newProxyInstance(
                     TargetedWebDriverInvocationHandler.class.getClassLoader(), 
                     ReflectionUtil.getAllInterfaces(args[0]).toArray(new Class[]{}), 
                     new TargetedWebElementInvocationHandler((WebElement) args[0], locator, target));
@@ -71,6 +71,11 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
             } catch (NoSuchWindowException | NoSuchFrameException e) {
                 return false;
             }
+        // Quitting a driver is not target specific
+        case "quit":
+            locator.defaultContent().quit();
+
+            return null;
         }
         
         return method.invoke(target.switchTo(locator), args);

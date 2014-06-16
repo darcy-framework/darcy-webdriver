@@ -47,8 +47,8 @@ public class RemoteBrowserFactory extends WebDriverBrowserFactory<RemoteBrowserF
         desiring(desired);
     }
     
-    public RemoteBrowserFactory(String hubUrl) throws MalformedURLException {
-        this.hub = new URL(hubUrl);
+    public RemoteBrowserFactory(String hubUrl, Capabilities desired) throws MalformedURLException {
+        this(new URL(hubUrl), desired);
     }
     
     @Override

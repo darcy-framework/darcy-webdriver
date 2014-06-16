@@ -102,7 +102,7 @@ public class TargetedElementFactoryTest {
 
         Element element = elementFactory.newElement(Element.class, mockedParentElement);
 
-        Element childElement = ((WebDriverElement) element).getElementContext().element()
+        Element childElement = ((WebDriverElement) element).getElementContext().find()
                 .element(By.id("test"));
 
         assertTrue(childElement.isDisplayed());

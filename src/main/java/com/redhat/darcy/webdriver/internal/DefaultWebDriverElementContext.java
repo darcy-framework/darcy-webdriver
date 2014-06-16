@@ -92,7 +92,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
         if (locators.length == 0) {
-            return new ArrayList<T>(0);
+            return new ArrayList<>(0);
         }
         
         List<T> elements = null;

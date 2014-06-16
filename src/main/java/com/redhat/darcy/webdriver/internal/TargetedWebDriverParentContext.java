@@ -66,7 +66,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         } else if (Frame.class.isAssignableFrom(type)) {
             target = WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId);
         } else {
-            // TODO: check if viewcontext
+            // TODO: check for more generic types
             throw new DarcyException("Cannot find Contexts of type: " + type);
         }
         
