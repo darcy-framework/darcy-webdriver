@@ -17,25 +17,30 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.internal.WebElementConverter;
-
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Supplier;
 
-/**
- * A {@link FunctionalInterface} to represent {@link WebDriverElement}s' and subclasses'
- * constructors.
- * 
- * @param <T>
- */
-@FunctionalInterface
-public interface ElementConstructor<T extends Element> {
-    T newElement(Supplier<WebElement> source, WebDriver parent, WebElementConverter converter);
+public class CachedWebElement implements Supplier<WebElement> {
+    private final By by;
+    private final SearchContext context;
+
+    private WebElement cachedElement;
+
+    public CachedWebElement(By by, SearchContext context) {
+        this.by = by;
+        this.context = context;
+    }
+
+    public WebElement get() {
+        if (cachedElement == null) {
+            cachedElement = context.findElement(by);
+        }
+
+        return cachedElement;
+    }
 }

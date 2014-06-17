@@ -36,12 +36,12 @@ import java.util.List;
 
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
     private final SearchContext searchContext;
-    private final ElementFactory elementFactory;
+    private final WebElementConverter webElementConverter;
     
     public DefaultWebDriverElementContext(SearchContext searchContext, 
-            ElementFactory elementFactory) {
+            WebElementConverter webElementConverter) {
         this.searchContext = searchContext;
-        this.elementFactory = elementFactory;
+        this.webElementConverter = webElementConverter;
     }
     
     @Override
@@ -107,8 +107,8 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                             locator.findAll(
                                     type,
                                     new DefaultWebDriverElementContext(
-                                            ((WebDriverElement) element).getWrappedElement(), 
-                                            elementFactory)));
+                                            ((WebDriverElement) element).getWrappedElement(),
+                                            webElementConverter)));
                 }
                 
                 elements.clear();
@@ -128,7 +128,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
         }
         
         return child.findAll(type, new DefaultWebDriverElementContext(
-                ((WebDriverElement) parent).getWrappedElement(), elementFactory));
+                ((WebDriverElement) parent).getWrappedElement(), webElementConverter));
     }
     
     @SuppressWarnings("unchecked")
@@ -138,7 +138,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
         
-        return (T) elementFactory.newElement(
+        return (T) webElementConverter.newElement(
                 (Class<Element>) type, 
                 by.findElement(searchContext));
     }
@@ -150,7 +150,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
         
-        return (List<T>) elementFactory.newElementList(
+        return (List<T>) webElementConverter.newElementList(
                 (Class<Element>) type, 
                 by.findElements(searchContext));
     }

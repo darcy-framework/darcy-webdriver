@@ -30,5 +30,5 @@ import java.util.List;
  */
 public interface WebElementConverter {
     <T extends Element> T newElement(Class<T> type, WebElement source);
-    <T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources);
+    //<T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources);
 }

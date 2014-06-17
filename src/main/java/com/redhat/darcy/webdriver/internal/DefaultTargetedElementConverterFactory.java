@@ -29,7 +29,7 @@ public class DefaultTargetedElementConverterFactory implements TargetedElementCo
     }
     
     @Override
-    public TargetedWebElementConverter newTargetedElementFactory(TargetedWebDriver driver) {
+    public TargetedWebElementConverter newTargetedElementConverter(TargetedWebDriver driver) {
         return new TargetedWebElementConverter(driver, factoryMap);
     }
     

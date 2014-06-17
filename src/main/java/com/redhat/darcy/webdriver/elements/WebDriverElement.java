@@ -21,23 +21,32 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
+import com.redhat.darcy.webdriver.internal.WebElementConverter;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.internal.WrapsElement;
 
+import java.util.function.Supplier;
+
 public class WebDriverElement implements Element, WrapsElement, WrapsDriver {
-    private final WebElement source;
+    private final Supplier<WebElement> source;
     private final WebDriver parent;
-    private final ElementContext elementContext;
-    
-    public WebDriverElement(WebElement source, WebDriver parent, ElementContext elementContext) {
+    private final WebElementConverter elementConverter;
+
+    private WebElement cachedElement;
+
+    public WebDriverElement(Supplier<WebElement> source, WebDriver parent, WebElementConverter
+            elementConverter) {
         this.source = source;
         this.parent = parent;
-        this.elementContext = elementContext;
+        this.elementConverter = elementConverter;
     }
-    
+
     @Override
     public boolean isDisplayed() {
         return getWrappedElement().isDisplayed();
@@ -45,14 +54,18 @@ public class WebDriverElement implements Element, WrapsElement, WrapsDriver {
 
     @Override
     public WebElement getWrappedElement() {
-        return source;
+        if (cachedElement == null) {
+            cachedElement = source.get();
+        }
+
+        return cachedElement;
     }
 
     @Override
     public WebDriver getWrappedDriver() {
         return parent;
     }
-    
+
     public ElementContext getElementContext() {
         return elementContext;
     }

@@ -48,7 +48,7 @@ public class TargetedWebDriverParentContextTest {
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
                 new TargetedWebDriverParentContext(mock(TargetedWebDriver.class),
-                        targetedWebDriverFactory, mock(TargetedElementFactoryFactory.class));
+                        targetedWebDriverFactory, mock(TargetedElementConverterFactory.class));
 
         Browser browser = targetedWebDriverParentContext.findById(Browser.class, "test");
 
@@ -71,7 +71,7 @@ public class TargetedWebDriverParentContextTest {
                         targetedWebDriverFactory
                                 .getTargetedWebDriver(WebDriverTargets.window("parent")),
                         targetedWebDriverFactory,
-                        mock(TargetedElementFactoryFactory.class));
+                        mock(TargetedElementConverterFactory.class));
 
         Frame frame = targetedWebDriverParentContext.findById(Frame.class, "test");
 
