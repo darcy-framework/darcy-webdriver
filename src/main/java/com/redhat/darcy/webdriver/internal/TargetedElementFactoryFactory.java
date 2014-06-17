@@ -19,18 +19,12 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.webdriver.ElementConstructorMap;
-
-public class DefaultTargetedElementConverterFactory implements TargetedElementConverterFactory {
-    private final ElementConstructorMap factoryMap;
-    
-    public DefaultTargetedElementConverterFactory(ElementConstructorMap factoryMap) {
-        this.factoryMap = factoryMap;
-    }
-    
-    @Override
-    public TargetedWebElementConverter newTargetedElementConverter(TargetedWebDriver driver) {
-        return new TargetedWebElementConverter(driver, factoryMap);
-    }
-    
+/**
+ * Creates {@link TargetedElementFactory TargetedElementConverters} for a given
+ * {@link TargetedWebDriver}.
+ *
+ * <blockquote>"And a factory in Chicago, that makes miniature models... of factories."</blockquote>
+ */
+public interface TargetedElementFactoryFactory {
+    TargetedElementFactory newTargetedElementConverter(TargetedWebDriver driver);
 }
