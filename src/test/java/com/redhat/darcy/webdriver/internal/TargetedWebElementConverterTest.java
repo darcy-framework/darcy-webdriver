@@ -47,10 +47,10 @@ import org.openqa.selenium.internal.WrapsElement;
 import java.util.Collections;
 
 @RunWith(JUnit4.class)
-public class TargetedElementFactoryTest {
+public class TargetedWebElementConverterTest {
     private TargetedWebDriver mockedTargetedWebDriver = mock(TargetedWebDriver.class);
     private ElementConstructorMap mockedElementCtorMap = mock(ElementConstructorMap.class);
-    private TargetedElementFactory elementFactory = new TargetedElementFactory(
+    private TargetedWebElementConverter elementFactory = new TargetedWebElementConverter(
             mockedTargetedWebDriver, mockedElementCtorMap);
 
     @Before
@@ -75,7 +75,7 @@ public class TargetedElementFactoryTest {
         when(mockedTargetedWebDriver.createTargetedWebElement(any(WebElement.class)))
                 .thenReturn(mockedWebElement);
 
-        TargetedElementFactory elementFactory = new TargetedElementFactory(
+        TargetedWebElementConverter elementFactory = new TargetedWebElementConverter(
                 mockedTargetedWebDriver, mockedElementCtorMap);
 
         Element element = elementFactory.newElement(Element.class, mock(WebElement.class));

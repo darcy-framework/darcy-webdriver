@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Translates from WebElement(s) to Darcy Elements.
  */
-public interface ElementFactory {
+public interface WebElementConverter {
     <T extends Element> T newElement(Class<T> type, WebElement source);
     <T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources);
 }

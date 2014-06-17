@@ -37,11 +37,11 @@ import java.util.List;
  * @see TargetedWebDriver
  * @see TargetedWebDriver#createTargetedWebElement(WebElement)
  */
-public class TargetedElementFactory implements ElementFactory {
+public class TargetedWebElementConverter implements WebElementConverter {
     private final TargetedWebDriver driver;
     private final ElementConstructorMap elementMap;
     
-    public TargetedElementFactory(TargetedWebDriver driver, ElementConstructorMap elementMap) {
+    public TargetedWebElementConverter(TargetedWebDriver driver, ElementConstructorMap elementMap) {
         this.driver = driver;
         this.elementMap = elementMap;
     }

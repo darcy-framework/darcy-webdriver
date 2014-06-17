@@ -21,16 +21,16 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 
-public class DefaultTargetedElementFactoryFactory implements TargetedElementFactoryFactory {
+public class DefaultTargetedElementConverterFactory implements TargetedElementConverterFactory {
     private final ElementConstructorMap factoryMap;
     
-    public DefaultTargetedElementFactoryFactory(ElementConstructorMap factoryMap) {
+    public DefaultTargetedElementConverterFactory(ElementConstructorMap factoryMap) {
         this.factoryMap = factoryMap;
     }
     
     @Override
-    public TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver) {
-        return new TargetedElementFactory(driver, factoryMap);
+    public TargetedWebElementConverter newTargetedElementFactory(TargetedWebDriver driver) {
+        return new TargetedWebElementConverter(driver, factoryMap);
     }
     
 }
