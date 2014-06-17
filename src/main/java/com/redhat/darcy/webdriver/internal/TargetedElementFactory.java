@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
@@ -27,8 +28,9 @@ import org.openqa.selenium.WebDriver;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Wraps a {@link TargetedWebDriver} and creates {@link WebDriverElement}s who's source 
@@ -47,22 +49,18 @@ public class TargetedElementFactory implements ElementFactory {
     }
     
     @Override
-    public <T extends Element> T newElement(Class<T> type, WebElement source) {
+    public <T extends Element> T newElement(Class<T> type, Supplier<WebElement> sourceReference) {
         return elementMap.get(type).newElement(
-                driver.createTargetedWebElement(source),
-                driver,
-                new DefaultWebDriverElementContext(source, this));
+                new TargetedWebElementSupplier(sourceReference, driver), this);
     }
     
     @Override
-    public <T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources) {
-        List<T> impls = new ArrayList<>(sources.size());
-        
-        for (WebElement source : sources) {
-            impls.add(newElement(type, source));
-        }
-        
-        return impls;
+    public <T extends Element> List<T> newElementList(Class<T> type,
+            Supplier<List<WebElement>> sourceReference) {
+        return new LazyList<T>(() -> sourceReference.get()
+                .stream()
+                .map(e -> newElement(type, () -> e))
+                .collect(Collectors.toList()));
     }
     
 }

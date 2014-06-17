@@ -35,13 +35,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
-    private final SearchContext searchContext;
-    private final WebElementConverter webElementConverter;
+    private final SearchContext context;
+    private final ElementFactory elementFactory;
     
-    public DefaultWebDriverElementContext(SearchContext searchContext, 
-            WebElementConverter webElementConverter) {
-        this.searchContext = searchContext;
-        this.webElementConverter = webElementConverter;
+    public DefaultWebDriverElementContext(SearchContext context, ElementFactory elementFactory) {
+        this.context = context;
+        this.elementFactory = elementFactory;
     }
     
     @Override
@@ -108,7 +107,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                                     type,
                                     new DefaultWebDriverElementContext(
                                             ((WebDriverElement) element).getWrappedElement(),
-                                            webElementConverter)));
+                                            elementFactory)));
                 }
                 
                 elements.clear();
@@ -128,7 +127,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
         }
         
         return child.findAll(type, new DefaultWebDriverElementContext(
-                ((WebDriverElement) parent).getWrappedElement(), webElementConverter));
+                ((WebDriverElement) parent).getWrappedElement(), elementFactory));
     }
     
     @SuppressWarnings("unchecked")
@@ -138,9 +137,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
         
-        return (T) webElementConverter.newElement(
-                (Class<Element>) type, 
-                by.findElement(searchContext));
+        return (T) elementFactory.newElement((Class<Element>) type, () -> by.findElement(context));
     }
   
     @SuppressWarnings("unchecked")
@@ -149,9 +146,8 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
             throw new DarcyException("An ElementContext can only locate Element types: " 
                     + type.toString());
         }
-        
-        return (List<T>) webElementConverter.newElementList(
-                (Class<Element>) type, 
-                by.findElements(searchContext));
+
+        return (List<T>) elementFactory.newElementList(
+                (Class<Element>) type, () -> by.findElements(context));
     }
 }

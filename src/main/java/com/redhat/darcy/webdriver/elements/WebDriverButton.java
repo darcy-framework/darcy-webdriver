@@ -19,16 +19,18 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.function.Supplier;
+
 public class WebDriverButton extends WebDriverElement implements Button {
     
-    public WebDriverButton(WebElement source, WebDriver parent, ElementContext elementContext) {
-        super(source, parent, elementContext);
+    public WebDriverButton(Supplier<WebElement> source, ElementFactory elementFactory) {
+        super(source, elementFactory);
     }
     
     @Override

@@ -38,7 +38,7 @@ import java.util.List;
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
     private final TargetedWebDriverFactory targetedWdFactory;
-    private final TargetedElementConverterFactory elementFactoryFactory;
+    private final TargetedElementFactoryFactory elementFactoryFactory;
 
     /**
      *
@@ -49,7 +49,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
      */
     public TargetedWebDriverParentContext(TargetedWebDriver driver, 
             TargetedWebDriverFactory targetedWdFactory,
-            TargetedElementConverterFactory elementFactoryFactory) {
+            TargetedElementFactoryFactory elementFactoryFactory) {
         this.driver = driver;
         this.targetedWdFactory = targetedWdFactory;
         this.elementFactoryFactory = elementFactoryFactory;
@@ -75,7 +75,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
                 new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
                         elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, 
-                        elementFactoryFactory.newTargetedElementConverter(targetedDriver)));
+                        elementFactoryFactory.newTargetedElementFactory(targetedDriver)));
         
         found.add((T) newBrowser);
         

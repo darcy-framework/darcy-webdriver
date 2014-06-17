@@ -20,11 +20,11 @@
 package com.redhat.darcy.webdriver.internal;
 
 /**
- * Creates {@link TargetedElementFactory TargetedElementConverters} for a given
+ * Creates {@link TargetedElementFactory TargetedElementFactories} for a given
  * {@link TargetedWebDriver}.
  *
  * <blockquote>"And a factory in Chicago, that makes miniature models... of factories."</blockquote>
  */
 public interface TargetedElementFactoryFactory {
-    TargetedElementFactory newTargetedElementConverter(TargetedWebDriver driver);
+    TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver);
 }

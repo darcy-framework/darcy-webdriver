@@ -23,11 +23,11 @@ import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.CachingTargetedWebWebDriverFactory;
-import com.redhat.darcy.webdriver.internal.DefaultTargetedElementConverterFactory;
+import com.redhat.darcy.webdriver.internal.DefaultTargetedElementFactoryFactory;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
-import com.redhat.darcy.webdriver.internal.TargetedWebElementConverter;
-import com.redhat.darcy.webdriver.internal.TargetedElementConverterFactory;
+import com.redhat.darcy.webdriver.internal.TargetedElementFactory;
+import com.redhat.darcy.webdriver.internal.TargetedElementFactoryFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
@@ -68,10 +68,10 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
                 target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
 
-        TargetedElementConverterFactory elementFactoryFactory =
-                new DefaultTargetedElementConverterFactory(constructorMap);
-        TargetedWebElementConverter elementFactory = elementFactoryFactory
-                .newTargetedElementConverter(targetedDriver);
+        TargetedElementFactoryFactory elementFactoryFactory =
+                new DefaultTargetedElementFactoryFactory(constructorMap);
+        TargetedElementFactory elementFactory = elementFactoryFactory
+                .newTargetedElementFactory(targetedDriver);
 
         return new WebDriverBrowserContext(targetedDriver,
                 new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,

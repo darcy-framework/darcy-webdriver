@@ -23,7 +23,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.function.Supplier;
 
-public class TargetedWebElementSupplier implements WebElementSupplier {
+public class TargetedWebElementSupplier implements Supplier<WebElement> {
     private final Supplier<WebElement> source;
     private final TargetedWebDriver driver;
 

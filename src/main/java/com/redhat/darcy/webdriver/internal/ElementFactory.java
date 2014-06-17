@@ -24,11 +24,13 @@ import com.redhat.darcy.ui.elements.Element;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Translates from WebElement(s) to Darcy Elements.
  */
 public interface ElementFactory {
-    <T extends Element> T newElement(Class<T> type, WebElement source);
-    //<T extends Element> List<T> newElementList(Class<T> type, List<WebElement> sources);
+    <T extends Element> T newElement(Class<T> type, Supplier<WebElement> sourceReference);
+    <T extends Element> List<T> newElementList(Class<T> type,
+            Supplier<List<WebElement>> sourceReference);
 }

@@ -19,21 +19,22 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.elements.Select;
 import com.redhat.darcy.ui.elements.SelectOption;
 import com.redhat.darcy.web.By;
+import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
     
-    public WebDriverSelect(WebElement source, WebDriver parent, ElementContext elementContext) {
-        super(source, parent, elementContext);
+    public WebDriverSelect(Supplier<WebElement> source, ElementFactory elementFactory) {
+        super(source, elementFactory);
     }
 
     @Override

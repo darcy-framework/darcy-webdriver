@@ -21,35 +21,34 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
-import com.redhat.darcy.webdriver.internal.WebElementConverter;
+import com.redhat.darcy.webdriver.internal.ElementFactory;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.internal.WrapsElement;
 
 import java.util.function.Supplier;
 
-public class WebDriverElement implements Element, WrapsElement, WrapsDriver {
+public class WebDriverElement implements Element, Caching, WrapsElement {
     private final Supplier<WebElement> source;
-    private final WebDriver parent;
-    private final WebElementConverter elementConverter;
+    private final ElementFactory elementFactory;
 
     private WebElement cachedElement;
 
-    public WebDriverElement(Supplier<WebElement> source, WebDriver parent, WebElementConverter
-            elementConverter) {
+    public WebDriverElement(Supplier<WebElement> source, ElementFactory elementFactory) {
         this.source = source;
-        this.parent = parent;
-        this.elementConverter = elementConverter;
+        this.elementFactory = elementFactory;
     }
 
     @Override
     public boolean isDisplayed() {
         return getWrappedElement().isDisplayed();
+    }
+
+    @Override
+    public void invalidateCache() {
+        cachedElement = null;
     }
 
     @Override
@@ -61,12 +60,8 @@ public class WebDriverElement implements Element, WrapsElement, WrapsDriver {
         return cachedElement;
     }
 
-    @Override
-    public WebDriver getWrappedDriver() {
-        return parent;
-    }
-
     public ElementContext getElementContext() {
-        return elementContext;
+        // Make sure to look up the element each time so that it matches the cache
+        return new DefaultWebDriverElementContext(getWrappedElement(), elementFactory);
     }
 }

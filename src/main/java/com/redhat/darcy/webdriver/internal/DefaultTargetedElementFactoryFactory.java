@@ -29,7 +29,7 @@ public class DefaultTargetedElementFactoryFactory implements TargetedElementFact
     }
     
     @Override
-    public TargetedElementFactory newTargetedElementConverter(TargetedWebDriver driver) {
+    public TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver) {
         return new TargetedElementFactory(driver, factoryMap);
     }
     

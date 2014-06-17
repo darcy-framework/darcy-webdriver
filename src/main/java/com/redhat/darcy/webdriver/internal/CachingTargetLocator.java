@@ -19,6 +19,8 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.util.Caching;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -32,7 +34,7 @@ import java.util.logging.Logger;
  * target, so that attempting to switch to the same target multiple times in a row will make no call
  * to the driver.
  */
-public class CachingTargetLocator implements TargetLocator {
+public class CachingTargetLocator implements TargetLocator, Caching {
     private WebDriverTarget currentTarget;
     private WebDriver driver;
 
@@ -78,7 +80,7 @@ public class CachingTargetLocator implements TargetLocator {
     @Override
     public WebDriver defaultContent() {
         // Can probably cache this target when we have a class for it
-        currentTarget = null;
+        invalidateCache();
         return driver.switchTo().defaultContent();
     }
 
@@ -86,15 +88,20 @@ public class CachingTargetLocator implements TargetLocator {
     public WebElement activeElement() {
         // Subsequent calls to active element could return different elements, so make sure we
         // don't cache this
-        currentTarget = null;
+        invalidateCache();
         return driver.switchTo().activeElement();
     }
 
     @Override
     public Alert alert() {
         // Don't cache this
-        currentTarget = null;
+        invalidateCache();
         return driver.switchTo().alert();
+    }
+
+    @Override
+    public void invalidateCache() {
+        currentTarget = null;
     }
 
     public WebDriverTarget getCurrentTarget() {

@@ -19,15 +19,17 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.elements.Link;
+import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.function.Supplier;
+
 public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(WebElement source, WebDriver parent, ElementContext elementContext) {
-        super(source, parent, elementContext);
+    public WebDriverLink(Supplier<WebElement> source, ElementFactory elementFactory) {
+        super(source, elementFactory);
     }
 
     @Override
