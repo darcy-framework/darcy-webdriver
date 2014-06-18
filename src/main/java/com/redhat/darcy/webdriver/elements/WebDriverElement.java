@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementContext;
+import com.redhat.darcy.ui.NotFoundException;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
@@ -43,7 +44,11 @@ public class WebDriverElement implements Element, Caching, WrapsElement {
 
     @Override
     public boolean isDisplayed() {
-        return getWrappedElement().isDisplayed();
+        try {
+            return getWrappedElement().isDisplayed();
+        } catch (NotFoundException e) {
+            return false;
+        }
     }
 
     @Override
