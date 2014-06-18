@@ -25,6 +25,7 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -54,7 +55,11 @@ public class TargetedWebElementInvocationHandler implements InvocationHandler {
             
             throw e;
         }
-        
-        return method.invoke(element, args);
+
+        try {
+            return method.invoke(element, args);
+        } catch (InvocationTargetException e) {
+            throw e.getCause();
+        }
     }
 }

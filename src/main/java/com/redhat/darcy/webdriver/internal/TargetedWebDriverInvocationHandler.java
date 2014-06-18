@@ -27,6 +27,7 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
@@ -77,8 +78,12 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
 
             return null;
         }
-        
-        return method.invoke(target.switchTo(locator), args);
+
+        try {
+            return method.invoke(target.switchTo(locator), args);
+        } catch (InvocationTargetException e) {
+            throw e.getCause();
+        }
     }
     
 }
