@@ -32,8 +32,18 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> T findByChained(Class<T> type, Locator... locators) {
+        throw new UnsupportedOperationException("findByChained");
+    }
+
+    @Override
     public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
         throw new UnsupportedOperationException("findAllByCssSelector");
+    }
+
+    @Override
+    public <T> T findByCssSelector(Class<T> type, String css) {
+        throw new UnsupportedOperationException("findByCssSelector");
     }
 
     @Override
@@ -42,8 +52,18 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> T findByHtmlTag(Class<T> type, String tag) {
+        throw new UnsupportedOperationException("findByHtmlTag");
+    }
+
+    @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
         throw new UnsupportedOperationException("findAllById");
+    }
+
+    @Override
+    public <T> T findById(Class<T> type, String id) {
+        throw new UnsupportedOperationException("findById");
     }
 
     @Override
@@ -52,8 +72,18 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> T findByLinkText(Class<T> type, String linkText) {
+        throw new UnsupportedOperationException("findByLinkText");
+    }
+
+    @Override
     public <T> List<T> findAllByName(Class<T> type, String name) {
         throw new UnsupportedOperationException("findAllByName");
+    }
+
+    @Override
+    public <T> T findByName(Class<T> type, String name) {
+        throw new UnsupportedOperationException("findByName");
     }
 
     @Override
@@ -62,8 +92,18 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> T findByNested(Class<T> type, Element parent, Locator child) {
+        throw new UnsupportedOperationException("findByNested");
+    }
+
+    @Override
     public <T> List<T> findAllByPartialTextContent(Class<T> type, String partialTextContent) {
         throw new UnsupportedOperationException("findAllByPartialTextContent");
+    }
+
+    @Override
+    public <T> T findByPartialTextContent(Class<T> type, String partialTextContent) {
+        throw new UnsupportedOperationException("findByPartialTextContent");
     }
 
     @Override
@@ -72,7 +112,17 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> T findByTextContent(Class<T> type, String textContent) {
+        throw new UnsupportedOperationException("findByTextContent");
+    }
+
+    @Override
     public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
         throw new UnsupportedOperationException("findAllByXPath");
+    }
+
+    @Override
+    public <T> T findByXPath(Class<T> type, String xpath) {
+        throw new UnsupportedOperationException("findByXPath");
     }
 }

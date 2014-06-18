@@ -28,4 +28,9 @@ public class StubWebDriverParentContext implements WebDriverParentContext {
     public <T> List<T> findAllById(Class<T> type, String id) {
         throw new UnsupportedOperationException("findAllById");
     }
+
+    @Override
+    public <T> T findById(Class<T> type, String id) {
+        throw new UnsupportedOperationException("findById");
+    }
 }
