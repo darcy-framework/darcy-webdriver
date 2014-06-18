@@ -81,4 +81,9 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         
         return found;
     }
+
+    @Override
+    public <T> T findById(Class<T> type, String id) {
+        return findAllById(type, id).get(0);
+    }
 }
