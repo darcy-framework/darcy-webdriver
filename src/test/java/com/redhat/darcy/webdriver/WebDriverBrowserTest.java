@@ -31,6 +31,7 @@ import static org.openqa.selenium.WebDriver.Navigation;
 
 import com.redhat.darcy.ui.View;
 import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
@@ -50,7 +51,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldOpenUrlInDriver() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
@@ -61,7 +62,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldSetViewContextWhenOpeningUrl() {
-        Browser browser = new WebDriverBrowser(mock(WebDriver.class),
+        Browser browser = new WebDriverBrowser(mock(TargetedWebDriver.class),
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         AlwaysLoadedView view = browser.open(AlwaysLoadedView.url());
@@ -77,7 +78,7 @@ public class WebDriverBrowserTest {
         // Only return true on 3rd invocation
         when(mockedView.isLoaded()).thenReturn(false, false, true);
 
-        Browser browser = new WebDriverBrowser(mock(WebDriver.class),
+        Browser browser = new WebDriverBrowser(mock(TargetedWebDriver.class),
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         browser.open("", mockedView);
@@ -88,7 +89,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnViewWhenOpeningUrl() {
-        Browser browser = new WebDriverBrowser(mock(WebDriver.class),
+        Browser browser = new WebDriverBrowser(mock(TargetedWebDriver.class),
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         AlwaysLoadedView view = new AlwaysLoadedView();
@@ -100,7 +101,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldGetTitleFromDriver() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
 
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
@@ -112,7 +113,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldGetCurrentUrlFromDriver() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
 
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
@@ -124,7 +125,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldGetPageSourceFromDriver() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
 
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
@@ -136,7 +137,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldNavigateBack() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -151,7 +152,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldSetViewContextWhenNavigatingBack() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -167,7 +168,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnFromBackOnlyWhenViewIsLoaded() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -186,7 +187,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnViewWhenNavigatingBack() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -202,7 +203,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldNavigateForward() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -217,7 +218,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldSetViewContextWhenNavigatingForward() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -234,7 +235,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnFromForwardOnlyWhenViewIsLoaded() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -253,7 +254,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnViewWhenNavigatingForward() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -269,7 +270,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldRefresh() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -284,7 +285,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldSetViewContextWhenRefreshing() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -301,7 +302,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnFromRefreshOnlyWhenViewIsLoaded() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -320,7 +321,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldReturnViewWhenRefreshing() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
         Navigation mockedNavigation = mock(Navigation.class);
 
         when(mockedDriver.navigate()).thenReturn(mockedNavigation);
@@ -336,7 +337,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldClose() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
 
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
@@ -348,7 +349,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldCloseAll() {
-        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
 
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
@@ -360,7 +361,7 @@ public class WebDriverBrowserTest {
 
     @Test
     public void shouldWrapDriver() {
-        Browser browser = new WebDriverBrowser(mock(WebDriver.class),
+        Browser browser = new WebDriverBrowser(mock(TargetedWebDriver.class),
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         assertThat(browser, instanceOf(WrapsDriver.class));

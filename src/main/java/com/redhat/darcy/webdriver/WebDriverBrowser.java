@@ -33,6 +33,7 @@ import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;
 import com.redhat.darcy.web.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebDriverWebContext;
+import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 
 import org.openqa.selenium.WebDriver;
@@ -59,7 +60,7 @@ import java.util.Objects;
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory
  */
 public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, WrapsDriver {
-    private final WebDriver driver;
+    private final TargetedWebDriver driver;
     private final WebDriverWebContext webContext;
 
     /**
@@ -69,7 +70,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      *                   contexts. This class implements WebContext by forwarding to this
      *                   implementation.
      */
-    public WebDriverBrowser(WebDriver driver, WebDriverWebContext webContext) {
+    public WebDriverBrowser(TargetedWebDriver driver, WebDriverWebContext webContext) {
         this.driver = Objects.requireNonNull(driver);
         this.webContext = Objects.requireNonNull(webContext);
     }
@@ -82,10 +83,14 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      * @param elementContext An element context that can find other elements. This class implements
      *                       ElementContext by forwarding to this implementation.
      */
-    public WebDriverBrowser(WebDriver driver, WebDriverParentContext parentContext,
+    public WebDriverBrowser(TargetedWebDriver driver, WebDriverParentContext parentContext,
             WebDriverElementContext elementContext) {
-        this.driver = Objects.requireNonNull(driver);
-        this.webContext = new DelegatingWebDriverWebContext(elementContext, parentContext);
+        this(driver, new DelegatingWebDriverWebContext(elementContext, parentContext));
+    }
+
+    @Override
+    public boolean isPresent() {
+        return driver.isPresent();
     }
 
     @Override

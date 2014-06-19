@@ -52,6 +52,16 @@ public class WebDriverElement implements Element, Caching, WrapsElement {
     }
 
     @Override
+    public boolean isPresent() {
+        try {
+            getWrappedElement();
+            return true;
+        } catch (NotFoundException e) {
+            return false;
+        }
+    }
+
+    @Override
     public void invalidateCache() {
         cachedElement = null;
     }
