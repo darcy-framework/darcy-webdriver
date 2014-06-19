@@ -19,6 +19,7 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
+import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
 import java.util.List;
@@ -32,5 +33,10 @@ public class StubWebDriverParentContext implements WebDriverParentContext {
     @Override
     public <T> T findById(Class<T> type, String id) {
         throw new UnsupportedOperationException("findById");
+    }
+
+    @Override
+    public Alert alert() {
+        throw new UnsupportedOperationException("alert");
     }
 }
