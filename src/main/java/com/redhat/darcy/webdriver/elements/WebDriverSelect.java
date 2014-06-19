@@ -25,7 +25,6 @@ import com.redhat.darcy.ui.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
