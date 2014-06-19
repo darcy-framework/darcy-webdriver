@@ -19,12 +19,23 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.webdriver.ElementConstructorMap;
+
 /**
  * Creates {@link TargetedElementFactory TargetedElementFactories} for a given
  * {@link TargetedWebDriver}.
  *
  * <blockquote>"And a factory in Chicago, that makes miniature models... of factories."</blockquote>
  */
-public interface TargetedElementFactoryFactory {
-    TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver);
+public class TargetedElementFactoryFactory {
+    private final ElementConstructorMap factoryMap;
+    
+    public TargetedElementFactoryFactory(ElementConstructorMap factoryMap) {
+        this.factoryMap = factoryMap;
+    }
+
+    public TargetedElementFactory newTargetedElementFactory(TargetedWebDriver driver) {
+        return new TargetedElementFactory(driver, factoryMap);
+    }
+    
 }

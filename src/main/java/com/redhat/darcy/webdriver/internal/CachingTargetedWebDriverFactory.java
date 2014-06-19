@@ -36,12 +36,12 @@ import java.util.List;
  * will only ask the parent driver to switch if it is not already known that the driver is pointing
  * to the correct target already.
  */
-public class CachingTargetedWebWebDriverFactory implements TargetedWebDriverFactory {
+public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory {
     private final CachingTargetLocator cachingTargetLocator;
     private final Class<?>[] interfaces;
     
-    public CachingTargetedWebWebDriverFactory(WebDriver untargetedDriver,
-                                              WebDriverTarget currentTarget) {
+    public CachingTargetedWebDriverFactory(WebDriver untargetedDriver,
+            WebDriverTarget currentTarget) {
         cachingTargetLocator = new CachingTargetLocator(currentTarget, untargetedDriver);
         
         List<Class<?>> interfaces = ReflectionUtil.getAllInterfaces(untargetedDriver);
@@ -53,7 +53,7 @@ public class CachingTargetedWebWebDriverFactory implements TargetedWebDriverFact
     @Override
     public TargetedWebDriver getTargetedWebDriver(WebDriverTarget target) {
         return (TargetedWebDriver) Proxy.newProxyInstance(
-                CachingTargetedWebWebDriverFactory.class.getClassLoader(),
+                CachingTargetedWebDriverFactory.class.getClassLoader(),
                 interfaces,
                 new TargetedWebDriverInvocationHandler(cachingTargetLocator, target));
     }

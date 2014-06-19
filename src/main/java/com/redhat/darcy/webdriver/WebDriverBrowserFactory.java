@@ -22,8 +22,7 @@ package com.redhat.darcy.webdriver;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.internal.CachingTargetedWebWebDriverFactory;
-import com.redhat.darcy.webdriver.internal.DefaultTargetedElementFactoryFactory;
+import com.redhat.darcy.webdriver.internal.CachingTargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.TargetedElementFactory;
@@ -64,16 +63,16 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
     static Browser makeBrowserContext(WebDriver driver, ElementConstructorMap constructorMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
 
-        TargetedWebDriverFactory targetedWdFactory = new CachingTargetedWebWebDriverFactory(driver,
+        TargetedWebDriverFactory targetedWdFactory = new CachingTargetedWebDriverFactory(driver,
                 target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
 
         TargetedElementFactoryFactory elementFactoryFactory =
-                new DefaultTargetedElementFactoryFactory(constructorMap);
+                new TargetedElementFactoryFactory(constructorMap);
         TargetedElementFactory elementFactory = elementFactoryFactory
                 .newTargetedElementFactory(targetedDriver);
 
-        return new WebDriverBrowserContext(targetedDriver,
+        return new WebDriverBrowser(targetedDriver,
                 new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
                         elementFactoryFactory),
                 new DefaultWebDriverElementContext(targetedDriver, elementFactory));

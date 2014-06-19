@@ -58,7 +58,7 @@ import java.util.Objects;
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory
  */
-public class WebDriverBrowserContext implements Browser, Frame, WebDriverWebContext, WrapsDriver {
+public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, WrapsDriver {
     private final WebDriver driver;
     private final WebDriverWebContext webContext;
 
@@ -69,7 +69,7 @@ public class WebDriverBrowserContext implements Browser, Frame, WebDriverWebCont
      *                   contexts. This class implements WebContext by forwarding to this
      *                   implementation.
      */
-    public WebDriverBrowserContext(WebDriver driver, WebDriverWebContext webContext) {
+    public WebDriverBrowser(WebDriver driver, WebDriverWebContext webContext) {
         this.driver = Objects.requireNonNull(driver);
         this.webContext = Objects.requireNonNull(webContext);
     }
@@ -82,8 +82,8 @@ public class WebDriverBrowserContext implements Browser, Frame, WebDriverWebCont
      * @param elementContext An element context that can find other elements. This class implements
      *                       ElementContext by forwarding to this implementation.
      */
-    public WebDriverBrowserContext(WebDriver driver, WebDriverParentContext parentContext,
-                                   WebDriverElementContext elementContext) {
+    public WebDriverBrowser(WebDriver driver, WebDriverParentContext parentContext,
+            WebDriverElementContext elementContext) {
         this.driver = Objects.requireNonNull(driver);
         this.webContext = new DelegatingWebDriverWebContext(elementContext, parentContext);
     }

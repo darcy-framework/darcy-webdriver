@@ -50,7 +50,7 @@ public class CachingTargetedWebDriverTest {
 
     @Test
     public void shouldKnowAssignedTarget() {
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mock(WebDriver.class), WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -66,7 +66,7 @@ public class CachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -86,7 +86,7 @@ public class CachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -105,7 +105,7 @@ public class CachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         WebElement mockedElement = mock(WebElement.class);
@@ -128,7 +128,7 @@ public class CachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         WebElement mockedElement = mock(WebElement.class);
@@ -152,7 +152,7 @@ public class CachingTargetedWebDriverTest {
         when(mockedTargetLocator.window(anyString()))
                 .thenThrow(new NoSuchWindowException("No such window"));
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         WebElement mockedElement = mock(WebElement.class);
@@ -171,7 +171,7 @@ public class CachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TestElement mockedElement = mock(TestElement.class);
@@ -194,7 +194,7 @@ public class CachingTargetedWebDriverTest {
         when(mockedTargetLocator.window(anyString()))
                 .thenThrow(new NoSuchWindowException("No such window"));
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory
@@ -212,7 +212,7 @@ public class CachingTargetedWebDriverTest {
         when(mockedTargetLocator.frame("not-present"))
                 .thenThrow(new NoSuchFrameException("No such window"));
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedWebDriver(
@@ -225,7 +225,7 @@ public class CachingTargetedWebDriverTest {
     public void shouldReturnTrueForIsPresentIfCanSwitchToTargetWindow() {
         WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory
@@ -238,7 +238,7 @@ public class CachingTargetedWebDriverTest {
     public void shouldReturnTrueForIsPresentIfCanSwitchToTargetFrame() {
         WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedWebDriver(

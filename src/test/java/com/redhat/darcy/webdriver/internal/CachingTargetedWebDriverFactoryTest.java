@@ -43,7 +43,7 @@ public class CachingTargetedWebDriverFactoryTest {
         TestDriver mockTestDriver = mock(TestDriver.class);
         when(mockTestDriver.doSomething()).thenReturn("did something");
 
-        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockTestDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver = targetedDriverFactory
