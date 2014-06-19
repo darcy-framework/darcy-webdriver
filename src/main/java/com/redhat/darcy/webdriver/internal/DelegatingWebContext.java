@@ -44,11 +44,11 @@ import java.util.Objects;
  * A {@link com.redhat.darcy.webdriver.internal.WebDriverWebContext} that delegates to a separate
  * ElementContext and ParentContext implementation based on the type of the element.
  */
-public class DelegatingWebDriverWebContext implements WebDriverWebContext {
+public class DelegatingWebContext implements WebDriverWebContext {
     private final WebDriverElementContext elementContext;
     private final WebDriverParentContext parentContext;
 
-    public DelegatingWebDriverWebContext(WebDriverElementContext elementContext,
+    public DelegatingWebContext(WebDriverElementContext elementContext,
             WebDriverParentContext parentContext) {
         this.elementContext = Objects.requireNonNull(elementContext);
         this.parentContext = Objects.requireNonNull(parentContext);

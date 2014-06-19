@@ -31,7 +31,7 @@ import com.redhat.darcy.web.Frame;
 import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;
 import com.redhat.darcy.web.WebSelection;
-import com.redhat.darcy.webdriver.internal.DelegatingWebDriverWebContext;
+import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
@@ -85,7 +85,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverParentContext parentContext,
             WebDriverElementContext elementContext) {
-        this(driver, new DelegatingWebDriverWebContext(elementContext, parentContext));
+        this(driver, new DelegatingWebContext(elementContext, parentContext));
     }
 
     @Override
