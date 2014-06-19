@@ -27,7 +27,6 @@ import com.redhat.darcy.ui.View;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.DefaultWebSelection;
 import com.redhat.darcy.web.Frame;
 import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.Url;
@@ -35,6 +34,7 @@ import com.redhat.darcy.web.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
+import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
@@ -153,11 +153,6 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public Alert alert() {
-        return new WebDriverAlert(driver);
-    }
-
-    @Override
     public void close() {
         driver.close();
     }
@@ -169,7 +164,12 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
     @Override
     public WebSelection find() {
-        return new DefaultWebSelection(this);
+        return new WebDriverWebSelection(this);
+    }
+
+    @Override
+    public Alert alert() {
+        return webContext.alert();
     }
 
     @Override

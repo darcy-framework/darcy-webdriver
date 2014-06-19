@@ -21,8 +21,10 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.DarcyException;
 import com.redhat.darcy.ui.ParentContext;
+import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.Frame;
+import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
@@ -53,6 +55,11 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         this.driver = driver;
         this.targetedWdFactory = targetedWdFactory;
         this.elementFactoryFactory = elementFactoryFactory;
+    }
+
+    @Override
+    public Alert alert() {
+        return new WebDriverAlert(driver);
     }
     
     @SuppressWarnings("unchecked")

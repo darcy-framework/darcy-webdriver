@@ -19,16 +19,20 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.web.AbstractWebSelection;
 import com.redhat.darcy.web.Alert;
-import com.redhat.darcy.web.WebContext;
-import com.redhat.darcy.web.WebSelection;
-import com.redhat.darcy.webdriver.WebDriverElementContext;
-import com.redhat.darcy.webdriver.WebDriverParentContext;
 
-public interface WebDriverWebContext extends WebContext, WebDriverElementContext,
-        WebDriverParentContext {
+public class WebDriverWebSelection extends AbstractWebSelection {
+    private final WebDriverWebContext webContext;
+
+    public WebDriverWebSelection(WebDriverWebContext webContext) {
+        super(webContext);
+
+        this.webContext = webContext;
+    }
+
     @Override
-    WebSelection find();
-
-    Alert alert();
+    public Alert alert() {
+        return webContext.alert();
+    }
 }

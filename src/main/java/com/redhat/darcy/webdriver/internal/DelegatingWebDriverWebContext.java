@@ -20,7 +20,6 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.Context;
-import com.redhat.darcy.ui.ElementContext;
 import com.redhat.darcy.ui.FindsByChained;
 import com.redhat.darcy.ui.FindsById;
 import com.redhat.darcy.ui.FindsByLinkText;
@@ -30,12 +29,13 @@ import com.redhat.darcy.ui.FindsByPartialTextContent;
 import com.redhat.darcy.ui.FindsByTextContent;
 import com.redhat.darcy.ui.FindsByXPath;
 import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.ParentContext;
 import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.web.DefaultWebSelection;
+import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.FindsByCssSelector;
 import com.redhat.darcy.web.FindsByHtmlTag;
 import com.redhat.darcy.web.WebSelection;
+import com.redhat.darcy.webdriver.WebDriverElementContext;
+import com.redhat.darcy.webdriver.WebDriverParentContext;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,18 +45,23 @@ import java.util.Objects;
  * ElementContext and ParentContext implementation based on the type of the element.
  */
 public class DelegatingWebDriverWebContext implements WebDriverWebContext {
-    private final ElementContext elementContext;
-    private final ParentContext parentContext;
+    private final WebDriverElementContext elementContext;
+    private final WebDriverParentContext parentContext;
 
-    public DelegatingWebDriverWebContext(ElementContext elementContext, ParentContext
-            parentContext) {
+    public DelegatingWebDriverWebContext(WebDriverElementContext elementContext,
+            WebDriverParentContext parentContext) {
         this.elementContext = Objects.requireNonNull(elementContext);
         this.parentContext = Objects.requireNonNull(parentContext);
     }
 
     @Override
     public WebSelection find() {
-        return new DefaultWebSelection(this);
+        return new WebDriverWebSelection(this);
+    }
+
+    @Override
+    public Alert alert() {
+        return parentContext.alert();
     }
 
     @Override

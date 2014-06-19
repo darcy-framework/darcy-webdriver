@@ -19,17 +19,18 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 
-import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 
 /**
  * Implements the darcy-web Alert interface by forwarding calls to WebDriver's
  * {@link org.openqa.selenium.Alert} interface.
  */
-public class WebDriverAlert implements Alert {
+public class WebDriverAlert implements Alert, Caching {
     private final WebDriver driver;
     private org.openqa.selenium.Alert cachedAlert;
     
@@ -44,10 +45,10 @@ public class WebDriverAlert implements Alert {
     @Override
     public boolean isPresent() {
         try {
-            cachedAlert = null;
+            invalidateCache();
             alert();
             return true;
-        } catch (NoAlertPresentException e) {
+        } catch (NotFoundException e) {
             return false;
         }
     }
@@ -70,6 +71,11 @@ public class WebDriverAlert implements Alert {
     @Override
     public String readText() {
         return alert().getText();
+    }
+
+    @Override
+    public void invalidateCache() {
+        cachedAlert = null;
     }
     
     private org.openqa.selenium.Alert alert() {
