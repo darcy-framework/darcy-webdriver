@@ -28,10 +28,11 @@ import com.redhat.darcy.webdriver.internal.ElementFactory;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
-    
+
     public WebDriverSelect(Supplier<WebElement> source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
@@ -40,23 +41,22 @@ public class WebDriverSelect extends WebDriverElement implements Select {
     public void select(Locator locator) {
         locator.find(SelectOption.class, getElementContext()).select();
     }
-    
+
     @Override
     public List<SelectOption> getOptions() {
         return getElementContext().find().elementsOfType(SelectOption.class, By.htmlTag
                 ("option"));
     }
-    
+
     @Override
-    public SelectOption getCurrentlySelectedOption() {
+    public Optional<SelectOption> getCurrentlySelectedOption() {
         for (SelectOption option : getOptions()) {
             if (option.isSelected()) {
-                return option;
+                return Optional.of(option);
             }
         }
-        
-        // Should probably throw an exception instead of return null?
-        return null;
+
+        return Optional.empty();
     }
 
     @Override
