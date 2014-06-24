@@ -1,6 +1,6 @@
 darcy-webdriver
 ===============
-[![Build Status](https://drone.io/github.com/darcy-framework/darcy-webdriver/status.png)](https://drone.io/github.com/darcy-framework/darcy-webdriver/latest)
+[![Build Status](https://travis-ci.org/darcy-framework/darcy-webdriver.svg?branch=master)](https://travis-ci.org/darcy-framework/darcy-webdriver)
 
 An implementation of [darcy][1] and [darcy-web][2] that uses [Selenium WebDriver][3] as the automation library backend.
 
