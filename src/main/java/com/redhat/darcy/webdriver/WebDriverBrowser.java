@@ -20,7 +20,7 @@
 package com.redhat.darcy.webdriver;
 
 import static com.redhat.synq.Synq.after;
-import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 import com.redhat.darcy.ui.Locator;
 import com.redhat.darcy.ui.View;
