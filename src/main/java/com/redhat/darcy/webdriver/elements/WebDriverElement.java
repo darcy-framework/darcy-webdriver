@@ -20,12 +20,12 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.NotFoundException;
 import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
