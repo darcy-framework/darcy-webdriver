@@ -1,6 +1,6 @@
 darcy-webdriver
 ===============
-[![Build Status](https://travis-ci.org/darcy-framework/darcy-webdriver.svg?branch=master)](https://travis-ci.org/darcy-framework/darcy-webdriver)
+[![Build Status](https://travis-ci.org/darcy-framework/darcy-webdriver.svg?branch=master)](https://travis-ci.org/darcy-framework/darcy-webdriver) [![Coverage Status](https://coveralls.io/repos/darcy-framework/darcy-webdriver/badge.png?branch=master)](https://coveralls.io/r/darcy-framework/darcy-webdriver?branch=master)
 
 An implementation of [darcy][1] and [darcy-web][2] that uses [Selenium WebDriver][3] as the automation library backend.
 
