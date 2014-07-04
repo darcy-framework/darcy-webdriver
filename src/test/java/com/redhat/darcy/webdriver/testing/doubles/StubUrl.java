@@ -20,9 +20,9 @@
 package com.redhat.darcy.webdriver.testing.doubles;
 
 import com.redhat.darcy.ui.View;
-import com.redhat.darcy.web.Url;
+import com.redhat.darcy.web.ViewUrl;
 
-public class StubUrl<T extends View> implements Url<T> {
+public class StubUrl<T extends View> implements ViewUrl<T> {
     @Override
     public String url() {
         throw new UnsupportedOperationException("url");

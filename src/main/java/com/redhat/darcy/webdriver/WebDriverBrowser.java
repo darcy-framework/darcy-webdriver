@@ -29,7 +29,7 @@ import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.Frame;
 import com.redhat.darcy.web.StaticUrl;
-import com.redhat.darcy.web.Url;
+import com.redhat.darcy.web.ViewUrl;
 import com.redhat.darcy.web.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
@@ -94,11 +94,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T extends View> T open(Url<T> url) {
-        Objects.requireNonNull(url);
+    public <T extends View> T open(ViewUrl<T> viewUrl) {
+        Objects.requireNonNull(viewUrl);
 
-        return after(() -> driver.get(url.url()))
-                .expect(transition().to(url.destination()))
+        return after(() -> driver.get(viewUrl.url()))
+                .expect(transition().to(viewUrl.destination()))
                 .waitUpTo(1, MINUTES);
     }
 

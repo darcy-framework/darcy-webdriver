@@ -52,6 +52,7 @@ public class WebDriverBrowserTest {
     @Test
     public void shouldOpenUrlInDriver() {
         TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
+
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
