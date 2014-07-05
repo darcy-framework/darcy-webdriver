@@ -55,7 +55,7 @@ public class RemoteBrowserFactory extends WebDriverBrowserFactory<RemoteBrowserF
     public Browser newBrowser() {
         RemoteWebDriver driver = new RemoteWebDriver(hub, desired, required);
         
-        return makeBrowserContext(driver, elementImpls);
+        return makeBrowser(driver, elementImpls);
     }
     
     public RemoteBrowserFactory desiring(Capabilities capabilities) {

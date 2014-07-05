@@ -61,7 +61,7 @@ public class FirefoxBrowserFactory extends WebDriverBrowserFactory<FirefoxBrowse
             driver = new FirefoxDriver();
         }
         
-        return makeBrowserContext(driver, elementImpls);
+        return makeBrowser(driver, elementImpls);
     }
     
     public FirefoxBrowserFactory desiring(Capabilities capabilities) {

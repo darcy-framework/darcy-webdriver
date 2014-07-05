@@ -60,7 +60,7 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
      * @param constructorMap
      * @return
      */
-    static Browser makeBrowserContext(WebDriver driver, ElementConstructorMap constructorMap) {
+    protected static Browser makeBrowser(WebDriver driver, ElementConstructorMap constructorMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
 
         TargetedWebDriverFactory targetedWdFactory = new CachingTargetedWebDriverFactory(driver,
