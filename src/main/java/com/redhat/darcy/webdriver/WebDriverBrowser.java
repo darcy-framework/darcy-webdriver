@@ -28,7 +28,6 @@ import com.redhat.darcy.ui.elements.Element;
 import com.redhat.darcy.web.Alert;
 import com.redhat.darcy.web.Browser;
 import com.redhat.darcy.web.Frame;
-import com.redhat.darcy.web.StaticUrl;
 import com.redhat.darcy.web.ViewUrl;
 import com.redhat.darcy.web.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
@@ -97,9 +96,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public <T extends View> T open(ViewUrl<T> viewUrl) {
         Objects.requireNonNull(viewUrl);
 
-        return after(() -> driver.get(viewUrl.url()))
-                .expect(transition().to(viewUrl.destination()))
-                .waitUpTo(1, MINUTES);
+        return open(viewUrl.url(), viewUrl.destination());
     }
 
     @Override
@@ -107,7 +104,9 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(url);
         Objects.requireNonNull(destination);
 
-        return open(new StaticUrl<T>(url, destination));
+        return after(() -> driver.get(url))
+                .expect(transition().to(destination))
+                .waitUpTo(1, MINUTES);
     }
 
     @Override
