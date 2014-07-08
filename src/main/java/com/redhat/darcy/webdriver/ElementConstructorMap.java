@@ -22,12 +22,14 @@ package com.redhat.darcy.webdriver;
 import com.redhat.darcy.DarcyException;
 import com.redhat.darcy.ui.elements.Button;
 import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.elements.Label;
 import com.redhat.darcy.ui.elements.Link;
 import com.redhat.darcy.ui.elements.Select;
 import com.redhat.darcy.ui.elements.SelectOption;
 import com.redhat.darcy.ui.elements.TextInput;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
+import com.redhat.darcy.webdriver.elements.WebDriverLabel;
 import com.redhat.darcy.webdriver.elements.WebDriverLink;
 import com.redhat.darcy.webdriver.elements.WebDriverSelect;
 import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
@@ -52,6 +54,7 @@ public class ElementConstructorMap {
         map.put(Link.class, WebDriverLink::new);
         map.put(Select.class, WebDriverSelect::new);
         map.put(SelectOption.class, WebDriverSelectOption::new);
+        map.put(Label.class, WebDriverLabel::new);
         map.put(Element.class, WebDriverElement::new);
         
         return map;
