@@ -26,9 +26,8 @@ public class StubView implements View {
     private ElementContext context;
 
     @Override
-    public View setContext(ElementContext context) {
+    public void setContext(ElementContext context) {
         this.context = context;
-        return this;
     }
 
     @Override
