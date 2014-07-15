@@ -19,7 +19,7 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.web.Alert;
+import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
 import java.util.List;

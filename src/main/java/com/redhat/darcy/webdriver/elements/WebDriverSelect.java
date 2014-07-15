@@ -19,9 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.elements.Select;
-import com.redhat.darcy.ui.elements.SelectOption;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.elements.Select;
+import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 

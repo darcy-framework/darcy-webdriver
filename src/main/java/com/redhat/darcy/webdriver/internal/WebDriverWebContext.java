@@ -19,9 +19,9 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.web.Alert;
-import com.redhat.darcy.web.WebContext;
-import com.redhat.darcy.web.WebSelection;
+import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.api.WebContext;
+import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 

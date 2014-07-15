@@ -19,7 +19,7 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.elements.Label;
+import com.redhat.darcy.ui.api.elements.Label;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebElement;

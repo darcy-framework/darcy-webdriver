@@ -19,15 +19,15 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.BrowserFactory;
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.web.api.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.CachingTargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
-import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.TargetedElementFactory;
 import com.redhat.darcy.webdriver.internal.TargetedElementFactoryFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
 import com.redhat.darcy.webdriver.internal.WebDriverTargets;
@@ -43,7 +43,7 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
      * ElementContext will only find elements within that source WebElement.
      *
      * @see ElementConstructor
-     * @see com.redhat.darcy.ui.ElementContext
+     * @see com.redhat.darcy.ui.api.ElementContext
      * @see com.redhat.darcy.webdriver.elements.WebDriverElement
      * @param type
      * @param constructor

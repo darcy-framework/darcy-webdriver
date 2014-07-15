@@ -19,8 +19,8 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.web.AbstractWebSelection;
-import com.redhat.darcy.web.Alert;
+import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.internal.AbstractWebSelection;
 
 public class WebDriverWebSelection extends AbstractWebSelection {
     private final WebDriverWebContext webContext;

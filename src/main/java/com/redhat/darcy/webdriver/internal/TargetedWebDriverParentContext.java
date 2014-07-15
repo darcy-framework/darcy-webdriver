@@ -19,11 +19,11 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.DarcyException;
-import com.redhat.darcy.ui.ParentContext;
-import com.redhat.darcy.web.Alert;
-import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.Frame;
+import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.ParentContext;
+import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;

@@ -19,9 +19,9 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.DarcyException;
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
@@ -177,7 +177,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
      * class cast exception.</strong>
      * <p>
      * This class implements WebDriverElementContext so that it can be used with chained locators.
-     * See {@link #findAllByChained(Class, com.redhat.darcy.ui.Locator...)}.
+     * See {@link #findAllByChained(Class, com.redhat.darcy.ui.api.Locator...)}.
      */
     private class WebElementContext implements WebDriverElementContext {
         private final SearchContext sc;

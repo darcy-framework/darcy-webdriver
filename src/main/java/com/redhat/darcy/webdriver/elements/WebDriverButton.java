@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.ui.api.elements.Button;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Supplier;

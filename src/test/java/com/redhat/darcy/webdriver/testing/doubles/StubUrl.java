@@ -19,8 +19,8 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.ui.View;
-import com.redhat.darcy.web.ViewUrl;
+import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.web.api.ViewUrl;
 
 public class StubUrl<T extends View> implements ViewUrl<T> {
     @Override

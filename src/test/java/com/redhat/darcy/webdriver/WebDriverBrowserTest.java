@@ -29,8 +29,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.WebDriver.Navigation;
 
-import com.redhat.darcy.ui.View;
-import com.redhat.darcy.web.Browser;
+import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
@@ -41,7 +41,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
 @RunWith(JUnit4.class)

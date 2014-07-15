@@ -19,21 +19,21 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.Context;
-import com.redhat.darcy.ui.FindsByChained;
-import com.redhat.darcy.ui.FindsById;
-import com.redhat.darcy.ui.FindsByLinkText;
-import com.redhat.darcy.ui.FindsByName;
-import com.redhat.darcy.ui.FindsByNested;
-import com.redhat.darcy.ui.FindsByPartialTextContent;
-import com.redhat.darcy.ui.FindsByTextContent;
-import com.redhat.darcy.ui.FindsByXPath;
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.web.Alert;
-import com.redhat.darcy.web.FindsByCssSelector;
-import com.redhat.darcy.web.FindsByHtmlTag;
-import com.redhat.darcy.web.WebSelection;
+import com.redhat.darcy.ui.api.Context;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.FindsByChained;
+import com.redhat.darcy.ui.internal.FindsById;
+import com.redhat.darcy.ui.internal.FindsByLinkText;
+import com.redhat.darcy.ui.internal.FindsByName;
+import com.redhat.darcy.ui.internal.FindsByNested;
+import com.redhat.darcy.ui.internal.FindsByPartialTextContent;
+import com.redhat.darcy.ui.internal.FindsByTextContent;
+import com.redhat.darcy.ui.internal.FindsByXPath;
+import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.api.WebSelection;
+import com.redhat.darcy.web.internal.FindsByCssSelector;
+import com.redhat.darcy.web.internal.FindsByHtmlTag;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 

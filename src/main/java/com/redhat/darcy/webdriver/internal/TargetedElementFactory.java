@@ -19,13 +19,12 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.WebDriver;
-
 import org.openqa.selenium.WebElement;
 
 import java.util.List;

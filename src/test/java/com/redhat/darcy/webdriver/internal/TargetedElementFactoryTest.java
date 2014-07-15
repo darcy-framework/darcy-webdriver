@@ -28,8 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.redhat.darcy.ui.By;
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
@@ -39,7 +38,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.FindsById;
 import org.openqa.selenium.internal.WrapsElement;

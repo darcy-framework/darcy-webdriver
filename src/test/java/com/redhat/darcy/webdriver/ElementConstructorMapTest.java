@@ -21,8 +21,8 @@ package com.redhat.darcy.webdriver;
 
 import static org.junit.Assert.assertSame;
 
-import com.redhat.darcy.DarcyException;
-import com.redhat.darcy.ui.elements.Button;
+import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.elements.Button;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 

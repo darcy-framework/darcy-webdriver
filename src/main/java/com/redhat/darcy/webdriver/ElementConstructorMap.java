@@ -19,14 +19,14 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.redhat.darcy.DarcyException;
-import com.redhat.darcy.ui.elements.Button;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.ui.elements.Label;
-import com.redhat.darcy.ui.elements.Link;
-import com.redhat.darcy.ui.elements.Select;
-import com.redhat.darcy.ui.elements.SelectOption;
-import com.redhat.darcy.ui.elements.TextInput;
+import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.elements.Button;
+import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.api.elements.Label;
+import com.redhat.darcy.ui.api.elements.Link;
+import com.redhat.darcy.ui.api.elements.Select;
+import com.redhat.darcy.ui.api.elements.SelectOption;
+import com.redhat.darcy.ui.api.elements.TextInput;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.elements.WebDriverLabel;

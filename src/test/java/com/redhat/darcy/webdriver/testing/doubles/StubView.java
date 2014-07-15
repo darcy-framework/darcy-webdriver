@@ -19,8 +19,8 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.View;
+import com.redhat.darcy.ui.api.ElementContext;
+import com.redhat.darcy.ui.api.View;
 
 public class StubView implements View {
     private ElementContext context;

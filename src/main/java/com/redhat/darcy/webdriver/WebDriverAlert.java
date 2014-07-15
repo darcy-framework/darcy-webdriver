@@ -20,7 +20,7 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.util.Caching;
-import com.redhat.darcy.web.Alert;
+import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 
 import org.openqa.selenium.NotFoundException;

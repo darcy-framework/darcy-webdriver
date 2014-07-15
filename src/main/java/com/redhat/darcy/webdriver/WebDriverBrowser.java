@@ -22,14 +22,14 @@ package com.redhat.darcy.webdriver;
 import static com.redhat.synq.Synq.after;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.View;
-import com.redhat.darcy.ui.elements.Element;
-import com.redhat.darcy.web.Alert;
-import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.Frame;
-import com.redhat.darcy.web.ViewUrl;
-import com.redhat.darcy.web.WebSelection;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.web.api.Frame;
+import com.redhat.darcy.web.api.ViewUrl;
+import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
@@ -43,7 +43,7 @@ import java.util.Objects;
 
 /**
  * The main wrapper around a {@link org.openqa.selenium.WebDriver} in order to implement {@link
- * com.redhat.darcy.web.Browser}. This class also implements {@link com.redhat.darcy.web.Frame},
+ * com.redhat.darcy.web.api.Browser}. This class also implements {@link com.redhat.darcy.web.api.Frame},
  * which is a subset of the Browser API.
  * <p>
  * There is one key difference between a Browser in Darcy and a WebDriver in Selenium. In Darcy, a
@@ -51,7 +51,7 @@ import java.util.Objects;
  * connection may manage many resulting windows or frames. It is assumed that the WebDriver passed
  * to this class is pointed at a specific target.
  * <p>
- * Implementation of {@link com.redhat.darcy.web.Browser} is straightforward, however, in addition
+ * Implementation of {@link com.redhat.darcy.web.api.Browser} is straightforward, however, in addition
  * to forwarding calls to the relevant WebDriver method, we will use our page object structure to
  * wait for those page objects to load as is required by implementers.
  *

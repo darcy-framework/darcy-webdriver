@@ -19,7 +19,6 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.redhat.darcy.webdriver.ElementConstructor;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 

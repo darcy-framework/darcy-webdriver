@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.elements.Link;
+import com.redhat.darcy.ui.api.elements.Link;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Supplier;

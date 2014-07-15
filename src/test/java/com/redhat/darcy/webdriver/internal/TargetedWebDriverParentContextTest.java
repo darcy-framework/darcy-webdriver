@@ -24,8 +24,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import com.redhat.darcy.web.Browser;
-import com.redhat.darcy.web.Frame;
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;

@@ -19,10 +19,9 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import org.openqa.selenium.WebElement;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.WebElement;
 
 /**
  * Factories for the various possible {@link WebDriverTarget}s.

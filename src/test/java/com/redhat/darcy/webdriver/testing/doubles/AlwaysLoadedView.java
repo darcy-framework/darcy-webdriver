@@ -20,7 +20,7 @@
 package com.redhat.darcy.webdriver.testing.doubles;
 
 import com.redhat.darcy.web.StaticViewUrl;
-import com.redhat.darcy.web.ViewUrl;
+import com.redhat.darcy.web.api.ViewUrl;
 
 public class AlwaysLoadedView extends StubView {
     public static ViewUrl<AlwaysLoadedView> url() {

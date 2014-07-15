@@ -19,8 +19,8 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.ui.Locator;
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 
 import java.util.List;

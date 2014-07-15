@@ -19,8 +19,8 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.ElementContext;
-import com.redhat.darcy.ui.elements.Element;
+import com.redhat.darcy.ui.api.ElementContext;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
