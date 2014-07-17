@@ -21,7 +21,9 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.SimpleTransition;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
@@ -40,10 +42,24 @@ import java.util.function.Supplier;
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
     private final WebElementContext context;
     private final ElementFactory elementFactory;
+    private final Transition transition;
 
     public DefaultWebDriverElementContext(SearchContext context, ElementFactory elementFactory) {
         this.context = new WebElementContext(context);
         this.elementFactory = elementFactory;
+        this.transition = new SimpleTransition(this);
+    }
+
+    public DefaultWebDriverElementContext(SearchContext context, ElementFactory elementFactory,
+            Transition transition) {
+        this.context = new WebElementContext(context);
+        this.elementFactory = elementFactory;
+        this.transition = transition;
+    }
+
+    @Override
+    public Transition transition() {
+        return transition;
     }
 
     @Override
@@ -147,6 +163,18 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
         return newElement(type, () -> context.findByNested(WebElement.class, parent, child));
+    }
+
+    @Override
+    public WebDriverElementContext withRootLocator(Locator root) {
+        return new ChainedWebDriverElementContext(root, this);
+    }
+
+    @Override
+    public WebDriverElementContext withRootElement(Element root) {
+        // Reuse the original transition to prevent the view transitioned to from having a context
+        // also nested under some root element
+        return new NestedWebDriverElementContext(root, this);
     }
 
     @SuppressWarnings("unchecked")
@@ -305,6 +333,18 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
             return (T) child.find(WebElement.class,
                     new WebElementContext(((WrapsElement) parent).getWrappedElement()));
+        }
+
+        @Override
+        public WebDriverElementContext withRootLocator(Locator root) {
+            // TODO
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public WebDriverElementContext withRootElement(Element root) {
+            // TODO
+            throw new UnsupportedOperationException();
         }
 
         @SuppressWarnings("unchecked")

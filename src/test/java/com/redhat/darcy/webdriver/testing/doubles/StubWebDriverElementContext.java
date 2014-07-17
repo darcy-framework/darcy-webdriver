@@ -125,4 +125,14 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     public <T> T findByXPath(Class<T> type, String xpath) {
         throw new UnsupportedOperationException("findByXPath");
     }
+
+    @Override
+    public WebDriverElementContext withRootLocator(Locator root) {
+        throw new UnsupportedOperationException("withRootLocator");
+    }
+
+    @Override
+    public WebDriverElementContext withRootElement(Element root) {
+        throw new UnsupportedOperationException("withRootElement");
+    }
 }

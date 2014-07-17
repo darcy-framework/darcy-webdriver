@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.FindsByChained;
 import com.redhat.darcy.ui.internal.FindsById;
@@ -52,6 +53,11 @@ public class DelegatingWebContext implements WebDriverWebContext {
             WebDriverParentContext parentContext) {
         this.elementContext = Objects.requireNonNull(elementContext);
         this.parentContext = Objects.requireNonNull(parentContext);
+    }
+
+    @Override
+    public Transition transition() {
+        return elementContext.transition();
     }
 
     @Override
@@ -282,6 +288,16 @@ public class DelegatingWebContext implements WebDriverWebContext {
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("XPath", type);
         }
+    }
+
+    @Override
+    public WebDriverWebContext withRootLocator(Locator root) {
+        return new DelegatingWebContext(elementContext.withRootLocator(root), parentContext);
+    }
+
+    @Override
+    public WebDriverWebContext withRootElement(Element root) {
+        return new DelegatingWebContext(elementContext.withRootElement(root), parentContext);
     }
 
     /**

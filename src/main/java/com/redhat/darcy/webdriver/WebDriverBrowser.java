@@ -23,8 +23,10 @@ import static com.redhat.synq.Synq.after;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.SimpleTransition;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
@@ -167,6 +169,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
+    public Transition transition() {
+        return new SimpleTransition(this);
+    }
+
+    @Override
     public Alert alert() {
         return webContext.alert();
     }
@@ -269,6 +276,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
         return webContext.findByNested(type, parent, child);
+    }
+
+    @Override
+    public WebDriverBrowser withRootLocator(Locator root) {
+        return new WebDriverBrowser(driver, webContext.withRootLocator(root));
+    }
+
+    @Override
+    public WebDriverBrowser withRootElement(Element root) {
+        return new WebDriverBrowser(driver, webContext.withRootElement(root));
     }
 
     @Override
