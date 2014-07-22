@@ -126,13 +126,13 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
-        return newElementList(type, () -> context.findAllByCssSelector(WebElement.class, css));
+    public <T> List<T> findAllByCss(Class<T> type, String css) {
+        return newElementList(type, () -> context.findAllByCss(WebElement.class, css));
     }
 
     @Override
-    public <T> T findByCssSelector(Class<T> type, String css) {
-        return newElement(type, () -> context.findByCssSelector(WebElement.class, css));
+    public <T> T findByCss(Class<T> type, String css) {
+        return newElement(type, () -> context.findByCss(WebElement.class, css));
     }
 
     @Override
@@ -253,13 +253,13 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
         @SuppressWarnings("unchecked")
         @Override
-        public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
+        public <T> List<T> findAllByCss(Class<T> type, String css) {
             return (List<T>) By.cssSelector(css).findElements(sc);
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public <T> T findByCssSelector(Class<T> type, String css) {
+        public <T> T findByCss(Class<T> type, String css) {
             return (T) By.cssSelector(css).findElement(sc);
         }
 

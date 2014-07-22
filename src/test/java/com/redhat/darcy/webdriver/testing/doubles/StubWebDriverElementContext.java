@@ -37,13 +37,13 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
-        throw new UnsupportedOperationException("findAllByCssSelector");
+    public <T> List<T> findAllByCss(Class<T> type, String css) {
+        throw new UnsupportedOperationException("findAllByCss");
     }
 
     @Override
-    public <T> T findByCssSelector(Class<T> type, String css) {
-        throw new UnsupportedOperationException("findByCssSelector");
+    public <T> T findByCss(Class<T> type, String css) {
+        throw new UnsupportedOperationException("findByCss");
     }
 
     @Override

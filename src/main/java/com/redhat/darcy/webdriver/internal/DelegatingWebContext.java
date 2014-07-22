@@ -33,7 +33,7 @@ import com.redhat.darcy.ui.internal.FindsByTextContent;
 import com.redhat.darcy.ui.internal.FindsByXPath;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.WebSelection;
-import com.redhat.darcy.web.internal.FindsByCssSelector;
+import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
@@ -93,22 +93,22 @@ public class DelegatingWebContext implements WebDriverWebContext {
     }
 
     @Override
-    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
+    public <T> List<T> findAllByCss(Class<T> type, String css) {
         try {
-            FindsByCssSelector context = (FindsByCssSelector) contextForType(type);
+            FindsByCss context = (FindsByCss) contextForType(type);
 
-            return context.findAllByCssSelector(type, css);
+            return context.findAllByCss(type, css);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("CSS", type);
         }
     }
 
     @Override
-    public <T> T findByCssSelector(Class<T> type, String css) {
+    public <T> T findByCss(Class<T> type, String css) {
         try {
-            FindsByCssSelector context = (FindsByCssSelector) contextForType(type);
+            FindsByCss context = (FindsByCss) contextForType(type);
 
-            return context.findByCssSelector(type, css);
+            return context.findByCss(type, css);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("CSS", type);
         }

@@ -229,8 +229,8 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
-        return webContext.findAllByCssSelector(type, css);
+    public <T> List<T> findAllByCss(Class<T> type, String css) {
+        return webContext.findAllByCss(type, css);
     }
 
     @Override
@@ -269,8 +269,8 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T> T findByCssSelector(Class<T> type, String css) {
-        return webContext.findByCssSelector(type, css);
+    public <T> T findByCss(Class<T> type, String css) {
+        return webContext.findByCss(type, css);
     }
 
     @Override

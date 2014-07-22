@@ -72,13 +72,13 @@ public class ChainedWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByCssSelector(Class<T> type, String css) {
-        return context.findAllByChained(type, parent, By.cssSelector(css));
+    public <T> List<T> findAllByCss(Class<T> type, String css) {
+        return context.findAllByChained(type, parent, By.css(css));
     }
 
     @Override
-    public <T> T findByCssSelector(Class<T> type, String css) {
-        return context.findByChained(type, parent, By.cssSelector(css));
+    public <T> T findByCss(Class<T> type, String css) {
+        return context.findByChained(type, parent, By.css(css));
     }
 
     @Override
