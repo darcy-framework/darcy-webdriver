@@ -37,7 +37,7 @@ import java.lang.reflect.Proxy;
  * @see TargetedWebDriver
  * @see TargetedWebDriverFactory
  */
-public class TargetedWebDriverInvocationHandler implements InvocationHandler {
+public class TargetedWebDriverHandler implements InvocationHandler {
     private final TargetLocator locator;
     private final WebDriverTarget target;
     
@@ -48,7 +48,7 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
      *                something that can switch the driver to the appropriate target.
      * @param target
      */
-    public TargetedWebDriverInvocationHandler(TargetLocator locator, WebDriverTarget target) {
+    public TargetedWebDriverHandler(TargetLocator locator, WebDriverTarget target) {
         this.locator = locator;
         this.target = target;
     }
@@ -62,9 +62,9 @@ public class TargetedWebDriverInvocationHandler implements InvocationHandler {
             return target;
         case "createTargetedWebElement":
             return Proxy.newProxyInstance(
-                    TargetedWebDriverInvocationHandler.class.getClassLoader(), 
+                    TargetedWebDriverHandler.class.getClassLoader(),
                     ReflectionUtil.getAllInterfaces(args[0]).toArray(new Class[]{}), 
-                    new TargetedWebElementInvocationHandler((WebElement) args[0], locator, target));
+                    new TargetedWebElementHandler((WebElement) args[0], locator, target));
         case "isPresent":
             try {
                 target.switchTo(locator);

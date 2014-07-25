@@ -32,12 +32,12 @@ import java.lang.reflect.Method;
  * InvocationHandler for "targeted" {@link WebElement}s. Switches the owning driver to the 
  * appropriate target before trying to interact with the {@link WebElement}.
  */
-public class TargetedWebElementInvocationHandler implements InvocationHandler {
+public class TargetedWebElementHandler implements InvocationHandler {
     private final WebElement element;
     private final TargetLocator locator;
     private final WebDriverTarget target;
     
-    public TargetedWebElementInvocationHandler(WebElement element, TargetLocator locator, 
+    public TargetedWebElementHandler(WebElement element, TargetLocator locator,
             WebDriverTarget target) {
         this.element = element;
         this.locator = locator;

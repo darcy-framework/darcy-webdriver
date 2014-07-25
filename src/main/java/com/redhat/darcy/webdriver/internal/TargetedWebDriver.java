@@ -29,10 +29,10 @@ import org.openqa.selenium.WebElement;
  * this way, every instance of a TargetedWebDriver is specific to a target that a driver may point
  * to, as opposed to pointing to one of a number of possible targets.
  * <p>
- * The interface is implemented entirely in {@link TargetedWebDriverInvocationHandler} so any
+ * The interface is implemented entirely in {@link TargetedWebDriverHandler} so any
  * changes must be reflected there as they will not cause compile time failures.
  *
- * @see TargetedWebDriverInvocationHandler
+ * @see TargetedWebDriverHandler
  */
 public interface TargetedWebDriver extends WebDriver {
     WebDriverTarget getWebDriverTarget();
@@ -41,7 +41,7 @@ public interface TargetedWebDriver extends WebDriver {
      * Given a source element that was found within this target, wrap it in a proxy that will always
      * switch to this targeted driver's target before interacting with the element.
      * <p>
-     * Note this is implemented in a Proxy by way of {@link TargetedWebDriverInvocationHandler}, so
+     * Note this is implemented in a Proxy by way of {@link TargetedWebDriverHandler}, so
      * if the signature is changed, that InvocationHandler will need to be updated.
      *
      * @param source

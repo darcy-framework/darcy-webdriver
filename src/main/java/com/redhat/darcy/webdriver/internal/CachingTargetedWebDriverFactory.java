@@ -55,6 +55,6 @@ public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory
         return (TargetedWebDriver) Proxy.newProxyInstance(
                 CachingTargetedWebDriverFactory.class.getClassLoader(),
                 interfaces,
-                new TargetedWebDriverInvocationHandler(cachingTargetLocator, target));
+                new TargetedWebDriverHandler(cachingTargetLocator, target));
     }
 }
