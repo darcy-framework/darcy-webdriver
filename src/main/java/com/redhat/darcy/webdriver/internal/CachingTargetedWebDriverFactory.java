@@ -47,7 +47,7 @@ public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory
         List<Class<?>> interfaces = ReflectionUtil.getAllInterfaces(untargetedDriver);
         interfaces.add(TargetedWebDriver.class);
         
-        this.interfaces = interfaces.toArray(new Class[]{});
+        this.interfaces = interfaces.toArray(new Class[interfaces.size()]);
     }
     
     @Override

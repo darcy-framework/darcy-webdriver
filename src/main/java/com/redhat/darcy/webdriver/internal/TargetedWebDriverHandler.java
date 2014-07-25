@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 /**
  * InvocationHandler for TargetedWebDriver proxies.
@@ -61,9 +62,11 @@ public class TargetedWebDriverHandler implements InvocationHandler {
         case "getWebDriverTarget":
             return target;
         case "createTargetedWebElement":
+            List<Class<?>> interfaces = ReflectionUtil.getAllInterfaces(args[0]);
+
             return Proxy.newProxyInstance(
                     TargetedWebDriverHandler.class.getClassLoader(),
-                    ReflectionUtil.getAllInterfaces(args[0]).toArray(new Class[]{}), 
+                    interfaces.toArray(new Class[interfaces.size()]),
                     new TargetedWebElementHandler((WebElement) args[0], locator, target));
         case "isPresent":
             try {
