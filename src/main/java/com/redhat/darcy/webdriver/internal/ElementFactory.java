@@ -30,7 +30,5 @@ import java.util.function.Supplier;
  * Translates from WebElement(s) to Darcy Elements.
  */
 public interface ElementFactory {
-    <T extends Element> T newElement(Class<T> type, Supplier<WebElement> sourceReference);
-    <T extends Element> List<T> newElementList(Class<T> type,
-            Supplier<List<WebElement>> sourceReference);
+    <T extends Element> T newElement(Class<T> type, WebElement sourceReference);
 }

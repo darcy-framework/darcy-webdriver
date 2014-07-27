@@ -35,5 +35,5 @@ import java.util.function.Supplier;
  */
 @FunctionalInterface
 public interface ElementConstructor<T extends Element> {
-    T newElement(Supplier<WebElement> source, ElementFactory converter);
+    T newElement(WebElement source, ElementFactory converter);
 }

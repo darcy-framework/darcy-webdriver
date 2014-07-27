@@ -21,7 +21,7 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
-import com.redhat.darcy.util.Caching;
+import com.redhat.darcy.ui.api.elements.Findable;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
@@ -29,15 +29,11 @@ import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
-import java.util.function.Supplier;
-
-public class WebDriverElement implements Element, Caching, WrapsElement {
-    private final Supplier<WebElement> source;
+public class WebDriverElement implements Element, WrapsElement {
+    private final WebElement source;
     private final ElementFactory elementFactory;
 
-    private WebElement cachedElement;
-
-    public WebDriverElement(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverElement(WebElement source, ElementFactory elementFactory) {
         this.source = source;
         this.elementFactory = elementFactory;
     }
@@ -53,27 +49,12 @@ public class WebDriverElement implements Element, Caching, WrapsElement {
 
     @Override
     public boolean isPresent() {
-        try {
-            invalidateCache();
-            getWrappedElement();
-            return true;
-        } catch (NotFoundException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public void invalidateCache() {
-        cachedElement = null;
+        return ((Findable) source).isPresent();
     }
 
     @Override
     public WebElement getWrappedElement() {
-        if (cachedElement == null) {
-            cachedElement = source.get();
-        }
-
-        return cachedElement;
+        return source;
     }
 
     public ElementContext getElementContext() {

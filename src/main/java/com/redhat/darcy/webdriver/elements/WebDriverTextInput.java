@@ -27,7 +27,7 @@ import org.openqa.selenium.WebElement;
 import java.util.function.Supplier;
 
 public class WebDriverTextInput extends WebDriverElement implements TextInput {
-    public WebDriverTextInput(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverTextInput(WebElement source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
     

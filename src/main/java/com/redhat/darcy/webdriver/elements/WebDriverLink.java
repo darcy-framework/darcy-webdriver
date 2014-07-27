@@ -24,10 +24,8 @@ import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.function.Supplier;
-
 public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverLink(WebElement source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
 

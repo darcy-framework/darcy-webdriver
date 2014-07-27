@@ -24,10 +24,8 @@ import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.function.Supplier;
-
 public class WebDriverLabel extends WebDriverElement implements Label {
-    public WebDriverLabel(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverLabel(WebElement source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
 

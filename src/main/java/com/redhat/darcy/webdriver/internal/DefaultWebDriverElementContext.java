@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.SimpleTransition;
+import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
@@ -38,6 +39,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
     private final WebElementContext context;
@@ -69,7 +71,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findById(Class<T> type, String id) {
-        return newElement(type, () -> context.findById(WebElement.class, id));
+        return newElement(type, context.findById(WebElement.class, id));
     }
 
     @Override
@@ -79,7 +81,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByName(Class<T> type, String name) {
-        return newElement(type, () -> context.findByName(WebElement.class, name));
+        return newElement(type, context.findByName(WebElement.class, name));
     }
 
     @Override
@@ -89,7 +91,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByLinkText(Class<T> type, String linkText) {
-        return newElement(type, () -> context.findByLinkText(WebElement.class, linkText));
+        return newElement(type, context.findByLinkText(WebElement.class, linkText));
     }
 
     @Override
@@ -100,7 +102,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByTextContent(Class<T> type, String textContent) {
-        return newElement(type, () -> context.findByTextContent(WebElement.class, textContent));
+        return newElement(type, context.findByTextContent(WebElement.class, textContent));
     }
 
     @Override
@@ -112,7 +114,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByPartialTextContent(Class<T> type, String partialTextContent) {
         return newElement(type,
-                () -> context.findByPartialTextContent(WebElement.class, partialTextContent));
+                context.findByPartialTextContent(WebElement.class, partialTextContent));
     }
 
     @Override
@@ -122,7 +124,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByXPath(Class<T> type, String xpath) {
-        return newElement(type, () -> context.findByXPath(WebElement.class, xpath));
+        return newElement(type, context.findByXPath(WebElement.class, xpath));
     }
 
     @Override
@@ -132,7 +134,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByCss(Class<T> type, String css) {
-        return newElement(type, () -> context.findByCss(WebElement.class, css));
+        return newElement(type, context.findByCss(WebElement.class, css));
     }
 
     @Override
@@ -142,7 +144,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByHtmlTag(Class<T> type, String tag) {
-        return newElement(type, () -> context.findByHtmlTag(WebElement.class, tag));
+        return newElement(type, context.findByHtmlTag(WebElement.class, tag));
     }
 
     @Override
@@ -152,7 +154,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByChained(Class<T> type, Locator... locators) {
-        return newElement(type, () -> context.findByChained(WebElement.class, locators));
+        return newElement(type, context.findByChained(WebElement.class, locators));
     }
 
     @Override
@@ -162,7 +164,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
-        return newElement(type, () -> context.findByNested(WebElement.class, parent, child));
+        return newElement(type, context.findByNested(WebElement.class, parent, child));
     }
 
     @Override
@@ -178,7 +180,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T newElement(Class<T> type, Supplier<WebElement> source) {
+    private <T> T newElement(Class<T> type, WebElement source) {
         if (!Element.class.isAssignableFrom(type)) {
             throw new DarcyException("An ElementContext can only locate Element types: "
                     + type.toString());
@@ -194,7 +196,10 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
 
-        return (List<T>) elementFactory.newElementList((Class<Element>) type, source);
+        return new LazyList<>(() -> (List<T>) source.get()
+                .stream()
+                .map(s -> elementFactory.newElement((Class<Element>) type, s))
+                .collect(Collectors.toList()));
     }
 
     /**

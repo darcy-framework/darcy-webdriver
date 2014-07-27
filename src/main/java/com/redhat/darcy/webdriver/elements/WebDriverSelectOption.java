@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 
 public class WebDriverSelectOption extends WebDriverElement implements SelectOption {
     
-    public WebDriverSelectOption(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverSelectOption(WebElement source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
 

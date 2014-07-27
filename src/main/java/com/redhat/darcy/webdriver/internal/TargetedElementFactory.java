@@ -48,18 +48,8 @@ public class TargetedElementFactory implements ElementFactory {
     }
     
     @Override
-    public <T extends Element> T newElement(Class<T> type, Supplier<WebElement> sourceReference) {
-        return elementMap.get(type).newElement(
-                new TargetedWebElementSupplier(sourceReference, driver), this);
-    }
-    
-    @Override
-    public <T extends Element> List<T> newElementList(Class<T> type,
-            Supplier<List<WebElement>> sourceReference) {
-        return new LazyList<T>(() -> sourceReference.get()
-                .stream()
-                .map(e -> newElement(type, () -> e))
-                .collect(Collectors.toList()));
+    public <T extends Element> T newElement(Class<T> type, WebElement source) {
+        return elementMap.get(type).newElement(source, this);
     }
     
 }

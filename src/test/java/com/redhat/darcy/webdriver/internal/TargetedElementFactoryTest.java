@@ -77,14 +77,14 @@ public class TargetedElementFactoryTest {
         TargetedElementFactory elementFactory = new TargetedElementFactory(
                 mockedTargetedWebDriver, mockedElementCtorMap);
 
-        Element element = elementFactory.newElement(Element.class, () -> mock(WebElement.class));
+        Element element = elementFactory.newElement(Element.class, mock(WebElement.class));
 
         assertSame(mockedWebElement, ((WrapsElement) element).getWrappedElement());
     }
 
     @Test
     public void shouldCreateElementsUsingElementConstructorMap() {
-        Element element = elementFactory.newElement(Element.class, () -> mock(WebElement.class));
+        Element element = elementFactory.newElement(Element.class, mock(WebElement.class));
 
         assertThat(element, instanceOf(ElementImpl.class));
     }
@@ -99,7 +99,7 @@ public class TargetedElementFactoryTest {
                 .thenReturn(Collections.singletonList(mockedChildElement));
         when(mockedChildElement.isDisplayed()).thenReturn(true);
 
-        Element element = elementFactory.newElement(Element.class, () -> mockedParentElement);
+        Element element = elementFactory.newElement(Element.class, mockedParentElement);
 
         Element childElement = ((WebDriverElement) element).getElementContext().find()
                 .element(By.id("test"));
@@ -108,7 +108,7 @@ public class TargetedElementFactoryTest {
     }
 
     class ElementImpl extends WebDriverElement {
-        ElementImpl(Supplier<WebElement> source, ElementFactory factory) {
+        ElementImpl(WebElement source, ElementFactory factory) {
             super(source, factory);
         }
     }

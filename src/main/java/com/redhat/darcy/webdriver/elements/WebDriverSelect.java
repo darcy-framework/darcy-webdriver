@@ -33,7 +33,7 @@ import java.util.function.Supplier;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
 
-    public WebDriverSelect(Supplier<WebElement> source, ElementFactory elementFactory) {
+    public WebDriverSelect(WebElement source, ElementFactory elementFactory) {
         super(source, elementFactory);
     }
 

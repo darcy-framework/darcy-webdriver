@@ -40,36 +40,36 @@ public class WebDriverElementTest {
     @Rule
     public TraceTestName traceTestName = new TraceTestName();
 
-    @Test
-    public void shouldCacheElementReferences() {
-        Supplier<WebElement> mockedElementSupplier = mock(Supplier.class);
-
-        // To prevent NPE
-        when(mockedElementSupplier.get()).thenReturn(mock(WebElement.class));
-
-        WebDriverElement element = new WebDriverElement(mockedElementSupplier,
-                mock(ElementFactory.class));
-
-        element.isDisplayed();
-        element.isDisplayed();
-
-        verify(mockedElementSupplier, times(1)).get();
-    }
-
-    @Test
-    public void shouldRelookElementIfCacheIsInvalidated() {
-        Supplier<WebElement> mockedElementSupplier = mock(Supplier.class);
-
-        // To prevent NPE
-        when(mockedElementSupplier.get()).thenReturn(mock(WebElement.class));
-
-        WebDriverElement element = new WebDriverElement(mockedElementSupplier,
-                mock(ElementFactory.class));
-
-        element.isDisplayed();
-        element.invalidateCache();
-        element.isDisplayed();
-
-        verify(mockedElementSupplier, times(2)).get();
-    }
+//    @Test
+//    public void shouldCacheElementReferences() {
+//        Supplier<WebElement> mockedElementSupplier = mock(Supplier.class);
+//
+//        // To prevent NPE
+//        when(mockedElementSupplier.get()).thenReturn(mock(WebElement.class));
+//
+//        WebDriverElement element = new WebDriverElement(mockedElementSupplier,
+//                mock(ElementFactory.class));
+//
+//        element.isDisplayed();
+//        element.isDisplayed();
+//
+//        verify(mockedElementSupplier, times(1)).get();
+//    }
+//
+//    @Test
+//    public void shouldRelookElementIfCacheIsInvalidated() {
+//        Supplier<WebElement> mockedElementSupplier = mock(Supplier.class);
+//
+//        // To prevent NPE
+//        when(mockedElementSupplier.get()).thenReturn(mock(WebElement.class));
+//
+//        WebDriverElement element = new WebDriverElement(mockedElementSupplier,
+//                mock(ElementFactory.class));
+//
+//        element.isDisplayed();
+//        element.invalidateCache();
+//        element.isDisplayed();
+//
+//        verify(mockedElementSupplier, times(2)).get();
+//    }
 }
