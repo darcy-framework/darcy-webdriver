@@ -19,6 +19,8 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.ui.api.elements.Findable;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -34,7 +36,7 @@ import org.openqa.selenium.WebElement;
  *
  * @see TargetedWebDriverHandler
  */
-public interface TargetedWebDriver extends WebDriver {
+public interface TargetedWebDriver extends WebDriver, Findable {
     WebDriverTarget getWebDriverTarget();
 
     /**
@@ -48,9 +50,4 @@ public interface TargetedWebDriver extends WebDriver {
      * @return
      */
     WebElement createTargetedWebElement(WebElement source);
-
-    /**
-     *
-     */
-    boolean isPresent();
 }
