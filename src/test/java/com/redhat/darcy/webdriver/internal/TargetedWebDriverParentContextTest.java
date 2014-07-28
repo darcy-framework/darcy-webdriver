@@ -26,6 +26,7 @@ import static org.mockito.Mockito.mock;
 
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;
@@ -43,12 +44,12 @@ public class TargetedWebDriverParentContextTest {
     @Test
     public void shouldCreateTargetedDriversForBrowsers() {
         TargetedWebDriverFactory targetedWebDriverFactory =
-                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
+                new ThreadSafeCachingTargetedWebDriverFactory(mock(WebDriver.class),
                         WebDriverTargets.window("shouldn't-matter"));
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
                 new TargetedWebDriverParentContext(mock(TargetedWebDriver.class),
-                        targetedWebDriverFactory, mock(TargetedElementFactoryFactory.class));
+                        targetedWebDriverFactory, mock(ElementConstructorMap.class));
 
         Browser browser = targetedWebDriverParentContext.findById(Browser.class, "test");
 
@@ -63,7 +64,7 @@ public class TargetedWebDriverParentContextTest {
     @Test
     public void shouldCreateTargetedDriversForFrames() {
         TargetedWebDriverFactory targetedWebDriverFactory =
-                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
+                new ThreadSafeCachingTargetedWebDriverFactory(mock(WebDriver.class),
                         WebDriverTargets.window("parent"));
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
@@ -71,7 +72,7 @@ public class TargetedWebDriverParentContextTest {
                         targetedWebDriverFactory
                                 .getTargetedWebDriver(WebDriverTargets.window("parent")),
                         targetedWebDriverFactory,
-                        mock(TargetedElementFactoryFactory.class));
+                        mock(ElementConstructorMap.class));
 
         Frame frame = targetedWebDriverParentContext.findById(Frame.class, "test");
 
