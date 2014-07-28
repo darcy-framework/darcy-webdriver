@@ -24,7 +24,6 @@ import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.api.elements.Findable;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
-import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;

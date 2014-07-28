@@ -21,11 +21,8 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.internal.ElementFactory;
 
 import org.openqa.selenium.WebElement;
-
-import java.util.function.Supplier;
 
 /**
  * A {@link FunctionalInterface} to represent {@link WebDriverElement}s' and subclasses'
