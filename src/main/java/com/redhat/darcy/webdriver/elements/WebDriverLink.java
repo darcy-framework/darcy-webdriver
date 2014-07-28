@@ -20,13 +20,13 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.Link;
-import com.redhat.darcy.webdriver.internal.ElementFactory;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(WebElement source, ElementFactory elementFactory) {
-        super(source, elementFactory);
+    public WebDriverLink(WebElement source, ElementConstructorMap elementMap) {
+        super(source, elementMap);
     }
 
     @Override

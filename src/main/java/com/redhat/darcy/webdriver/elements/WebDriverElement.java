@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver.elements;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.api.elements.Findable;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementFactory;
 
@@ -31,11 +32,11 @@ import org.openqa.selenium.internal.WrapsElement;
 
 public class WebDriverElement implements Element, WrapsElement {
     private final WebElement source;
-    private final ElementFactory elementFactory;
+    private final ElementConstructorMap elementMap;
 
-    public WebDriverElement(WebElement source, ElementFactory elementFactory) {
+    public WebDriverElement(WebElement source, ElementConstructorMap elementMap) {
         this.source = source;
-        this.elementFactory = elementFactory;
+        this.elementMap = elementMap;
     }
 
     @Override
@@ -59,6 +60,6 @@ public class WebDriverElement implements Element, WrapsElement {
 
     public ElementContext getElementContext() {
         // Make sure to look up the element each time so that it matches the cache
-        return new DefaultWebDriverElementContext(getWrappedElement(), elementFactory);
+        return new DefaultWebDriverElementContext(getWrappedElement(), elementMap);
     }
 }

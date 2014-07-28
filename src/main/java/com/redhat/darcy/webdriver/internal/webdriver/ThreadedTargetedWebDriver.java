@@ -112,12 +112,6 @@ public class ThreadedTargetedWebDriver implements TargetedWebDriver, FindsByClas
         return driver.getWebDriverTarget();
     }
 
-    // TODO: This API is no longer needed
-    @Override
-    public WebElement createTargetedWebElement(WebElement source) {
-        return new ThreadedWebElement(driver.createTargetedWebElement(source), executor);
-    }
-
     @Override
     public boolean isPresent() {
         return submitAndGet(driver::isPresent);

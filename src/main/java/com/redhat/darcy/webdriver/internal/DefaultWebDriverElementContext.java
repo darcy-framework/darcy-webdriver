@@ -25,6 +25,7 @@ import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.SimpleTransition;
 import com.redhat.darcy.util.LazyList;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
@@ -43,19 +44,19 @@ import java.util.stream.Collectors;
 
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
     private final WebElementContext context;
-    private final ElementFactory elementFactory;
+    private final ElementConstructorMap elementMap;
     private final Transition transition;
 
-    public DefaultWebDriverElementContext(SearchContext context, ElementFactory elementFactory) {
+    public DefaultWebDriverElementContext(SearchContext context, ElementConstructorMap elementMap) {
         this.context = new WebElementContext(context);
-        this.elementFactory = elementFactory;
+        this.elementMap = elementMap;
         this.transition = new SimpleTransition(this);
     }
 
-    public DefaultWebDriverElementContext(SearchContext context, ElementFactory elementFactory,
+    public DefaultWebDriverElementContext(SearchContext context, ElementConstructorMap elementMap,
             Transition transition) {
         this.context = new WebElementContext(context);
-        this.elementFactory = elementFactory;
+        this.elementMap = elementMap;
         this.transition = transition;
     }
 
@@ -186,7 +187,7 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
 
-        return (T) elementFactory.newElement((Class<Element>) type, source);
+        return (T) elementMap.get((Class<Element>) type).newElement(source, elementMap);
     }
 
     @SuppressWarnings("unchecked")
@@ -196,9 +197,9 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
 
-        return new LazyList<>(() -> (List<T>) source.get()
+        return new LazyList<>(() -> source.get()
                 .stream()
-                .map(s -> elementFactory.newElement((Class<Element>) type, s))
+                .map(s -> newElement(type, s))
                 .collect(Collectors.toList()));
     }
 

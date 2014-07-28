@@ -60,12 +60,6 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
         return target;
     }
 
-    // TODO: This API is not needed
-    @Override
-    public WebElement createTargetedWebElement(WebElement source) {
-        return targetedWebElement(source);
-    }
-
     @Override
     public boolean isPresent() {
         try {

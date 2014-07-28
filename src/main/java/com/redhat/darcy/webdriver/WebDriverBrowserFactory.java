@@ -22,10 +22,7 @@ package com.redhat.darcy.webdriver;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.internal.CachingTargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
-import com.redhat.darcy.webdriver.internal.TargetedElementFactory;
-import com.redhat.darcy.webdriver.internal.TargetedElementFactoryFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
@@ -39,16 +36,13 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
         BrowserFactory {
     /**
      * Registers an element implementation to use for a given element type. A valid Element
-     * implementation must implement that element type, extend WebDriverElement, and accept its
-     * source WebElement, parent WebDriver, and its ElementContext in its constructor. Its
-     * ElementContext will only find elements within that source WebElement.
+     * implementation must implement that element type, extend WebDriverElement, and be creatable
+     * by a method accepting a source WebElement and ElementConstructorMap (obviously this will
+     * generally be the element's own constructor).
      *
      * @see ElementConstructor
      * @see com.redhat.darcy.ui.api.ElementContext
      * @see com.redhat.darcy.webdriver.elements.WebDriverElement
-     * @param type
-     * @param constructor
-     * @return
      */
     public abstract <E extends WebDriverElement> T withElementImplementation(Class<? super E> type,
             ElementConstructor<E> constructor);
@@ -56,26 +50,16 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
     /**
      * Boiler plate code to take a freshly minted driver, an {@link ElementConstructorMap}, and
      * spit out a Browser.
-     *
-     * @param driver
-     * @param constructorMap
-     * @return
      */
-    protected static Browser makeBrowser(WebDriver driver, ElementConstructorMap constructorMap) {
+    protected static Browser makeBrowser(WebDriver driver, ElementConstructorMap elementMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
 
-        TargetedWebDriverFactory targetedWdFactory = new ThreadSafeCachingTargetedWebDriverFactory(
-                driver, target);
+        TargetedWebDriverFactory targetedWdFactory =
+                new ThreadSafeCachingTargetedWebDriverFactory(driver, target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
 
-        TargetedElementFactoryFactory elementFactoryFactory =
-                new TargetedElementFactoryFactory(constructorMap);
-        TargetedElementFactory elementFactory = elementFactoryFactory
-                .newTargetedElementFactory(targetedDriver);
-
         return new WebDriverBrowser(targetedDriver,
-                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
-                        elementFactoryFactory),
-                new DefaultWebDriverElementContext(targetedDriver, elementFactory));
+                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, elementMap),
+                new DefaultWebDriverElementContext(targetedDriver, elementMap));
     }
 }

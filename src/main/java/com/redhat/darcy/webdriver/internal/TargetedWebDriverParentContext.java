@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.api.ParentContext;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
@@ -40,21 +41,18 @@ import java.util.List;
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
     private final TargetedWebDriverFactory targetedWdFactory;
-    private final TargetedElementFactoryFactory elementFactoryFactory;
+    private final ElementConstructorMap elementMap;
 
     /**
      *
      * @param driver The targeted driver for which this context is a parent of. (Frames will be
      *               found within this target).
-     * @param targetedWdFactory
-     * @param elementFactoryFactory
      */
-    public TargetedWebDriverParentContext(TargetedWebDriver driver, 
-            TargetedWebDriverFactory targetedWdFactory,
-            TargetedElementFactoryFactory elementFactoryFactory) {
+    public TargetedWebDriverParentContext(TargetedWebDriver driver,
+            TargetedWebDriverFactory targetedWdFactory, ElementConstructorMap elementMap) {
         this.driver = driver;
         this.targetedWdFactory = targetedWdFactory;
-        this.elementFactoryFactory = elementFactoryFactory;
+        this.elementMap = elementMap;
     }
 
     @Override
@@ -79,10 +77,8 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
         Browser newBrowser = new WebDriverBrowser(targetedDriver,
-                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory,
-                        elementFactoryFactory),
-                new DefaultWebDriverElementContext(targetedDriver, 
-                        elementFactoryFactory.newTargetedElementFactory(targetedDriver)));
+                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, elementMap),
+                new DefaultWebDriverElementContext(targetedDriver, elementMap));
         
         found.add((T) newBrowser);
         

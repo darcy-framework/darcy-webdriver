@@ -31,23 +31,9 @@ import org.openqa.selenium.WebElement;
  * this way, every instance of a TargetedWebDriver is specific to a target that a driver may point
  * to, as opposed to pointing to one of a number of possible targets.
  * <p>
- * The interface is implemented entirely in {@link TargetedWebDriverHandler} so any
- * changes must be reflected there as they will not cause compile time failures.
- *
- * @see TargetedWebDriverHandler
+ * Elements found by this driver should also be targeted. That is, elements are associated with a
+ * driver and target and will ensure the driver is switched before interacting with the element.
  */
 public interface TargetedWebDriver extends WebDriver, Findable {
     WebDriverTarget getWebDriverTarget();
-
-    /**
-     * Given a source element that was found within this target, wrap it in a proxy that will always
-     * switch to this targeted driver's target before interacting with the element.
-     * <p>
-     * Note this is implemented in a Proxy by way of {@link TargetedWebDriverHandler}, so
-     * if the signature is changed, that InvocationHandler will need to be updated.
-     *
-     * @param source
-     * @return
-     */
-    WebElement createTargetedWebElement(WebElement source);
 }

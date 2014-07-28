@@ -20,16 +20,14 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.SelectOption;
-import com.redhat.darcy.webdriver.internal.ElementFactory;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.function.Supplier;
-
 public class WebDriverSelectOption extends WebDriverElement implements SelectOption {
     
-    public WebDriverSelectOption(WebElement source, ElementFactory elementFactory) {
-        super(source, elementFactory);
+    public WebDriverSelectOption(WebElement source, ElementConstructorMap elementMap) {
+        super(source, elementMap);
     }
 
     @Override
