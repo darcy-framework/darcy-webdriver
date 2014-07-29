@@ -109,8 +109,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.get(url))
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                .expect(transition().to(destination));
     }
 
     @Override
