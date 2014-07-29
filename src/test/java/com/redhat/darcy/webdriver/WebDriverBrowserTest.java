@@ -36,6 +36,7 @@ import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
+import com.redhat.synq.Event;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class WebDriverBrowserTest {
         Browser browser = new WebDriverBrowser(mock(TargetedWebDriver.class),
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
-        AlwaysLoadedView view = browser.open(AlwaysLoadedView.url());
+        Event<AlwaysLoadedView> view = browser.open(AlwaysLoadedView.url());
 
         assertNotNull(view.getContext());
         assertSame(browser, view.getContext());
@@ -94,7 +95,7 @@ public class WebDriverBrowserTest {
 
         AlwaysLoadedView view = new AlwaysLoadedView();
 
-        AlwaysLoadedView returnedView = browser.open("", view);
+        Event<AlwaysLoadedView> returnedView = browser.open("", view);
 
         assertSame(view, returnedView);
     }
