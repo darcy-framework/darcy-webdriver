@@ -40,6 +40,8 @@ import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
+import com.redhat.synq.Event;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -95,14 +97,14 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T extends View> T open(ViewUrl<T> viewUrl) {
+    public <T extends View> Event<T> open(ViewUrl<T> viewUrl) {
         Objects.requireNonNull(viewUrl);
 
         return open(viewUrl.url(), viewUrl.destination());
     }
 
     @Override
-    public <T extends View> T open(String url, T destination) {
+    public <T extends View> Event<T> open(String url, T destination) {
         Objects.requireNonNull(url);
         Objects.requireNonNull(destination);
 
