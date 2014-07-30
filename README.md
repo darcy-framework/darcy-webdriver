@@ -15,6 +15,19 @@ maven
 </dependency>
 ```
 
+To use snapshot versions, you'll need Sonatype's snapshot repo in your pom or settings.xml.
+
+```xml
+<repositories>
+    <repository>
+        <id>central-snapshots</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        <releases><enabled>false</enabled></releases>
+        <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+</repositories>
+```
+
 getting started
 ===============
 
