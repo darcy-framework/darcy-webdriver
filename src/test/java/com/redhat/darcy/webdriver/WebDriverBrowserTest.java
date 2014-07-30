@@ -197,7 +197,7 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         AlwaysLoadedView view = new AlwaysLoadedView();
-        AlwaysLoadedView returnedView = browser.back(view);
+        Event<AlwaysLoadedView> returnedView = browser.back(view);
 
         assertSame(view, returnedView);
     }
@@ -264,7 +264,7 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         AlwaysLoadedView view = new AlwaysLoadedView();
-        AlwaysLoadedView returnedView = browser.forward(view);
+        Event<AlwaysLoadedView> returnedView = browser.forward(view);
 
         assertSame(view, returnedView);
     }
@@ -331,7 +331,7 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         AlwaysLoadedView view = new AlwaysLoadedView();
-        AlwaysLoadedView returnedView = browser.refresh(view);
+        Event<AlwaysLoadedView> returnedView = browser.refresh(view);
 
         assertSame(view, returnedView);
     }

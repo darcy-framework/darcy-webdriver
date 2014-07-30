@@ -128,30 +128,27 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T extends View> T back(T destination) {
+    public <T extends View> Event<T> back(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().back())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                .expect(transition().to(destination));
     }
 
     @Override
-    public <T extends View> T forward(T destination) {
+    public <T extends View> Event<T> forward(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().forward())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                .expect(transition().to(destination));
     }
 
     @Override
-    public <T extends View> T refresh(T destination) {
+    public <T extends View> Event<T> refresh(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().refresh())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                .expect(transition().to(destination));
     }
 
     @Override
