@@ -38,11 +38,19 @@ import org.openqa.selenium.internal.WrapsDriver;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A WebDriver whos found elements are "refinding"&mdash;that is, they know how to find themselves
+ * again in the event that their reference becomes stale.
+ */
 public class RefindingWebDriver implements WebDriver, FindsByClassName, FindsByCssSelector,
         FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath, TakesScreenshot,
         JavascriptExecutor, WrapsDriver {
     private final WebDriver driver;
 
+    /**
+     * @param driver Used as the underlying implementation; all calls ultimately get forwarded to
+     * this driver, and refinding elements will use this driver to refind themselves.
+     */
     public RefindingWebDriver(WebDriver driver) {
         this.driver = driver;
     }

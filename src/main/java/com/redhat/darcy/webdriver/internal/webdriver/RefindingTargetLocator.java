@@ -25,6 +25,10 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+/**
+ * Since target locators return drivers, the returned drivers must themselves be finding. In this
+ * way, {@link org.openqa.selenium.WebDriver.TargetLocator TargetLocators} are factories.
+ */
 public class RefindingTargetLocator implements TargetLocator {
     private final TargetLocator locator;
 
