@@ -185,9 +185,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByClassName(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByClassName) e).findElementsByClassName(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByClassName) e).findElementsByClassName(using));
     }
 
     @Override
@@ -197,9 +195,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByCssSelector(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByCssSelector) e).findElementsByCssSelector(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByCssSelector) e).findElementsByCssSelector(using));
     }
 
     @Override
@@ -209,9 +205,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsById(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsById) e).findElementsById(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsById) e).findElementsById(using));
     }
 
     @Override
@@ -221,9 +215,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByLinkText(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByLinkText) e).findElementsByLinkText(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByLinkText) e).findElementsByLinkText(using));
     }
 
     @Override
@@ -233,9 +225,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByPartialLinkText(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByLinkText) e).findElementsByPartialLinkText(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByLinkText) e).findElementsByPartialLinkText(using));
     }
 
     @Override
@@ -245,9 +235,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByName(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByName) e).findElementsByName(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByName) e).findElementsByName(using));
     }
 
     @Override
@@ -257,9 +245,7 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByTagName(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByTagName) e).findElementsByTagName(using));
-        return refindingWebElements(_elements);
+        return performAndGet(e -> ((FindsByTagName) e).findElementsByTagName(using));
     }
 
     @Override
@@ -269,13 +255,6 @@ public class RefindingWebElement implements WebElement, Caching, Findable, Finds
 
     @Override
     public List<WebElement> findElementsByXPath(String using) {
-        List<WebElement> _elements = performAndGet(
-                e -> ((FindsByXPath) e).findElementsByXPath(using));
-        return refindingWebElements(_elements);
-    }
-
-    // TODO: How to implement?
-    private List<WebElement> refindingWebElements(List<WebElement> elements) {
-        return elements;
+        return performAndGet(e -> ((FindsByXPath) e).findElementsByXPath(using));
     }
 }
