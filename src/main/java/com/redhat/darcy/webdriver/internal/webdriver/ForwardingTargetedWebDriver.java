@@ -244,13 +244,13 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
     }
 
     private WebElement targetedWebElement(WebElement element) {
-        return new ForwardingTargetedWebElement(locator, target, element);
+        return new TargetedWebElement(locator, target, element);
     }
 
     private List<WebElement> targetedWebElements(List<WebElement> elements) {
         return elements
                 .stream()
-                .map(e -> new ForwardingTargetedWebElement(locator, target, e))
+                .map(e -> new TargetedWebElement(locator, target, e))
                 .collect(Collectors.toList());
     }
 }

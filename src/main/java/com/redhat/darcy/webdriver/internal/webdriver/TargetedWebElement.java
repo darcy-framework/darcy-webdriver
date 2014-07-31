@@ -39,14 +39,14 @@ import org.openqa.selenium.internal.FindsByXPath;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ForwardingTargetedWebElement implements WebElement, FindsByClassName,
+public class TargetedWebElement implements WebElement, FindsByClassName,
         FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath,
         Findable {
     private final TargetLocator locator;
     private final WebDriverTarget target;
     private final WebElement element;
 
-    public ForwardingTargetedWebElement(TargetLocator locator, WebDriverTarget target,
+    public TargetedWebElement(TargetLocator locator, WebDriverTarget target,
             WebElement element) {
         this.locator = locator;
         this.target = target;
@@ -219,13 +219,13 @@ public class ForwardingTargetedWebElement implements WebElement, FindsByClassNam
     }
 
     private WebElement targetedWebElement(WebElement element) {
-        return new ForwardingTargetedWebElement(locator, target, element);
+        return new TargetedWebElement(locator, target, element);
     }
 
     private List<WebElement> targetedWebElements(List<WebElement> elements) {
         return elements
                 .stream()
-                .map(e -> new ForwardingTargetedWebElement(locator, target, e))
+                .map(e -> new TargetedWebElement(locator, target, e))
                 .collect(Collectors.toList());
     }
 }
