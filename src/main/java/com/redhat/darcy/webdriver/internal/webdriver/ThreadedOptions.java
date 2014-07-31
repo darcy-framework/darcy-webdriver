@@ -39,51 +39,53 @@ public class ThreadedOptions extends Threaded implements Options {
 
     @Override
     public void addCookie(Cookie cookie) {
-
+        submitAndWait(() -> options.addCookie(cookie));
     }
 
     @Override
     public void deleteCookieNamed(String name) {
-
+        submitAndWait(() -> options.deleteCookieNamed(name));
     }
 
     @Override
     public void deleteCookie(Cookie cookie) {
-
+        submitAndWait(() -> options.deleteCookie(cookie));
     }
 
     @Override
     public void deleteAllCookies() {
-
+        submitAndWait(options::deleteAllCookies);
     }
 
     @Override
     public Set<Cookie> getCookies() {
-        return null;
+        return submitAndGet(options::getCookies);
     }
 
     @Override
     public Cookie getCookieNamed(String name) {
-        return null;
+        return submitAndGet(() -> options.getCookieNamed(name));
     }
 
+    // TODO: It's inconsistent but does this REALLY need to be thread safe?
     @Override
     public WebDriver.Timeouts timeouts() {
-        return null;
+        return options.timeouts();
     }
 
+    // TODO: It's inconsistent but does this REALLY need to be thread safe?
     @Override
     public WebDriver.ImeHandler ime() {
-        return null;
+        return options.ime();
     }
 
     @Override
     public WebDriver.Window window() {
-        return null;
+        return new ThreadedWindow(submitAndGet(options::window), executor);
     }
 
     @Override
     public Logs logs() {
-        return null;
+        return new ThreadedLogs(submitAndGet(options::logs), executor);
     }
 }
