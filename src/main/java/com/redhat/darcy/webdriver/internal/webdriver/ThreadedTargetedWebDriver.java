@@ -63,10 +63,9 @@ import java.util.stream.Collectors;
  * @see com.redhat.darcy.webdriver.internal.webdriver.ThreadedTargetLocator
  * @see com.redhat.darcy.webdriver.internal.webdriver.ThreadedNavigation
  */
-public class ThreadedTargetedWebDriver implements TargetedWebDriver, FindsByClassName,
-        FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath,
-        TakesScreenshot, JavascriptExecutor, WrapsDriver {
-    private final ExecutorService executor;
+public class ThreadedTargetedWebDriver extends Threaded implements TargetedWebDriver,
+        FindsByClassName, FindsByCssSelector, FindsById, FindsByLinkText, FindsByName,
+        FindsByTagName, FindsByXPath, TakesScreenshot, JavascriptExecutor, WrapsDriver {
     private final TargetedWebDriver driver;
 
     /**
@@ -76,34 +75,9 @@ public class ThreadedTargetedWebDriver implements TargetedWebDriver, FindsByClas
      * {@link java.util.concurrent.Executors#newSingleThreadExecutor() SingleThreadExecutor}.
      */
     public ThreadedTargetedWebDriver(TargetedWebDriver driver, ExecutorService executor) {
+        super(executor);
+
         this.driver = Objects.requireNonNull(driver, "driver");
-        this.executor = Objects.requireNonNull(executor, "executor");
-    }
-
-    /**
-     * Submits a task and waits for it to be completed.
-     */
-    private void submitAndWait(Runnable runnable) {
-        try {
-            executor.submit(runnable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
-    }
-
-    /**
-     * Submits a task and waits for it to be completed, returning the result.
-     */
-    private <T> T submitAndGet(Callable<T> callable) {
-        try {
-            return executor.submit(callable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
     }
 
     @Override

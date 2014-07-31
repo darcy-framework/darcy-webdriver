@@ -28,13 +28,13 @@ import org.openqa.selenium.logging.Logs;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
-public class ThreadedOptions implements Options {
+public class ThreadedOptions extends Threaded implements Options {
     private final Options options;
-    private final ExecutorService executor;
 
     public ThreadedOptions(Options options, ExecutorService executor) {
+        super(executor);
+
         this.options = options;
-        this.executor = executor;
     }
 
     @Override

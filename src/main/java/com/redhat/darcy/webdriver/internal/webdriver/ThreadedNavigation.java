@@ -27,26 +27,13 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
-public class ThreadedNavigation implements Navigation {
+public class ThreadedNavigation extends Threaded implements Navigation {
     private final Navigation navigation;
-    private final ExecutorService executor;
 
     public ThreadedNavigation(Navigation navigation, ExecutorService executor) {
-        this.navigation = navigation;
-        this.executor = executor;
-    }
+        super(executor);
 
-    /**
-     * Submits a task and waits for it to be completed.
-     */
-    private void submitAndWait(Runnable runnable) {
-        try {
-            executor.submit(runnable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
+        this.navigation = navigation;
     }
 
     @Override

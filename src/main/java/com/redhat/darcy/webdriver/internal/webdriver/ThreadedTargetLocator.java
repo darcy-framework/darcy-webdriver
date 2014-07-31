@@ -31,26 +31,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
-public class ThreadedTargetLocator implements TargetLocator {
-    private final ExecutorService executor;
+public class ThreadedTargetLocator extends Threaded implements TargetLocator {
     private final TargetLocator locator;
 
     public ThreadedTargetLocator(TargetLocator locator, ExecutorService executor) {
-        this.locator = locator;
-        this.executor = executor;
-    }
+        super(executor);
 
-    /**
-     * Submits a task and waits for it to be completed, returning the result.
-     */
-    private <T> T submitAndGet(Callable<T> callable) {
-        try {
-            return executor.submit(callable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
+        this.locator = locator;
     }
 
     @Override

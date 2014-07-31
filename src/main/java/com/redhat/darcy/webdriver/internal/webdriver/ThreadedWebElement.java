@@ -40,40 +40,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
-public class ThreadedWebElement implements WebElement, FindsByClassName, FindsByCssSelector,
-        FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath, Findable {
-    private final ExecutorService executor;
+public class ThreadedWebElement extends Threaded implements WebElement, FindsByClassName,
+        FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath,
+        Findable {
     private final WebElement element;
 
     public ThreadedWebElement(WebElement element, ExecutorService executor) {
+        super(executor);
+
         this.element = element;
-        this.executor = executor;
-    }
-
-    /**
-     * Submits a task and waits for it to be completed.
-     */
-    private void submitAndWait(Runnable runnable) {
-        try {
-            executor.submit(runnable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
-    }
-
-    /**
-     * Submits a task and waits for it to be completed, returning the result.
-     */
-    private <T> T submitAndGet(Callable<T> callable) {
-        try {
-            return executor.submit(callable).get();
-        } catch (InterruptedException e) {
-            throw ThrowableUtil.throwUnchecked(e);
-        } catch (ExecutionException e) {
-            throw ThrowableUtil.throwUnchecked(e.getCause());
-        }
     }
 
     @Override
