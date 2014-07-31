@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutorService;
 public class ThreadedLogs extends Threaded implements Logs {
     private final Logs logs;
 
-    public ThreadedLogs(ExecutorService executor, Logs logs) {
+    public ThreadedLogs(Logs logs, ExecutorService executor) {
         super(executor);
 
         this.logs = logs;
