@@ -36,9 +36,12 @@ import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
+import com.redhat.synq.Event;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
+
+
 
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +88,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      *                       ElementContext by forwarding to this implementation.
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverParentContext parentContext,
-            WebDriverElementContext elementContext) {
+                    WebDriverElementContext elementContext) {
         this(driver, new DelegatingWebContext(elementContext, parentContext));
     }
 
@@ -95,20 +98,19 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T extends View> T open(ViewUrl<T> viewUrl) {
+    public <T extends View> Event<T> open(ViewUrl<T> viewUrl) {
         Objects.requireNonNull(viewUrl);
 
         return open(viewUrl.url(), viewUrl.destination());
     }
 
     @Override
-    public <T extends View> T open(String url, T destination) {
+    public <T extends View> Event<T> open(String url, T destination) {
         Objects.requireNonNull(url);
         Objects.requireNonNull(destination);
 
         return after(() -> driver.get(url))
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                        .expect(transition().to(destination));
     }
 
     @Override
@@ -127,30 +129,27 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T extends View> T back(T destination) {
+    public <T extends View> Event<T> back(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().back())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                        .expect(transition().to(destination));
     }
 
     @Override
-    public <T extends View> T forward(T destination) {
+    public <T extends View> Event<T> forward(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().forward())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                        .expect(transition().to(destination));
     }
 
     @Override
-    public <T extends View> T refresh(T destination) {
+    public <T extends View> Event<T> refresh(T destination) {
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().refresh())
-                .expect(transition().to(destination))
-                .waitUpTo(1, MINUTES);
+                        .expect(transition().to(destination));
     }
 
     @Override
