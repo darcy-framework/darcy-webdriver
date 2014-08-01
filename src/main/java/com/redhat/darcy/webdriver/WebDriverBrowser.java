@@ -36,11 +36,12 @@ import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
+import com.redhat.synq.Event;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
-import com.redhat.synq.Event;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -87,7 +88,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      *                       ElementContext by forwarding to this implementation.
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverParentContext parentContext,
-            WebDriverElementContext elementContext) {
+                    WebDriverElementContext elementContext) {
         this(driver, new DelegatingWebContext(elementContext, parentContext));
     }
 
@@ -109,7 +110,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.get(url))
-                .expect(transition().to(destination));
+                        .expect(transition().to(destination));
     }
 
     @Override
@@ -132,7 +133,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().back())
-                .expect(transition().to(destination));
+                        .expect(transition().to(destination));
     }
 
     @Override
@@ -140,7 +141,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().forward())
-                .expect(transition().to(destination));
+                        .expect(transition().to(destination));
     }
 
     @Override
@@ -148,7 +149,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().refresh())
-                .expect(transition().to(destination));
+                        .expect(transition().to(destination));
     }
 
     @Override
