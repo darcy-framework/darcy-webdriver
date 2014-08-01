@@ -110,7 +110,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.get(url))
-                        .expect(transition().to(destination));
+                .expect(transition().to(destination));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().back())
-                        .expect(transition().to(destination));
+                .expect(transition().to(destination));
     }
 
     @Override
@@ -141,7 +141,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().forward())
-                        .expect(transition().to(destination));
+                .expect(transition().to(destination));
     }
 
     @Override
@@ -149,7 +149,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(destination);
 
         return after(() -> driver.navigate().refresh())
-                        .expect(transition().to(destination));
+                .expect(transition().to(destination));
     }
 
     @Override
