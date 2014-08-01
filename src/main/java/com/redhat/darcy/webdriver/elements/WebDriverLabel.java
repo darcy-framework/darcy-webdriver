@@ -31,6 +31,6 @@ public class WebDriverLabel extends WebDriverElement implements Label {
 
     @Override
     public String readText() {
-        return getWrappedElement().getText();
+        return attemptAndGet(WebElement::getText);
     }
 }

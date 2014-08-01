@@ -19,15 +19,22 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.ElementNotDisplayedException;
+import com.redhat.darcy.ui.ElementNotPresentException;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.api.elements.Findable;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class WebDriverElement implements Element, WrapsElement {
     private final WebElement source;
@@ -60,5 +67,43 @@ public class WebDriverElement implements Element, WrapsElement {
     public ElementContext getElementContext() {
         // Make sure to look up the element each time so that it matches the cache
         return new DefaultWebDriverElementContext(getWrappedElement(), elementMap);
+    }
+
+    /**
+     * Expected way for sub element types to interact with their corresponding WebElement. This
+     * attempts the desired action, and will throw appropriate exceptions should the element not
+     * be able to be interacted with, for whatever reason.
+     *
+     * @param action A function that wraps the action to be performed. Accepts the source WebElement
+     * as its only parameter and returns nothing.
+     */
+    protected void attempt(Consumer<WebElement> action) {
+        try {
+            action.accept(source);
+        } catch (ElementNotVisibleException e) {
+            throw new ElementNotDisplayedException(this, e);
+        } catch (NoSuchElementException e) {
+            throw new ElementNotPresentException(this, e);
+        }
+    }
+
+    /**
+     * Expected way for sub element types to interact with their corresponding WebElement. This
+     * attempts the desired action, and will throw appropriate exceptions should the element not
+     * be able to be interacted with, for whatever reason.
+     *
+     * @param action A function that wraps the action to be performed. Accepts the source WebElement
+     * as its only parameter and returns the result of this action.
+     * @param <T> Return type of the action.
+     * @return Whatever the action returns.
+     */
+    protected <T> T attemptAndGet(Function<WebElement, T> action) {
+        try {
+            return action.apply(source);
+        } catch (ElementNotVisibleException e) {
+            throw new ElementNotDisplayedException(this, e);
+        } catch (NoSuchElementException e) {
+            throw new ElementNotPresentException(this, e);
+        }
     }
 }

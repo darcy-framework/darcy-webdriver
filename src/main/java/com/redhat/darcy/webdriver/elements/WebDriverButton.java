@@ -32,11 +32,11 @@ public class WebDriverButton extends WebDriverElement implements Button {
     
     @Override
     public void click() {
-        getWrappedElement().click();
+        attempt(WebElement::click);
     }
 
     @Override
     public boolean isEnabled() {
-        return getWrappedElement().isEnabled();
+        return attemptAndGet(WebElement::isEnabled);
     }
 }

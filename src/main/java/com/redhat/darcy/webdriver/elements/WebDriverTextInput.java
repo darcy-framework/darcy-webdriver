@@ -38,26 +38,26 @@ public class WebDriverTextInput extends WebDriverElement implements TextInput {
     
     @Override
     public void sendKeys(CharSequence... keysToSend) {
-        getWrappedElement().sendKeys(keysToSend);
+        attempt(e -> e.sendKeys(keysToSend));
     }
     
     @Override
     public String readValue() {
-        return getWrappedElement().getAttribute("value");
+        return attemptAndGet(e -> e.getAttribute("value"));
     }
     
     @Override
     public void click() {
-        getWrappedElement().click();
+        attempt(WebElement::click);
     }
 
     @Override
     public void clear() {
-        getWrappedElement().clear();
+        attempt(WebElement::clear);
     }
 
     @Override
     public boolean isEnabled() {
-        return getWrappedElement().isEnabled();
+        return attemptAndGet(WebElement::isEnabled);
     }
 }

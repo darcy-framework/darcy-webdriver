@@ -32,17 +32,17 @@ public class WebDriverSelectOption extends WebDriverElement implements SelectOpt
 
     @Override
     public String readText() {
-        return getWrappedElement().getText();
+        return attemptAndGet(WebElement::getText);
     }
     
     @Override
     public void select() {
-        getWrappedElement().click();
+        attempt(WebElement::click);
     }
     
     @Override
     public boolean isSelected() {
-        return getWrappedElement().isSelected();
+        return attemptAndGet(WebElement::isSelected);
     }
     
 }

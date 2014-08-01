@@ -31,16 +31,16 @@ public class WebDriverLink extends WebDriverElement implements Link {
 
     @Override
     public void click() {
-        getWrappedElement().click();
+        attempt(WebElement::click);
     }
     
     @Override
     public String getLinkText() {
-        return getWrappedElement().getText();
+        return attemptAndGet(WebElement::getText);
     }
 
     @Override
     public boolean isEnabled() {
-        return getWrappedElement().isEnabled();
+        return attemptAndGet(WebElement::isEnabled);
     }
 }

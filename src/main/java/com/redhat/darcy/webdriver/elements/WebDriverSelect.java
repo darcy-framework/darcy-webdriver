@@ -60,6 +60,6 @@ public class WebDriverSelect extends WebDriverElement implements Select {
 
     @Override
     public boolean isEnabled() {
-        return getWrappedElement().isEnabled();
+        return attemptAndGet(WebElement::isEnabled);
     }
 }
