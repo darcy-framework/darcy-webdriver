@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/darcy-framework/darcy-webdriver.png?label=ready&title=Ready)](https://waffle.io/darcy-framework/darcy-webdriver)
 darcy-webdriver
 ===============
 [![Build Status](https://travis-ci.org/darcy-framework/darcy-webdriver.svg?branch=master)](https://travis-ci.org/darcy-framework/darcy-webdriver) [![Coverage Status](https://coveralls.io/repos/darcy-framework/darcy-webdriver/badge.png?branch=master)](https://coveralls.io/r/darcy-framework/darcy-webdriver?branch=master)
