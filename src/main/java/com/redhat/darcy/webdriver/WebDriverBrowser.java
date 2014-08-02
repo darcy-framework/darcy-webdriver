@@ -20,8 +20,8 @@
 package com.redhat.darcy.webdriver;
 
 import static com.redhat.synq.Synq.after;
-import static java.time.temporal.ChronoUnit.MINUTES;
 
+import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.View;
@@ -38,13 +38,14 @@ import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import com.redhat.synq.Event;
 
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
-
-
+import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * The main wrapper around a {@link org.openqa.selenium.WebDriver} in order to implement {@link
@@ -109,30 +110,30 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         Objects.requireNonNull(url);
         Objects.requireNonNull(destination);
 
-        return after(() -> driver.get(url))
+        return after(() -> attempt(() -> driver.get(url)))
                 .expect(transition().to(destination));
     }
 
     @Override
     public String getCurrentUrl() {
-        return driver.getCurrentUrl();
+        return attemptAndGet(driver::getCurrentUrl);
     }
 
     @Override
     public String getTitle() {
-        return driver.getTitle();
+        return attemptAndGet(driver::getTitle);
     }
 
     @Override
     public String getSource() {
-        return driver.getPageSource();
+        return attemptAndGet(driver::getPageSource);
     }
 
     @Override
     public <T extends View> Event<T> back(T destination) {
         Objects.requireNonNull(destination);
 
-        return after(() -> driver.navigate().back())
+        return after(() -> attempt(() -> driver.navigate().back()))
                 .expect(transition().to(destination));
     }
 
@@ -140,7 +141,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public <T extends View> Event<T> forward(T destination) {
         Objects.requireNonNull(destination);
 
-        return after(() -> driver.navigate().forward())
+        return after(() -> attempt(() -> driver.navigate().forward()))
                 .expect(transition().to(destination));
     }
 
@@ -148,17 +149,18 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public <T extends View> Event<T> refresh(T destination) {
         Objects.requireNonNull(destination);
 
-        return after(() -> driver.navigate().refresh())
+        return after(() -> attempt(() -> driver.navigate().refresh()))
                 .expect(transition().to(destination));
     }
 
     @Override
     public void close() {
-        driver.close();
+        attempt(driver::close);
     }
 
     @Override
     public void closeAll() {
+        // TODO: Any harm in calling this with no windows open?
         driver.quit();
     }
 
@@ -179,102 +181,102 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
-        return webContext.findAllById(type, id);
+        return attemptAndGet(() -> webContext.findAllById(type, id));
     }
 
     @Override
     public <T> List<T> findAllByName(Class<T> type, String name) {
-        return webContext.findAllByName(type, name);
+        return attemptAndGet(() -> webContext.findAllByName(type, name));
     }
 
     @Override
     public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
-        return webContext.findAllByXPath(type, xpath);
+        return attemptAndGet(() -> webContext.findAllByXPath(type, xpath));
     }
 
     @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
-        return webContext.findAllByChained(type, locators);
+        return attemptAndGet(() -> webContext.findAllByChained(type, locators));
     }
 
     @Override
     public <T> List<T> findAllByLinkText(Class<T> type, String linkText) {
-        return webContext.findAllByLinkText(type, linkText);
+        return attemptAndGet(() -> webContext.findAllByLinkText(type, linkText));
     }
 
     @Override
     public <T> List<T> findAllByTextContent(Class<T> type, String textContent) {
-        return webContext.findAllByTextContent(type, textContent);
+        return attemptAndGet(() -> webContext.findAllByTextContent(type, textContent));
     }
 
     @Override
     public <T> List<T> findAllByPartialTextContent(Class<T> type, String partialTextContent) {
-        return webContext.findAllByPartialTextContent(type, partialTextContent);
+        return attemptAndGet(() -> webContext.findAllByPartialTextContent(type, partialTextContent));
     }
 
     @Override
     public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
-        return webContext.findAllByNested(type, parent, child);
+        return attemptAndGet(() -> webContext.findAllByNested(type, parent, child));
     }
 
     @Override
     public <T> T findById(Class<T> type, String id) {
-        return webContext.findById(type, id);
+        return attemptAndGet(() -> webContext.findById(type, id));
     }
 
     @Override
     public <T> List<T> findAllByHtmlTag(Class<T> type, String tag) {
-        return webContext.findAllByHtmlTag(type, tag);
+        return attemptAndGet(() -> webContext.findAllByHtmlTag(type, tag));
     }
 
     @Override
     public <T> List<T> findAllByCss(Class<T> type, String css) {
-        return webContext.findAllByCss(type, css);
+        return attemptAndGet(() -> webContext.findAllByCss(type, css));
     }
 
     @Override
     public <T> T findByName(Class<T> type, String name) {
-        return webContext.findByName(type, name);
+        return attemptAndGet(() -> webContext.findByName(type, name));
     }
 
     @Override
     public <T> T findByXPath(Class<T> type, String xpath) {
-        return webContext.findByXPath(type, xpath);
+        return attemptAndGet(() -> webContext.findByXPath(type, xpath));
     }
 
     @Override
     public <T> T findByLinkText(Class<T> type, String linkText) {
-        return webContext.findByLinkText(type, linkText);
+        return attemptAndGet(() -> webContext.findByLinkText(type, linkText));
     }
 
     @Override
     public <T> T findByChained(Class<T> type, Locator... locators) {
-        return webContext.findByChained(type, locators);
+        return attemptAndGet(() -> webContext.findByChained(type, locators));
     }
 
     @Override
     public <T> T findByTextContent(Class<T> type, String textContent) {
-        return webContext.findByTextContent(type, textContent);
+        return attemptAndGet(() -> webContext.findByTextContent(type, textContent));
     }
 
     @Override
     public <T> T findByPartialTextContent(Class<T> type, String partialTextContent) {
-        return webContext.findByPartialTextContent(type, partialTextContent);
+        return attemptAndGet(() -> webContext.findByPartialTextContent(type, partialTextContent));
     }
 
     @Override
     public <T> T findByHtmlTag(Class<T> type, String tag) {
-        return webContext.findByHtmlTag(type, tag);
+        return attemptAndGet(() -> webContext.findByHtmlTag(type, tag));
     }
 
     @Override
     public <T> T findByCss(Class<T> type, String css) {
-        return webContext.findByCss(type, css);
+        return attemptAndGet(() -> webContext.findByCss(type, css));
     }
 
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
-        return webContext.findByNested(type, parent, child);
+        return attemptAndGet(() -> webContext.findByNested(type, parent, child));
     }
 
     @Override
@@ -290,5 +292,28 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     @Override
     public WebDriver getWrappedDriver() {
         return driver;
+    }
+
+    /**
+     * Wrapper for interacting with a targeted driver that may or may not actually be present.
+     */
+    private void attempt(Runnable action) {
+        try {
+            action.run();
+        } catch (NotFoundException | SessionNotFoundException e) {
+            throw new FindableNotPresentException(this, e);
+        }
+    }
+
+    /**
+     * Wrapper for interacting with a targeted driver that may or may not actually be present.
+     * Returns a result.
+     */
+    private <T> T attemptAndGet(Supplier<T> action) {
+        try {
+            return action.get();
+        } catch (NotFoundException | SessionNotFoundException e) {
+            throw new FindableNotPresentException(this, e);
+        }
     }
 }

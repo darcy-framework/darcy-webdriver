@@ -20,7 +20,7 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.ElementNotDisplayedException;
-import com.redhat.darcy.ui.ElementNotPresentException;
+import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.api.elements.Findable;
@@ -83,7 +83,7 @@ public class WebDriverElement implements Element, WrapsElement {
         } catch (ElementNotVisibleException e) {
             throw new ElementNotDisplayedException(this, e);
         } catch (NoSuchElementException e) {
-            throw new ElementNotPresentException(this, e);
+            throw new FindableNotPresentException(this, e);
         }
     }
 
@@ -103,7 +103,7 @@ public class WebDriverElement implements Element, WrapsElement {
         } catch (ElementNotVisibleException e) {
             throw new ElementNotDisplayedException(this, e);
         } catch (NoSuchElementException e) {
-            throw new ElementNotPresentException(this, e);
+            throw new FindableNotPresentException(this, e);
         }
     }
 }
