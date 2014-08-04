@@ -20,7 +20,6 @@
 package com.redhat.darcy.webdriver.internal.webdriver;
 
 import com.redhat.darcy.ui.api.elements.Findable;
-import com.redhat.synq.ThrowableUtil;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -35,8 +34,6 @@ import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 

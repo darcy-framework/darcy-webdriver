@@ -21,10 +21,7 @@ package com.redhat.darcy.webdriver.internal.webdriver;
 
 import static org.openqa.selenium.WebDriver.Navigation;
 
-import com.redhat.synq.ThrowableUtil;
-
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 public class ThreadedNavigation extends Threaded implements Navigation {

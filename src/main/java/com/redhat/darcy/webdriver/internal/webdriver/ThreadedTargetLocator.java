@@ -21,8 +21,6 @@ package com.redhat.darcy.webdriver.internal.webdriver;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

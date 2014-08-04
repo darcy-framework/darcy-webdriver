@@ -21,7 +21,6 @@ package com.redhat.darcy.webdriver.internal.webdriver;
 
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
-import com.redhat.synq.ThrowableUtil;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -42,8 +41,6 @@ import org.openqa.selenium.internal.WrapsDriver;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
