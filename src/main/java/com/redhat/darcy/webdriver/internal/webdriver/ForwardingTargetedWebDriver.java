@@ -121,8 +121,8 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
     }
 
     @Override
-    public TargetLocator switchTo() {
-        return locator;
+    public TargetedTargetLocator switchTo() {
+        return new TargetedTargetLocator(locator, target);
     }
 
     // TODO: Navigation object wont be targeted

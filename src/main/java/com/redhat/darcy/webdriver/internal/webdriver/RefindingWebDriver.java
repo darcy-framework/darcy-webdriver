@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A WebDriver whos found elements are "refinding"&mdash;that is, they know how to find themselves
+ * A WebDriver who's found elements are "refinding"&mdash;that is, they know how to find themselves
  * again in the event that their reference becomes stale.
  */
 public class RefindingWebDriver implements WebDriver, FindsByClassName, FindsByCssSelector,

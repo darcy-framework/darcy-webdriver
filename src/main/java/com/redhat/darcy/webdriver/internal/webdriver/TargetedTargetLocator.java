@@ -21,59 +21,56 @@ package com.redhat.darcy.webdriver.internal.webdriver;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.WebDriverTarget;
+import com.redhat.darcy.webdriver.internal.WebDriverTargets;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.util.concurrent.ExecutorService;
+public class TargetedTargetLocator implements TargetLocator {
+    private final TargetLocator locator;
+    private final WebDriverTarget self;
 
-public class ThreadedTargetLocator extends Threaded implements TargetLocator {
-    private final TargetedTargetLocator locator;
-
-    public ThreadedTargetLocator(TargetedTargetLocator locator, ExecutorService executor) {
-        super(executor);
-
+    public TargetedTargetLocator(TargetLocator locator, WebDriverTarget self) {
         this.locator = locator;
+        this.self = self;
     }
 
     @Override
-    public WebDriver frame(int index) {
-        return new ThreadedTargetedWebDriver(submitAndGet(() -> locator.frame(index)), executor);
+    public ForwardingTargetedWebDriver frame(int index) {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, index));
     }
 
     @Override
-    public WebDriver frame(String nameOrId) {
-        return new ThreadedTargetedWebDriver(submitAndGet(() -> locator.frame(nameOrId)), executor);
+    public ForwardingTargetedWebDriver frame(String nameOrId) {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, nameOrId));
     }
 
     @Override
-    public WebDriver frame(WebElement frameElement) {
-        return new ThreadedTargetedWebDriver(submitAndGet(() -> locator.frame(frameElement)),
-                executor);
+    public ForwardingTargetedWebDriver frame(WebElement frameElement) {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, frameElement));
     }
 
     @Override
-    public WebDriver window(String nameOrHandle) {
-        return new ThreadedTargetedWebDriver(submitAndGet(() -> locator.window(nameOrHandle)),
-                executor);
+    public ForwardingTargetedWebDriver window(String nameOrHandle) {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.window(nameOrHandle));
     }
 
     @Override
     public WebDriver defaultContent() {
-        // TODO?
-        return submitAndGet(locator::defaultContent);
+        // TODO: This target is kind of irrelevant to darcy, how to deal?
+        return locator.defaultContent();
     }
 
     @Override
     public WebElement activeElement() {
-        return new ThreadedWebElement(submitAndGet(locator::activeElement), executor);
+        return locator.activeElement();
     }
 
     @Override
     public Alert alert() {
         // TODO
-        return submitAndGet(locator::alert);
+        return locator.alert();
     }
 }

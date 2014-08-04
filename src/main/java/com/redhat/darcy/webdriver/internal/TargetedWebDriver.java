@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.api.elements.Findable;
+import com.redhat.darcy.webdriver.internal.webdriver.TargetedTargetLocator;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

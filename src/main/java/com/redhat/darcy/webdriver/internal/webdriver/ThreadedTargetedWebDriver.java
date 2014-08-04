@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 public class ThreadedTargetedWebDriver extends Threaded implements TargetedWebDriver,
         FindsByClassName, FindsByCssSelector, FindsById, FindsByLinkText, FindsByName,
         FindsByTagName, FindsByXPath, TakesScreenshot, JavascriptExecutor, WrapsDriver {
-    private final TargetedWebDriver driver;
+    private final ForwardingTargetedWebDriver driver;
 
     /**
      * Creates a new ThreadedWebDriver for the given driver and executor service. Note that because
@@ -74,7 +74,7 @@ public class ThreadedTargetedWebDriver extends Threaded implements TargetedWebDr
      * and the executor service should therefore be a
      * {@link java.util.concurrent.Executors#newSingleThreadExecutor() SingleThreadExecutor}.
      */
-    public ThreadedTargetedWebDriver(TargetedWebDriver driver, ExecutorService executor) {
+    public ThreadedTargetedWebDriver(ForwardingTargetedWebDriver driver, ExecutorService executor) {
         super(executor);
 
         this.driver = Objects.requireNonNull(driver, "driver");
