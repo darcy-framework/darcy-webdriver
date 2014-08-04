@@ -19,6 +19,7 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.webdriver.internal.webdriver.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.webdriver.ForwardingTargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.webdriver.RefindingWebDriver;
 import com.redhat.darcy.webdriver.internal.webdriver.ThreadedTargetedWebDriver;

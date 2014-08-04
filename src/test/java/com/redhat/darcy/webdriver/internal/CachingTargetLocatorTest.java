@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
+import com.redhat.darcy.webdriver.internal.webdriver.CachingTargetLocator;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;

@@ -17,9 +17,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.internal;
+package com.redhat.darcy.webdriver.internal.webdriver;
 
 import com.redhat.darcy.util.Caching;
+import com.redhat.darcy.webdriver.internal.WebDriverTarget;
+import com.redhat.darcy.webdriver.internal.WebDriverTargets;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
