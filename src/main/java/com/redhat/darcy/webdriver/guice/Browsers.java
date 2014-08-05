@@ -29,9 +29,10 @@ public enum Browsers implements BrowserType {
 
     /**
      * Picks a browser type based off of the "darcy.browser" environment variable. Case-insensitive.
+     * Defaults to Firefox.
      */
     public static Browsers getBrowserFromEnv() {
-        return valueOf(System.getProperty("darcy.browser").toUpperCase());
+        return valueOf(System.getProperty("darcy.browser", "firefox").toUpperCase());
     }
 
     private final DesiredCapabilities caps;
