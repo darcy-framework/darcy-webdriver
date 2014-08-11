@@ -38,7 +38,8 @@ import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import com.redhat.synq.Event;
 
-import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
@@ -300,7 +301,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private void attempt(Runnable action) {
         try {
             action.run();
-        } catch (NotFoundException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
             throw new FindableNotPresentException(this, e);
         }
     }
@@ -312,7 +313,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private <T> T attemptAndGet(Supplier<T> action) {
         try {
             return action.get();
-        } catch (NotFoundException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
             throw new FindableNotPresentException(this, e);
         }
     }
