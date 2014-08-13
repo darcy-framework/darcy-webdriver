@@ -44,7 +44,7 @@ public class TargetedWebDriverParentContextTest {
     @Test
     public void shouldCreateTargetedDriversForBrowsers() {
         TargetedWebDriverFactory targetedWebDriverFactory =
-                new ThreadSafeCachingTargetedWebDriverFactory(mock(WebDriver.class),
+                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
                         WebDriverTargets.window("shouldn't-matter"));
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
@@ -64,7 +64,7 @@ public class TargetedWebDriverParentContextTest {
     @Test
     public void shouldCreateTargetedDriversForFrames() {
         TargetedWebDriverFactory targetedWebDriverFactory =
-                new ThreadSafeCachingTargetedWebDriverFactory(mock(WebDriver.class),
+                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
                         WebDriverTargets.window("parent"));
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =

@@ -21,11 +21,12 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.Link;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverLink extends WebDriverElement implements Link {
-    public WebDriverLink(WebElement source, ElementConstructorMap elementMap) {
+    public WebDriverLink(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
 

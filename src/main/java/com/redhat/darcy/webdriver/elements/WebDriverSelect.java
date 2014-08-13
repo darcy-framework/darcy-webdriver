@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.api.elements.Select;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
@@ -32,7 +33,7 @@ import java.util.Optional;
 
 public class WebDriverSelect extends WebDriverElement implements Select {
 
-    public WebDriverSelect(WebElement source, ElementConstructorMap elementMap) {
+    public WebDriverSelect(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
 

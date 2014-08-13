@@ -17,27 +17,23 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.elements;
+package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.api.elements.Button;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
-import com.redhat.darcy.webdriver.internal.ElementLookup;
+import com.redhat.darcy.webdriver.internal.webdriver.CachingTargetLocator;
+import com.redhat.darcy.webdriver.internal.webdriver.ForwardingTargetedWebDriver;
 
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriver;
 
-public class WebDriverButton extends WebDriverElement implements Button {
+public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory {
+    private final CachingTargetLocator cachingTargetLocator;
 
-    public WebDriverButton(ElementLookup source, ElementConstructorMap elementMap) {
-        super(source, elementMap);
-    }
-    
-    @Override
-    public void click() {
-        attempt(WebElement::click);
+    public CachingTargetedWebDriverFactory(WebDriver untargetedDriver,
+            WebDriverTarget currentTarget) {
+        cachingTargetLocator = new CachingTargetLocator(currentTarget, untargetedDriver);
     }
 
     @Override
-    public boolean isEnabled() {
-        return attemptAndGet(WebElement::isEnabled);
+    public TargetedWebDriver getTargetedWebDriver(WebDriverTarget target) {
+        return new ForwardingTargetedWebDriver(cachingTargetLocator, target);
     }
 }
