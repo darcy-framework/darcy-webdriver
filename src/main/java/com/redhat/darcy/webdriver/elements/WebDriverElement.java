@@ -23,24 +23,27 @@ import com.redhat.darcy.ui.ElementNotDisplayedException;
 import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
-import com.redhat.darcy.ui.api.elements.Findable;
+import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class WebDriverElement implements Element, WrapsElement {
-    private final WebElement source;
+public class WebDriverElement implements Caching, Element, WrapsElement {
+    private final ElementLookup source;
     private final ElementConstructorMap elementMap;
 
-    public WebDriverElement(WebElement source, ElementConstructorMap elementMap) {
+    private WebElement cached;
+
+    public WebDriverElement(ElementLookup source, ElementConstructorMap elementMap) {
         this.source = source;
         this.elementMap = elementMap;
     }
@@ -56,41 +59,61 @@ public class WebDriverElement implements Element, WrapsElement {
 
     @Override
     public boolean isPresent() {
-        return ((Findable) source).isPresent();
+        try {
+            getWrappedElement();
+            return true;
+        } catch (NotFoundException e) {
+            return false;
+        }
     }
 
     @Override
     public WebElement getWrappedElement() {
-        return source;
+        return source.get();
+    }
+
+    @Override
+    public void invalidateCache() {
+        cached = null;
     }
 
     public ElementContext getElementContext() {
         // Make sure to look up the element each time so that it matches the cache
-        return new DefaultWebDriverElementContext(getWrappedElement(), elementMap);
+        return new DefaultWebDriverElementContext(webElement(), elementMap);
     }
 
     /**
      * Expected way for sub element types to interact with their corresponding WebElement. This
-     * attempts the desired action, and will throw appropriate exceptions should the element not
-     * be able to be interacted with, for whatever reason.
+     * attempts the desired action, and will throw appropriate exceptions should the element not be
+     * able to be interacted with, for whatever reason. If the WebElement is stale when the action
+     * is attempted, the cached WebElement will be cleared and looked up again, which may get a
+     * fresh reference to the equivalent element.
      *
      * @param action A function that wraps the action to be performed. Accepts the source WebElement
      * as its only parameter and returns nothing.
      */
     protected void attempt(Consumer<WebElement> action) {
         try {
-            action.accept(source);
+            action.accept(webElement());
+        } catch (StaleElementReferenceException e) {
+            invalidateCache();
+
+            try {
+                action.accept(webElement());
+            } catch (ElementNotVisibleException e1) {
+                throw new ElementNotDisplayedException(this, e1);
+            }
         } catch (ElementNotVisibleException e) {
             throw new ElementNotDisplayedException(this, e);
-        } catch (NoSuchElementException e) {
-            throw new FindableNotPresentException(this, e);
         }
     }
 
     /**
      * Expected way for sub element types to interact with their corresponding WebElement. This
-     * attempts the desired action, and will throw appropriate exceptions should the element not
-     * be able to be interacted with, for whatever reason.
+     * attempts the desired action, and will throw appropriate exceptions should the element not be
+     * able to be interacted with, for whatever reason. If the WebElement is stale when the action
+     * is attempted, the cached WebElement will be cleared and looked up again, which may get a
+     * fresh reference to the equivalent element.
      *
      * @param action A function that wraps the action to be performed. Accepts the source WebElement
      * as its only parameter and returns the result of this action.
@@ -99,11 +122,29 @@ public class WebDriverElement implements Element, WrapsElement {
      */
     protected <T> T attemptAndGet(Function<WebElement, T> action) {
         try {
-            return action.apply(source);
+            return action.apply(webElement());
+        } catch (StaleElementReferenceException e) {
+            invalidateCache();
+
+            try {
+                return action.apply(webElement());
+            } catch (ElementNotVisibleException e1) {
+                throw new ElementNotDisplayedException(this, e1);
+            }
         } catch (ElementNotVisibleException e) {
             throw new ElementNotDisplayedException(this, e);
-        } catch (NoSuchElementException e) {
-            throw new FindableNotPresentException(this, e);
         }
+    }
+
+    private WebElement webElement() {
+        if (cached == null) {
+            try {
+                cached = getWrappedElement();
+            } catch (NotFoundException e) {
+                throw new FindableNotPresentException(this, e);
+            }
+        }
+
+        return cached;
     }
 }

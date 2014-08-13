@@ -20,7 +20,6 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -51,7 +50,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
 
     @Test
     public void shouldKnowAssignedTarget() {
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mock(WebDriver.class), WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -67,7 +66,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -87,7 +86,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedWebDriver =
@@ -195,7 +194,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
         when(mockedTargetLocator.window(anyString()))
                 .thenThrow(new NoSuchWindowException("No such window"));
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory
@@ -213,7 +212,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
         when(mockedTargetLocator.frame("not-present"))
                 .thenThrow(new NoSuchFrameException("No such window"));
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedWebDriver(
@@ -226,7 +225,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
     public void shouldReturnTrueForIsPresentIfCanSwitchToTargetWindow() {
         WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory
@@ -239,7 +238,7 @@ public class ThreadSafeCachingTargetedWebDriverTest {
     public void shouldReturnTrueForIsPresentIfCanSwitchToTargetFrame() {
         WebDriver mockedDriver = mock(WebDriver.class, Mockito.RETURNS_MOCKS);
 
-        TargetedWebDriverFactory targetedDriverFactory = new ThreadSafeCachingTargetedWebDriverFactory(
+        TargetedWebDriverFactory targetedDriverFactory = new CachingTargetedWebDriverFactory(
                 mockedDriver, WebDriverTargets.window("test"));
 
         TargetedWebDriver targetedDriver = targetedDriverFactory.getTargetedWebDriver(

@@ -21,11 +21,12 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.Label;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverLabel extends WebDriverElement implements Label {
-    public WebDriverLabel(WebElement source, ElementConstructorMap elementMap) {
+    public WebDriverLabel(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
 

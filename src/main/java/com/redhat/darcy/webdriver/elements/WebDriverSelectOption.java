@@ -21,12 +21,13 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverSelectOption extends WebDriverElement implements SelectOption {
     
-    public WebDriverSelectOption(WebElement source, ElementConstructorMap elementMap) {
+    public WebDriverSelectOption(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
 

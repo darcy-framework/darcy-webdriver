@@ -17,30 +17,20 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.internal.webdriver;
+package com.redhat.darcy.webdriver.internal;
 
-import org.openqa.selenium.logging.LogEntries;
-import org.openqa.selenium.logging.Logs;
+import org.openqa.selenium.WebElement;
 
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
 
-public class ThreadedLogs extends Threaded implements Logs {
-    private final Logs logs;
-
-    public ThreadedLogs(Logs logs, ExecutorService executor) {
-        super(executor);
-
-        this.logs = logs;
-    }
-
+public interface ElementLookup extends Supplier<WebElement> {
+    /**
+     * Attempts to retrieve a WebElement reference, which may throw a
+     * {@link org.openqa.selenium.NoSuchElementException}. The retrieved element may or may not be
+     * stale.
+     *
+     * @throws java.util.NoSuchElementException if the element cannot be located.
+     */
     @Override
-    public LogEntries get(String logType) {
-        return submitAndGet(() -> logs.get(logType));
-    }
-
-    @Override
-    public Set<String> getAvailableLogTypes() {
-        return submitAndGet(logs::getAvailableLogTypes);
-    }
+    WebElement get();
 }

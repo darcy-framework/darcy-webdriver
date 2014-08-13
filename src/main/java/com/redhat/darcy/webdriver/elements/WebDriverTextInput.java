@@ -21,11 +21,12 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.elements.TextInput;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverTextInput extends WebDriverElement implements TextInput {
-    public WebDriverTextInput(WebElement source, ElementConstructorMap elementMap) {
+    public WebDriverTextInput(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
     

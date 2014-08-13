@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
@@ -32,5 +33,5 @@ import org.openqa.selenium.WebElement;
  */
 @FunctionalInterface
 public interface ElementConstructor<T extends Element> {
-    T newElement(WebElement source, ElementConstructorMap elementMap);
+    T newElement(ElementLookup source, ElementConstructorMap elementMap);
 }

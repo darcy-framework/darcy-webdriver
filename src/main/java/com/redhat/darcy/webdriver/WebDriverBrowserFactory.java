@@ -26,7 +26,7 @@ import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
-import com.redhat.darcy.webdriver.internal.ThreadSafeCachingTargetedWebDriverFactory;
+import com.redhat.darcy.webdriver.internal.CachingTargetedWebDriverFactory;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
 import com.redhat.darcy.webdriver.internal.WebDriverTargets;
 
@@ -55,7 +55,7 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
 
         TargetedWebDriverFactory targetedWdFactory =
-                new ThreadSafeCachingTargetedWebDriverFactory(driver, target);
+                new CachingTargetedWebDriverFactory(driver, target);
         TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
 
         return new WebDriverBrowser(targetedDriver,
