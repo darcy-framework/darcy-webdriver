@@ -19,7 +19,6 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -44,7 +43,7 @@ import org.openqa.selenium.WebElement;
 
 // TODO: Rewrite this
 @RunWith(JUnit4.class)
-public class ThreadSafeCachingTargetedWebDriverTest {
+public class CachingTargetedWebDriverTest {
     @Rule
     public TraceTestName traceTestName = new TraceTestName();
 
