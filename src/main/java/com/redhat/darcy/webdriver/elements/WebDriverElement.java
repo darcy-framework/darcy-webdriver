@@ -78,7 +78,8 @@ public class WebDriverElement implements Caching, Element, WrapsElement {
     }
 
     public ElementContext getElementContext() {
-        // Make sure to look up the element each time so that it matches the cache
+        // TODO: Address stale element references when finding sub elements in this manner
+        // TODO: Is this method necessary?
         return new DefaultWebDriverElementContext(webElement(), elementMap);
     }
 
