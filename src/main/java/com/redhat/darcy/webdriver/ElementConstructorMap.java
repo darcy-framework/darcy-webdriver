@@ -29,6 +29,10 @@ import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.ui.api.elements.TextInput;
 import com.redhat.darcy.web.api.elements.HtmlButton;
 import com.redhat.darcy.web.api.elements.HtmlElement;
+import com.redhat.darcy.web.api.elements.HtmlLabel;
+import com.redhat.darcy.web.api.elements.HtmlLink;
+import com.redhat.darcy.web.api.elements.HtmlSelect;
+import com.redhat.darcy.web.api.elements.HtmlSelectOption;
 import com.redhat.darcy.web.api.elements.HtmlTextInput;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
@@ -42,10 +46,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A map of element interfaces to implementations.
+ * A map of element interfaces to implementations (specifically, means of creating something that
+ * implements that element interface).
+ *
+ * @see com.redhat.darcy.webdriver.ElementConstructor
  */
 public class ElementConstructorMap {
-    // Every key MUST map to a value that constructs an implementation of THAT KEY
+    /**
+     * Every key MUST map to a value that constructs an implementation of THAT KEY.
+     */
     private final Map<Class<?>, ElementConstructor<? extends Element>> classMap =
             new HashMap<>();
 
@@ -65,19 +74,29 @@ public class ElementConstructorMap {
 
         map.put(HtmlTextInput.class, WebDriverTextInput::new);
         map.put(HtmlButton.class, WebDriverButton::new);
-        map.put(Link.class, WebDriverLink::new);
-        map.put(Select.class, WebDriverSelect::new);
-        map.put(SelectOption.class, WebDriverSelectOption::new);
-        map.put(Label.class, WebDriverLabel::new);
+        map.put(HtmlLink.class, WebDriverLink::new);
+        map.put(HtmlSelect.class, WebDriverSelect::new);
+        map.put(HtmlSelectOption.class, WebDriverSelectOption::new);
+        map.put(HtmlLabel.class, WebDriverLabel::new);
         map.put(HtmlElement.class, WebDriverElement::new);
 
-        map.point(Element.class, HtmlElement.class);
         map.point(TextInput.class, HtmlTextInput.class);
         map.point(Button.class, HtmlButton.class);
+        map.point(Link.class, HtmlLink.class);
+        map.point(Select.class, HtmlSelect.class);
+        map.point(SelectOption.class, HtmlSelectOption.class);
+        map.point(Label.class, HtmlLabel.class);
+        map.point(Element.class, HtmlElement.class);
         
         return map;
     }
-    
+
+    /**
+     * Returns something that can create real element implementations of the desired type (that is,
+     * an {@link com.redhat.darcy.webdriver.ElementConstructor}), given certain required inputs as
+     * defined in
+     * {@link ElementConstructor#newElement(com.redhat.darcy.webdriver.internal.ElementLookup, ElementConstructorMap)}.
+     */
     @SuppressWarnings("unchecked")
     public <E extends Element> ElementConstructor<E> get(Class<E> type) {
         ElementConstructor<? extends Element> factory = classMap.get(type);
@@ -90,10 +109,11 @@ public class ElementConstructorMap {
     }
     
     /**
-     * 
-     * @param elementType
-     * @param constructor
-     * @return
+     * Register an element constructor (a factory method) for a given element type (some interface
+     * that is or extends {@link com.redhat.darcy.ui.api.elements.Element}. A constructor for a
+     * particular element type can then be looked up via {@link #get(Class)}.
+     *
+     * @see #point(Class, Class)
      */
     @SuppressWarnings("unchecked")
     public <E extends Element> ElementConstructor<E> put(

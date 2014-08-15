@@ -44,7 +44,7 @@ public class WebDriverTextInput extends WebDriverElement implements HtmlTextInpu
     
     @Override
     public String readValue() {
-        return attemptAndGet(e -> e.getAttribute("value"));
+        return getAttribute("value");
     }
     
     @Override

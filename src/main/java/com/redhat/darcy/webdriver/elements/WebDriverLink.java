@@ -19,13 +19,14 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.api.elements.Link;
+import com.redhat.darcy.web.api.elements.HtmlLink;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.TagMismatchException;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
-public class WebDriverLink extends WebDriverElement implements Link {
+public class WebDriverLink extends WebDriverElement implements HtmlLink {
     public WebDriverLink(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
@@ -43,5 +44,10 @@ public class WebDriverLink extends WebDriverElement implements Link {
     @Override
     public boolean isEnabled() {
         return attemptAndGet(WebElement::isEnabled);
+    }
+
+    @Override
+    public String getHref() {
+        return getAttribute("href");
     }
 }
