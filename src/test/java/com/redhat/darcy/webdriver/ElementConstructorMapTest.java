@@ -20,10 +20,16 @@
 package com.redhat.darcy.webdriver;
 
 import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.elements.Button;
+import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
+import com.redhat.darcy.webdriver.internal.ElementLookup;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;
@@ -51,4 +57,36 @@ public class ElementConstructorMapTest {
         ElementConstructorMap elementConstructorMap = new ElementConstructorMap();
         elementConstructorMap.get(Button.class);
     }
+
+    @Test
+    public void shouldAllowPointingOneGenericElementTypeToAMoreSpecificType() {
+        ElementConstructorMap map = new ElementConstructorMap();
+        ElementConstructor<Button> buttonConstructor = mock(ButtonConstructor.class);
+
+        map.put(Button.class, buttonConstructor);
+        map.point(Element.class, Button.class);
+
+        map.get(Element.class).newElement(null, null);
+
+        verify(buttonConstructor).newElement(any(ElementLookup.class), any(ElementConstructorMap.class));
+    }
+
+    @Test
+    public void shouldPointToSpecificTypeConstructorEvenIfUpdatedAfterPointing() {
+        ElementConstructorMap map = new ElementConstructorMap();
+        ElementConstructor<Button> buttonConstructor = mock(ButtonConstructor.class);
+        ElementConstructor<Button> updatedButtonConstructor = mock(ButtonConstructor.class);
+
+        map.put(Button.class, buttonConstructor);
+        map.point(Element.class, Button.class);
+        map.put(Button.class, updatedButtonConstructor);
+
+        map.get(Element.class).newElement(null, null);
+
+        verify(updatedButtonConstructor).newElement(null, null);
+        verify(buttonConstructor, never()).newElement(any(ElementLookup.class), any(ElementConstructorMap.class));
+    }
+
+    interface ButtonConstructor extends ElementConstructor<Button> {}
+    interface AnElementConstructor extends ElementConstructor<Element> {}
 }
