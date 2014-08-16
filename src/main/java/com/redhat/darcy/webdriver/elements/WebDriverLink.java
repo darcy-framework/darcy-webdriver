@@ -21,7 +21,6 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.web.api.elements.HtmlLink;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
-import com.redhat.darcy.webdriver.TagMismatchException;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
