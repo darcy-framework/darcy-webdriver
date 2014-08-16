@@ -86,7 +86,7 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
     public Set<String> getClasses() {
         String classList = getAttribute("class");
 
-        if (classList.isEmpty()) {
+        if (classList == null || classList.isEmpty()) {
             return Collections.emptySet();
         }
 
