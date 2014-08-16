@@ -28,8 +28,12 @@ import org.openqa.selenium.WebElement;
 /**
  * A {@link FunctionalInterface} to represent {@link WebDriverElement}s' and subclasses'
  * constructors.
- * 
- * @param <T>
+ *
+ * <p>Intended to match the signature of
+ * {@link WebDriverElement#WebDriverElement(com.redhat.darcy.webdriver.internal.ElementLookup, ElementConstructorMap)},
+ * so that a constructor reference may be used as an implementation of this interface. So, for
+ * example, where a method accepts an {@code ElementConstructor<Element>} you may simply pass,
+ * {@code WebDriverElement::new}.
  */
 @FunctionalInterface
 public interface ElementConstructor<T extends Element> {

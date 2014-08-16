@@ -19,13 +19,13 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.api.elements.Button;
+import com.redhat.darcy.web.api.elements.HtmlButton;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
-public class WebDriverButton extends WebDriverElement implements Button {
+public class WebDriverButton extends WebDriverElement implements HtmlButton {
 
     public WebDriverButton(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);

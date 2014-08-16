@@ -19,13 +19,13 @@
 
 package com.redhat.darcy.webdriver.elements;
 
-import com.redhat.darcy.ui.api.elements.Label;
+import com.redhat.darcy.web.api.elements.HtmlLabel;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
-public class WebDriverLabel extends WebDriverElement implements Label {
+public class WebDriverLabel extends WebDriverElement implements HtmlLabel {
     public WebDriverLabel(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
     }
@@ -33,5 +33,10 @@ public class WebDriverLabel extends WebDriverElement implements Label {
     @Override
     public String readText() {
         return attemptAndGet(WebElement::getText);
+    }
+
+    @Override
+    public String getFor() {
+        return getAttribute("for");
     }
 }

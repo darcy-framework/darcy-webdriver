@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.util.Caching;
+import com.redhat.darcy.web.api.elements.HtmlElement;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
@@ -34,10 +35,14 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class WebDriverElement implements Caching, Element, WrapsElement {
+public class WebDriverElement implements Element, Caching, HtmlElement, WrapsElement {
     private final ElementLookup source;
     private final ElementConstructorMap elementMap;
 
@@ -65,6 +70,33 @@ public class WebDriverElement implements Caching, Element, WrapsElement {
         } catch (NotFoundException e) {
             return false;
         }
+    }
+
+    @Override
+    public String getTagName() {
+        return attemptAndGet(WebElement::getTagName);
+    }
+
+    @Override
+    public String getCssValue(String property) {
+        return attemptAndGet(e -> e.getCssValue(property));
+    }
+
+    @Override
+    public Set<String> getClasses() {
+        String classList = getAttribute("class");
+
+        if (classList == null || classList.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        return Arrays.stream(classList.split(" "))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public String getAttribute(String attribute) {
+        return attemptAndGet(e -> e.getAttribute(attribute));
     }
 
     @Override

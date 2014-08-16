@@ -23,6 +23,7 @@ import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.Select;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
+import com.redhat.darcy.web.api.elements.HtmlSelect;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
@@ -31,7 +32,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Optional;
 
-public class WebDriverSelect extends WebDriverElement implements Select {
+public class WebDriverSelect extends WebDriverElement implements HtmlSelect {
 
     public WebDriverSelect(ElementLookup source, ElementConstructorMap elementMap) {
         super(source, elementMap);
