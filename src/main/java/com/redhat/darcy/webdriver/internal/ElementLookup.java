@@ -23,7 +23,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.function.Supplier;
 
-public interface ElementLookup extends Supplier<WebElement> {
+public interface ElementLookup {
     /**
      * Attempts to retrieve a WebElement reference, which may throw a
      * {@link org.openqa.selenium.NoSuchElementException}. The retrieved element may or may not be
@@ -31,6 +31,5 @@ public interface ElementLookup extends Supplier<WebElement> {
      *
      * @throws java.util.NoSuchElementException if the element cannot be located.
      */
-    @Override
-    WebElement get();
+    WebElement lookup();
 }

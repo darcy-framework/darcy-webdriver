@@ -25,8 +25,6 @@ import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.web.api.elements.HtmlElement;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
-import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.ElementNotVisibleException;
@@ -43,14 +41,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WebDriverElement implements Element, Caching, HtmlElement, WrapsElement {
-    private final ElementLookup source;
-    private final ElementConstructorMap elementMap;
+    /**
+     * Subclasses should not really be using this directly.
+     * @see #attempt(java.util.function.Consumer)
+     * @see #attemptAndGet(java.util.function.Function)
+     */
+    protected final ElementLookup source;
+    private final ElementContext context;
 
     private WebElement cached;
 
-    public WebDriverElement(ElementLookup source, ElementConstructorMap elementMap) {
+    public WebDriverElement(ElementLookup source, ElementContext context) {
         this.source = source;
-        this.elementMap = elementMap;
+        this.context = context;
     }
 
     @Override
@@ -99,9 +102,13 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
         return attemptAndGet(e -> e.getAttribute(attribute));
     }
 
+    /**
+     * Looks up the underlying source {@link org.openqa.selenium.WebElement}. If the element is no
+     * longer present, a {@link org.openqa.selenium.NoSuchElementException} may be thrown.
+     */
     @Override
     public WebElement getWrappedElement() {
-        return source.get();
+        return source.lookup();
     }
 
     @Override
@@ -109,17 +116,26 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
         cached = null;
     }
 
-    public ElementContext getElementContext() {
-        // TODO: Address stale element references when finding sub elements in this manner
-        // TODO: Is this method necessary?
-        return new DefaultWebDriverElementContext(webElement(), elementMap);
+    @Override
+    public String toString() {
+        return "A WebDriverElement backed by, " + source;
+    }
+
+    /**
+     * Retrieve the ElementContext that this element was found in. Intended to allow element types
+     * to find other elements within the same context, most likely by nesting within themselves. For
+     * example, {@code return By.nested(this, By.htmlTag("option")).findAll(SelectOption.class,
+     * getContext());}.
+     */
+    public ElementContext getContext() {
+        return context;
     }
 
     /**
      * Expected way for sub element types to interact with their corresponding WebElement. This
      * attempts the desired action, and will throw appropriate exceptions should the element not be
      * able to be interacted with, for whatever reason. If the WebElement is stale when the action
-     * is attempted, the cached WebElement will be cleared and looked up again, which may get a
+     * is attempted, the cached WebElement will be cleared and looked up again, which may lookup a
      * fresh reference to the equivalent element.
      *
      * @param action A function that wraps the action to be performed. Accepts the source WebElement
@@ -145,7 +161,7 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
      * Expected way for sub element types to interact with their corresponding WebElement. This
      * attempts the desired action, and will throw appropriate exceptions should the element not be
      * able to be interacted with, for whatever reason. If the WebElement is stale when the action
-     * is attempted, the cached WebElement will be cleared and looked up again, which may get a
+     * is attempted, the cached WebElement will be cleared and looked up again, which may lookup a
      * fresh reference to the equivalent element.
      *
      * @param action A function that wraps the action to be performed. Accepts the source WebElement

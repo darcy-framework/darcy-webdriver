@@ -20,204 +20,142 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.DarcyException;
-import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
-import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
-import com.redhat.darcy.ui.internal.SimpleTransition;
 import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
+import com.redhat.darcy.webdriver.locators.ByChained;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsElement;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class DefaultWebDriverElementContext implements WebDriverElementContext {
     private final ElementConstructorMap elementMap;
-    private final Transition transition;
     private final SearchContext sc;
 
     public DefaultWebDriverElementContext(SearchContext context, ElementConstructorMap elementMap) {
         this.elementMap = elementMap;
-        this.transition = new SimpleTransition(this);
         this.sc = context;
-    }
-
-    public DefaultWebDriverElementContext(SearchContext context, ElementConstructorMap elementMap,
-            Transition transition) {
-        this.elementMap = elementMap;
-        this.transition = transition;
-        this.sc = context;
-    }
-
-    @Override
-    public Transition transition() {
-        return transition;
     }
 
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
-        return newElementList(type, () -> By.id(id).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.id(id), sc));
     }
 
     @Override
     public <T> T findById(Class<T> type, String id) {
-        return newElement(type, () -> By.id(id).findElement(sc));
+        return newElement(type, new WebElementLookup(By.id(id), sc));
     }
 
     @Override
     public <T> List<T> findAllByName(Class<T> type, String name) {
-        return newElementList(type, () -> By.name(name).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.name(name), sc));
     }
 
     @Override
     public <T> T findByName(Class<T> type, String name) {
-        return newElement(type, () -> By.name(name).findElement(sc));
+        return newElement(type, new WebElementLookup(By.name(name), sc));
     }
 
     @Override
     public <T> List<T> findAllByLinkText(Class<T> type, String linkText) {
-        return newElementList(type, () -> By.linkText(linkText).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.linkText(linkText), sc));
     }
 
     @Override
     public <T> T findByLinkText(Class<T> type, String linkText) {
-        return newElement(type, () -> By.linkText(linkText).findElement(sc));
+        return newElement(type, new WebElementLookup(By.linkText(linkText), sc));
     }
 
     @Override
     public <T> List<T> findAllByTextContent(Class<T> type, String textContent) {
-        return newElementList(type, () -> new ByVisibleText(textContent).findElements(sc));
+        return newElementList(type, new WebElementListLookup(new ByVisibleText(textContent), sc));
     }
 
     @Override
     public <T> T findByTextContent(Class<T> type, String textContent) {
-        return newElement(type, () -> new ByVisibleText(textContent).findElement(sc));
+        return newElement(type, new WebElementLookup(new ByVisibleText(textContent), sc));
     }
 
     @Override
     public <T> List<T> findAllByPartialTextContent(Class<T> type, String partialTextContent) {
-        return newElementList(type,
-                () -> new ByPartialVisibleText(partialTextContent).findElements(sc));
+        By by = new ByPartialVisibleText(partialTextContent);
+        ElementListLookup listLookup = new WebElementListLookup(by, sc);
+        return newElementList(type, listLookup);
     }
 
     @Override
     public <T> T findByPartialTextContent(Class<T> type, String partialTextContent) {
-        return newElement(type,
-                () -> new ByPartialVisibleText(partialTextContent).findElement(sc));
+        By by = new ByPartialVisibleText(partialTextContent);
+        return newElement(type, new WebElementLookup(by, sc));
     }
 
     @Override
     public <T> List<T> findAllByXPath(Class<T> type, String xpath) {
-        return newElementList(type, () -> By.xpath(xpath).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.xpath(xpath), sc));
     }
 
     @Override
     public <T> T findByXPath(Class<T> type, String xpath) {
-        return newElement(type, () -> By.xpath(xpath).findElement(sc));
+        return newElement(type, new WebElementLookup(By.xpath(xpath), sc));
     }
 
     @Override
     public <T> List<T> findAllByCss(Class<T> type, String css) {
-        return newElementList(type, () -> By.cssSelector(css).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.cssSelector(css), sc));
     }
 
     @Override
     public <T> T findByCss(Class<T> type, String css) {
-        return newElement(type, () -> By.cssSelector(css).findElement(sc));
+        return newElement(type, new WebElementLookup(By.cssSelector(css), sc));
     }
 
     @Override
     public <T> List<T> findAllByHtmlTag(Class<T> type, String tag) {
-        return newElementList(type, () -> By.tagName(tag).findElements(sc));
+        return newElementList(type, new WebElementListLookup(By.tagName(tag), sc));
     }
 
     @Override
     public <T> T findByHtmlTag(Class<T> type, String tag) {
-        return newElement(type, () -> By.tagName(tag).findElement(sc));
+        return newElement(type, new WebElementLookup(By.tagName(tag), sc));
     }
 
     @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
-        return new LazyList<>(() -> {
-            List<T> elements = null;
-            List<T> subElements = new ArrayList<>();
-
-            for (Locator locator : locators) {
-                if (elements == null) {
-                    elements = locator.findAll(type, this);
-                } else {
-                    for (T element : elements) {
-                        Context subCtx = new DefaultWebDriverElementContext(
-                                ((WebDriverElement) element).getWrappedElement(), elementMap);
-                        subElements.addAll(locator.findAll(type, subCtx));
-                    }
-
-                    elements.clear();
-                    elements.addAll(subElements);
-                    subElements.clear();
-                }
-            }
-
-            return elements;
-        });
+        return newElementList(type, new WebElementListLookup(new ByChained(locators), sc));
     }
 
     @Override
     public <T> T findByChained(Class<T> type, Locator... locators) {
-        return newElement(type, () -> {
-            List<T> elements = findAllByChained(type, locators);
-
-            if (elements.isEmpty()) {
-                throw new NoSuchElementException("Cannot locate a element by chaining locators: " +
-                        Arrays.toString(locators));
-            }
-
-            return ((WrapsElement) elements.get(0)).getWrappedElement();
-        });
+        return newElement(type, new WebElementLookup(new ByChained(locators), sc));
     }
 
     @Override
     public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
-        return newElementList(type, () -> {
-            if (!(parent instanceof WrapsElement)) {
-                throw new DarcyException("Parent element does not wrap a WebElement. Can only find "
-                        + "by nested for fundamental UI element types found by darcy-webdriver.");
-            }
-            Context subCtx = new DefaultWebDriverElementContext(
-                    ((WrapsElement) parent).getWrappedElement(), elementMap);
+        if (!(parent instanceof WebDriverElement)) {
+            throw new DarcyException("Parent element is not a WebDriverElement. Can only find " +
+                    "by nested for fundamental UI element types found by darcy-webdriver.");
+        }
 
-            return child.findAll(type, subCtx)
-                    .stream()
-                    .map(e -> ((WrapsElement) e).getWrappedElement())
-                    .collect(Collectors.toList());
-        });
+        return newElementList(type, new NestedElementListLookup((WebDriverElement) parent, child));
     }
 
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
-        return newElement(type, () -> {
-            if (!(parent instanceof WrapsElement)) {
-                throw new DarcyException("Parent element does not wrap a WebElement. Can only find "
-                        + "by nested for fundamental UI element types found by darcy-webdriver.");
-            }
-            Context subCtx = new DefaultWebDriverElementContext(
-                    ((WrapsElement) parent).getWrappedElement(), elementMap);
+        if (!(parent instanceof WebDriverElement)) {
+            throw new DarcyException("Parent element is not a WebDriverElement. Can only find " +
+                    "by nested for fundamental UI element types found by darcy-webdriver.");
+        }
 
-            return ((WrapsElement) child.find(type, subCtx)).getWrappedElement();
-        });
+        return newElement(type, new NestedElementLookup((WebDriverElement) parent, child));
     }
 
     @Override
@@ -239,19 +177,19 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
                     + type.toString());
         }
 
-        return (T) elementMap.get((Class<Element>) type).newElement(source, elementMap);
+        return (T) elementMap.get((Class<Element>) type).newElement(source, this);
     }
 
     @SuppressWarnings("unchecked")
-    private <T> List<T> newElementList(Class<T> type, Supplier<List<WebElement>> source) {
+    private <T> List<T> newElementList(Class<T> type, ElementListLookup source) {
         if (!Element.class.isAssignableFrom(type)) {
             throw new DarcyException("An ElementContext can only locate Element types: "
                     + type.toString());
         }
 
-        return new LazyList<>(() -> source.get()
+        return new LazyList<>(() -> source.lookup()
                 .stream()
-                .map(s -> newElement(type, () -> s))
+                .map(e -> newElement(type, new ListElementLookup(source, e)))
                 .collect(Collectors.toList()));
     }
 }

@@ -19,6 +19,7 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
@@ -30,12 +31,12 @@ import org.openqa.selenium.WebElement;
  * constructors.
  *
  * <p>Intended to match the signature of
- * {@link WebDriverElement#WebDriverElement(com.redhat.darcy.webdriver.internal.ElementLookup, ElementConstructorMap)},
+ * {@link WebDriverElement#WebDriverElement(com.redhat.darcy.webdriver.internal.ElementLookup, com.redhat.darcy.ui.api.ElementContext)},
  * so that a constructor reference may be used as an implementation of this interface. So, for
  * example, where a method accepts an {@code ElementConstructor<Element>} you may simply pass,
  * {@code WebDriverElement::new}.
  */
 @FunctionalInterface
 public interface ElementConstructor<T extends Element> {
-    T newElement(ElementLookup source, ElementConstructorMap elementMap);
+    T newElement(ElementLookup source, ElementContext context);
 }

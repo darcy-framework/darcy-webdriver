@@ -19,31 +19,36 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.web.api.elements.HtmlSelectOption;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverSelectOption extends WebDriverElement implements HtmlSelectOption {
-    
-    public WebDriverSelectOption(ElementLookup source, ElementConstructorMap elementMap) {
-        super(source, elementMap);
+
+    public WebDriverSelectOption(ElementLookup source, ElementContext context) {
+        super(source, context);
     }
 
     @Override
     public String readText() {
         return attemptAndGet(WebElement::getText);
     }
-    
+
     @Override
     public void select() {
         attempt(WebElement::click);
     }
-    
+
     @Override
     public boolean isSelected() {
         return attemptAndGet(WebElement::isSelected);
     }
-    
+
+    @Override
+    public String toString() {
+        return "A WebDriverSelectOption backed by, " + source;
+    }
+
 }

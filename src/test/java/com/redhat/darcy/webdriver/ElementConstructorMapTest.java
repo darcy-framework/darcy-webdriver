@@ -26,6 +26,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Button;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
@@ -68,7 +69,7 @@ public class ElementConstructorMapTest {
 
         map.get(Element.class).newElement(null, null);
 
-        verify(buttonConstructor).newElement(any(ElementLookup.class), any(ElementConstructorMap.class));
+        verify(buttonConstructor).newElement(any(ElementLookup.class), any(ElementContext.class));
     }
 
     @Test
@@ -84,9 +85,8 @@ public class ElementConstructorMapTest {
         map.get(Element.class).newElement(null, null);
 
         verify(updatedButtonConstructor).newElement(null, null);
-        verify(buttonConstructor, never()).newElement(any(ElementLookup.class), any(ElementConstructorMap.class));
+        verify(buttonConstructor, never()).newElement(any(ElementLookup.class), any(ElementContext.class));
     }
 
     interface ButtonConstructor extends ElementConstructor<Button> {}
-    interface AnElementConstructor extends ElementConstructor<Element> {}
 }

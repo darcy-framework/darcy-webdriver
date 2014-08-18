@@ -19,12 +19,11 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.Locator;
-import com.redhat.darcy.ui.api.elements.Select;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.web.api.elements.HtmlSelect;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
@@ -34,18 +33,18 @@ import java.util.Optional;
 
 public class WebDriverSelect extends WebDriverElement implements HtmlSelect {
 
-    public WebDriverSelect(ElementLookup source, ElementConstructorMap elementMap) {
-        super(source, elementMap);
+    public WebDriverSelect(ElementLookup source, ElementContext context) {
+        super(source, context);
     }
 
     @Override
     public void select(Locator locator) {
-        locator.find(SelectOption.class, getElementContext()).select();
+        By.nested(this, locator).find(SelectOption.class, getContext()).select();
     }
 
     @Override
     public List<SelectOption> getOptions() {
-        return getElementContext().find().elementsOfType(SelectOption.class, By.htmlTag("option"));
+        return By.nested(this, By.htmlTag("option")).findAll(SelectOption.class, getContext());
     }
 
     @Override
@@ -62,5 +61,10 @@ public class WebDriverSelect extends WebDriverElement implements HtmlSelect {
     @Override
     public boolean isEnabled() {
         return attemptAndGet(WebElement::isEnabled);
+    }
+
+    @Override
+    public String toString() {
+        return "A WebDriverSelect backed by, " + source;
     }
 }

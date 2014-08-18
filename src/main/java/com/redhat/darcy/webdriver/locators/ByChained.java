@@ -17,32 +17,33 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.elements;
+package com.redhat.darcy.webdriver.locators;
 
-import com.redhat.darcy.ui.api.ElementContext;
-import com.redhat.darcy.web.api.elements.HtmlButton;
-import com.redhat.darcy.webdriver.internal.ElementLookup;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.webdriver.internal.WebElementContext;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-public class WebDriverButton extends WebDriverElement implements HtmlButton {
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-    public WebDriverButton(ElementLookup source, ElementContext context) {
-        super(source, context);
-    }
-    
-    @Override
-    public void click() {
-        attempt(WebElement::click);
+public class ByChained extends By {
+    private Locator[] locators;
+
+    public ByChained(Locator[] locators) {
+        this.locators = Objects.requireNonNull(locators, "locators");
     }
 
     @Override
-    public boolean isEnabled() {
-        return attemptAndGet(WebElement::isEnabled);
+    public List<WebElement> findElements(SearchContext context) {
+        return new WebElementContext(context).findAllByChained(WebElement.class, locators);
     }
 
     @Override
     public String toString() {
-        return "A WebDriverButton backed by, " + source;
+        return "ByChained: {locators: " + Arrays.toString(locators) + "}";
     }
 }

@@ -19,34 +19,34 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.web.api.elements.HtmlTextInput;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverTextInput extends WebDriverElement implements HtmlTextInput {
-    public WebDriverTextInput(ElementLookup source, ElementConstructorMap elementMap) {
-        super(source, elementMap);
+    public WebDriverTextInput(ElementLookup source, ElementContext context) {
+        super(source, context);
     }
-    
+
     @Override
     public void clearAndType(String stringToType) {
         clear();
         sendKeys(stringToType);
         // TODO: send TAB key to trigger blur events
     }
-    
+
     @Override
     public void sendKeys(CharSequence... keysToSend) {
         attempt(e -> e.sendKeys(keysToSend));
     }
-    
+
     @Override
     public String readValue() {
         return getAttribute("value");
     }
-    
+
     @Override
     public void click() {
         attempt(WebElement::click);
@@ -60,5 +60,10 @@ public class WebDriverTextInput extends WebDriverElement implements HtmlTextInpu
     @Override
     public boolean isEnabled() {
         return attemptAndGet(WebElement::isEnabled);
+    }
+
+    @Override
+    public String toString() {
+        return "A WebDriverTextInput backed by, " + source;
     }
 }

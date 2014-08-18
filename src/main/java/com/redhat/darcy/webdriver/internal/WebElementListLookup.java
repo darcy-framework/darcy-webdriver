@@ -17,32 +17,31 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.elements;
+package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.api.ElementContext;
-import com.redhat.darcy.web.api.elements.HtmlButton;
-import com.redhat.darcy.webdriver.internal.ElementLookup;
-
+import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
-public class WebDriverButton extends WebDriverElement implements HtmlButton {
+import java.util.List;
 
-    public WebDriverButton(ElementLookup source, ElementContext context) {
-        super(source, context);
-    }
-    
-    @Override
-    public void click() {
-        attempt(WebElement::click);
+public class WebElementListLookup implements ElementListLookup {
+    private final By by;
+    private final SearchContext sc;
+
+    public WebElementListLookup(By by, SearchContext sc) {
+        this.by = by;
+        this.sc = sc;
     }
 
     @Override
-    public boolean isEnabled() {
-        return attemptAndGet(WebElement::isEnabled);
+    public List<WebElement> lookup() {
+        return by.findElements(sc);
     }
 
     @Override
     public String toString() {
-        return "A WebDriverButton backed by, " + source;
+        return "A list of elements found by, " + by + "\n" +
+                "in search context, " + sc;
     }
 }

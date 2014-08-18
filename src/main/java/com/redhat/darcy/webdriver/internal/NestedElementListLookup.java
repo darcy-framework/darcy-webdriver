@@ -17,32 +17,32 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.elements;
+package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.api.ElementContext;
-import com.redhat.darcy.web.api.elements.HtmlButton;
-import com.redhat.darcy.webdriver.internal.ElementLookup;
+import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.WebElement;
 
-public class WebDriverButton extends WebDriverElement implements HtmlButton {
+import java.util.List;
 
-    public WebDriverButton(ElementLookup source, ElementContext context) {
-        super(source, context);
-    }
-    
-    @Override
-    public void click() {
-        attempt(WebElement::click);
+public class NestedElementListLookup implements ElementListLookup {
+    private final WebDriverElement parent;
+    private final Locator children;
+
+    public NestedElementListLookup(WebDriverElement parent, Locator children) {
+        this.parent = parent;
+        this.children = children;
     }
 
     @Override
-    public boolean isEnabled() {
-        return attemptAndGet(WebElement::isEnabled);
+    public List<WebElement> lookup() {
+        return children.findAll(WebElement.class, new WebElementContext(parent.getWrappedElement()));
     }
 
     @Override
     public String toString() {
-        return "A WebDriverButton backed by, " + source;
+        return "A list of elements found nested within a parent element, " + parent + "\n" +
+                "with locator, " + children;
     }
 }

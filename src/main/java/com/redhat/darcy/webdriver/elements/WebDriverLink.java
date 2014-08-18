@@ -19,15 +19,15 @@
 
 package com.redhat.darcy.webdriver.elements;
 
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.web.api.elements.HtmlLink;
-import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
 public class WebDriverLink extends WebDriverElement implements HtmlLink {
-    public WebDriverLink(ElementLookup source, ElementConstructorMap elementMap) {
-        super(source, elementMap);
+    public WebDriverLink(ElementLookup source, ElementContext context) {
+        super(source, context);
     }
 
     @Override
@@ -48,5 +48,10 @@ public class WebDriverLink extends WebDriverElement implements HtmlLink {
     @Override
     public String getHref() {
         return getAttribute("href");
+    }
+
+    @Override
+    public String toString() {
+        return "A WebDriverLink backed by, " + source;
     }
 }
