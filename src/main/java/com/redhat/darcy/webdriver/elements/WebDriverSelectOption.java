@@ -32,7 +32,7 @@ public class WebDriverSelectOption extends WebDriverElement implements HtmlSelec
     }
 
     @Override
-    public String readText() {
+    public String getText() {
         return attemptAndGet(WebElement::getText);
     }
 

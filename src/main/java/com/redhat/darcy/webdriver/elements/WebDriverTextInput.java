@@ -31,19 +31,19 @@ public class WebDriverTextInput extends WebDriverElement implements HtmlTextInpu
     }
 
     @Override
-    public void clearAndType(String stringToType) {
+    public void clearAndType(CharSequence... keysToType) {
         clear();
-        sendKeys(stringToType);
+        type(keysToType);
         // TODO: send TAB key to trigger blur events
     }
 
     @Override
-    public void sendKeys(CharSequence... keysToSend) {
-        attempt(e -> e.sendKeys(keysToSend));
+    public void type(CharSequence... keysToType) {
+        attempt(e -> e.sendKeys(keysToType));
     }
 
     @Override
-    public String readValue() {
+    public String getValue() {
         return getAttribute("value");
     }
 

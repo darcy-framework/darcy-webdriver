@@ -31,7 +31,7 @@ public class WebDriverLabel extends WebDriverElement implements HtmlLabel {
     }
 
     @Override
-    public String readText() {
+    public String getText() {
         return attemptAndGet(WebElement::getText);
     }
 
