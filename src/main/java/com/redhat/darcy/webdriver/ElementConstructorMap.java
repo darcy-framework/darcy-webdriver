@@ -26,6 +26,7 @@ import com.redhat.darcy.ui.api.elements.Label;
 import com.redhat.darcy.ui.api.elements.Link;
 import com.redhat.darcy.ui.api.elements.Select;
 import com.redhat.darcy.ui.api.elements.SelectOption;
+import com.redhat.darcy.ui.api.elements.Text;
 import com.redhat.darcy.ui.api.elements.TextInput;
 import com.redhat.darcy.web.api.elements.HtmlButton;
 import com.redhat.darcy.web.api.elements.HtmlElement;
@@ -40,6 +41,7 @@ import com.redhat.darcy.webdriver.elements.WebDriverLabel;
 import com.redhat.darcy.webdriver.elements.WebDriverLink;
 import com.redhat.darcy.webdriver.elements.WebDriverSelect;
 import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
+import com.redhat.darcy.webdriver.elements.WebDriverText;
 import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
 
 import java.util.HashMap;
@@ -79,6 +81,7 @@ public class ElementConstructorMap {
         map.put(HtmlSelectOption.class, WebDriverSelectOption::new);
         map.put(HtmlLabel.class, WebDriverLabel::new);
         map.put(HtmlElement.class, WebDriverElement::new);
+        map.put(Text.class, WebDriverText::new);
 
         map.point(TextInput.class, HtmlTextInput.class);
         map.point(Button.class, HtmlButton.class);
