@@ -11,8 +11,22 @@ public class WebDriverCheckbox extends WebDriverElement implements Checkbox {
     }
 
     @Override
+    public void check() {
+        if (!isChecked()) {
+            attempt(WebElement::click);
+        }
+    }
+
+    @Override
+    public void uncheck() {
+        if (isChecked()) {
+            attempt(WebElement::click);
+        }
+    }
+
+    @Override
     public boolean isChecked() {
-        return attemptAndGet(e -> e.getAttribute("checked").equals("checked"));
+        return attemptAndGet(WebElement::isSelected);
     }
 
     @Override
