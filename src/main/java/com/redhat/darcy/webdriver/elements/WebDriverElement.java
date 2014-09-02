@@ -76,6 +76,11 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
     }
 
     @Override
+    public void click() {
+        attempt(WebElement::click);
+    }
+
+    @Override
     public String getTagName() {
         return attemptAndGet(WebElement::getTagName);
     }

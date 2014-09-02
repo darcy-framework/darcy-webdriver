@@ -48,11 +48,6 @@ public class WebDriverTextInput extends WebDriverElement implements HtmlTextInpu
     }
 
     @Override
-    public void click() {
-        attempt(WebElement::click);
-    }
-
-    @Override
     public void clear() {
         attempt(WebElement::clear);
     }

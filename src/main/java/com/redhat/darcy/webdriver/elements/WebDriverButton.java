@@ -30,11 +30,6 @@ public class WebDriverButton extends WebDriverElement implements HtmlButton {
     public WebDriverButton(ElementLookup source, ElementContext context) {
         super(source, context);
     }
-    
-    @Override
-    public void click() {
-        attempt(WebElement::click);
-    }
 
     @Override
     public boolean isEnabled() {

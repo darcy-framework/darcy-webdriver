@@ -29,11 +29,6 @@ public class WebDriverLink extends WebDriverElement implements HtmlLink {
     public WebDriverLink(ElementLookup source, ElementContext context) {
         super(source, context);
     }
-
-    @Override
-    public void click() {
-        attempt(WebElement::click);
-    }
     
     @Override
     public String getLinkText() {

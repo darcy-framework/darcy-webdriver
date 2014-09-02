@@ -21,11 +21,12 @@ package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.elements.Text;
+import com.redhat.darcy.web.api.elements.HtmlText;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
 
-public class WebDriverText extends WebDriverElement implements Text {
+public class WebDriverText extends WebDriverElement implements HtmlText {
     public WebDriverText(ElementLookup source, ElementContext context) {
         super(source, context);
     }
