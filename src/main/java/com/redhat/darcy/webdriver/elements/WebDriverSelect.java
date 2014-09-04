@@ -48,7 +48,7 @@ public class WebDriverSelect extends WebDriverElement implements HtmlSelect {
     }
 
     @Override
-    public Optional<SelectOption> getCurrentlySelectedOption() {
+    public Optional<SelectOption> getSelectedOption() {
         for (SelectOption option : getOptions()) {
             if (option.isSelected()) {
                 return Optional.of(option);
