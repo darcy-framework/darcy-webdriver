@@ -20,11 +20,11 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.ElementContext;
-import com.redhat.darcy.ui.api.elements.Checkbox;
+import com.redhat.darcy.web.api.elements.HtmlCheckbox;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 import org.openqa.selenium.WebElement;
 
-public class WebDriverCheckbox extends WebDriverElement implements Checkbox {
+public class WebDriverCheckbox extends WebDriverElement implements HtmlCheckbox {
     public WebDriverCheckbox(ElementLookup source, ElementContext context) {
         super(source, context);
     }

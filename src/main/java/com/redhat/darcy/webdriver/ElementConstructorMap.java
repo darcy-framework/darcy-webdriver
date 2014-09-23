@@ -20,30 +20,9 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.DarcyException;
-import com.redhat.darcy.ui.api.elements.Button;
-import com.redhat.darcy.ui.api.elements.Element;
-import com.redhat.darcy.ui.api.elements.Label;
-import com.redhat.darcy.ui.api.elements.Link;
-import com.redhat.darcy.ui.api.elements.Select;
-import com.redhat.darcy.ui.api.elements.SelectOption;
-import com.redhat.darcy.ui.api.elements.Text;
-import com.redhat.darcy.ui.api.elements.TextInput;
-import com.redhat.darcy.web.api.elements.HtmlButton;
-import com.redhat.darcy.web.api.elements.HtmlElement;
-import com.redhat.darcy.web.api.elements.HtmlLabel;
-import com.redhat.darcy.web.api.elements.HtmlLink;
-import com.redhat.darcy.web.api.elements.HtmlSelect;
-import com.redhat.darcy.web.api.elements.HtmlSelectOption;
-import com.redhat.darcy.web.api.elements.HtmlText;
-import com.redhat.darcy.web.api.elements.HtmlTextInput;
-import com.redhat.darcy.webdriver.elements.WebDriverButton;
-import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.elements.WebDriverLabel;
-import com.redhat.darcy.webdriver.elements.WebDriverLink;
-import com.redhat.darcy.webdriver.elements.WebDriverSelect;
-import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
-import com.redhat.darcy.webdriver.elements.WebDriverText;
-import com.redhat.darcy.webdriver.elements.WebDriverTextInput;
+import com.redhat.darcy.ui.api.elements.*;
+import com.redhat.darcy.web.api.elements.*;
+import com.redhat.darcy.webdriver.elements.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +61,9 @@ public class ElementConstructorMap {
         map.put(HtmlSelectOption.class, WebDriverSelectOption::new);
         map.put(HtmlLabel.class, WebDriverLabel::new);
         map.put(HtmlText.class, WebDriverText::new);
+        map.put(HtmlRadio.class, WebDriverRadio::new);
+        map.put(HtmlCheckbox.class, WebDriverCheckbox::new);
+        map.put(HtmlMultiSelect.class, WebDriverMultiSelect::new);
         map.put(HtmlElement.class, WebDriverElement::new);
 
         map.point(TextInput.class, HtmlTextInput.class);
@@ -91,6 +73,9 @@ public class ElementConstructorMap {
         map.point(SelectOption.class, HtmlSelectOption.class);
         map.point(Label.class, HtmlLabel.class);
         map.point(Text.class, HtmlText.class);
+        map.point(Radio.class, HtmlRadio.class);
+        map.point(Checkbox.class, HtmlCheckbox.class);
+        map.point(MultiSelect.class, HtmlMultiSelect.class);
         map.point(Element.class, HtmlElement.class);
         
         return map;
