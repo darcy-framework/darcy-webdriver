@@ -33,6 +33,7 @@ import com.redhat.darcy.ui.internal.FindsByTextContent;
 import com.redhat.darcy.ui.internal.FindsByXPath;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.WebSelection;
+import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
@@ -287,6 +288,28 @@ public class DelegatingWebContext implements WebDriverWebContext {
             return context.findByXPath(type, xpath);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("XPath", type);
+        }
+    }
+
+    @Override
+    public <T> List<T> findAllByClassName(Class<T> type, String className) {
+        try {
+            FindsByClassName context = (FindsByClassName) contextForType(type);
+
+            return context.findAllByClassName(type, className);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("HTML class name", type);
+        }
+    }
+
+    @Override
+    public <T> T findByClassName(Class<T> type, String className) {
+        try {
+            FindsByClassName context = (FindsByClassName) contextForType(type);
+
+            return context.findByClassName(type, className);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("HTML class name", type);
         }
     }
 

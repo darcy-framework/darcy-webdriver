@@ -135,4 +135,14 @@ public class StubWebDriverElementContext implements WebDriverElementContext {
     public WebDriverElementContext withRootElement(Element root) {
         throw new UnsupportedOperationException("withRootElement");
     }
+
+    @Override
+    public <T> List<T> findAllByClassName(Class<T> type, String className) {
+        throw new UnsupportedOperationException("findAllByClassName");
+    }
+
+    @Override
+    public <T> T findByClassName(Class<T> type, String className) {
+        throw new UnsupportedOperationException("findByClassName");
+    }
 }

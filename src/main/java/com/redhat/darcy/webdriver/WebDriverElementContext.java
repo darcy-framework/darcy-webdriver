@@ -30,12 +30,13 @@ import com.redhat.darcy.ui.internal.FindsByNested;
 import com.redhat.darcy.ui.internal.FindsByPartialTextContent;
 import com.redhat.darcy.ui.internal.FindsByTextContent;
 import com.redhat.darcy.ui.internal.FindsByXPath;
+import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
 
 public interface WebDriverElementContext extends ElementContext, FindsById, FindsByName,
         FindsByLinkText, FindsByTextContent, FindsByPartialTextContent, FindsByXPath,
-        FindsByCss, FindsByHtmlTag, FindsByChained, FindsByNested {
+        FindsByCss, FindsByHtmlTag, FindsByClassName, FindsByChained, FindsByNested {
     @Override
     WebDriverElementContext withRootLocator(Locator root);
 

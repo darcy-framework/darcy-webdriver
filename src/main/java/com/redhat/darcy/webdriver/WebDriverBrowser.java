@@ -236,6 +236,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
+    public <T> List<T> findAllByClassName(Class<T> type, String className) {
+        return attemptAndGet(() -> webContext.findAllByClassName(type, className));
+    }
+
+    @Override
     public <T> T findByName(Class<T> type, String name) {
         return attemptAndGet(() -> webContext.findByName(type, name));
     }
@@ -273,6 +278,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     @Override
     public <T> T findByCss(Class<T> type, String css) {
         return attemptAndGet(() -> webContext.findByCss(type, css));
+    }
+
+    @Override
+    public <T> T findByClassName(Class<T> type, String className) {
+        return attemptAndGet(() -> webContext.findByClassName(type, className));
     }
 
     @Override

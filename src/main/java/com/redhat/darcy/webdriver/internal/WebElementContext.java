@@ -225,4 +225,16 @@ public class WebElementContext implements WebDriverElementContext {
     public <T> T findByXPath(Class<T> type, String xpath) {
         return (T) By.xpath(xpath).findElement(sc);
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByClassName(Class<T> type, String className) {
+        return (List<T>) By.className(className).findElements(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByClassName(Class<T> type, String className) {
+        return (T) By.className(className).findElement(sc);
+    }
 }

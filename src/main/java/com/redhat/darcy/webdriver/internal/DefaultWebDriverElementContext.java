@@ -129,6 +129,16 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
+    public <T> List<T> findAllByClassName(Class<T> type, String className) {
+        return newElementList(type, new WebElementListLookup(By.className(className), sc));
+    }
+
+    @Override
+    public <T> T findByClassName(Class<T> type, String className) {
+        return newElement(type, new WebElementLookup(By.className(className), sc));
+    }
+
+    @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
         return newElementList(type, new WebElementListLookup(new ByChained(locators), sc));
     }
