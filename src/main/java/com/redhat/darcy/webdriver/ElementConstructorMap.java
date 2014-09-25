@@ -105,7 +105,7 @@ public class ElementConstructorMap {
      * Returns something that can create real element implementations of the desired type (that is,
      * an {@link com.redhat.darcy.webdriver.ElementConstructor}), given certain required inputs as
      * defined in
-     * {@link ElementConstructor#newElement(com.redhat.darcy.webdriver.internal.ElementLookup, ElementConstructorMap)}.
+     * {@link ElementConstructor#newElement(com.redhat.darcy.webdriver.internal.ElementLookup, com.redhat.darcy.ui.api.ElementContext)}.
      */
     @SuppressWarnings("unchecked")
     public <E extends Element> ElementConstructor<E> get(Class<E> type) {
