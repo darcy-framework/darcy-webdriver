@@ -75,6 +75,12 @@ public class CachingTargetLocator implements TargetLocator, Caching {
     }
 
     @Override
+    public WebDriver parentFrame() {
+        invalidateCache();
+        return driver.switchTo().parentFrame();
+    }
+
+    @Override
     public WebDriver window(String nameOrHandle) {
         return switchTo(WebDriverTargets.window(nameOrHandle));
     }
