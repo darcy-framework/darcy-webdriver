@@ -23,7 +23,6 @@ import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
-import com.redhat.darcy.ui.internal.FindsByChained;
 import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.ui.internal.FindsByLinkText;
 import com.redhat.darcy.ui.internal.FindsByName;
@@ -74,7 +73,7 @@ public class DelegatingWebContext implements WebDriverWebContext {
     @Override
     public <T> List<T> findAllByChained(Class<T> type, Locator... locators) {
         try {
-            FindsByChained context = (FindsByChained) contextForType(type);
+            FindsByNested context = (FindsByNested) contextForType(type);
 
             return context.findAllByChained(type, locators);
         } catch (ClassCastException e) {
@@ -85,7 +84,7 @@ public class DelegatingWebContext implements WebDriverWebContext {
     @Override
     public <T> T findByChained(Class<T> type, Locator... locators) {
         try {
-            FindsByChained context = (FindsByChained) contextForType(type);
+            FindsByNested context = (FindsByNested) contextForType(type);
 
             return context.findByChained(type, locators);
         } catch (ClassCastException e) {
