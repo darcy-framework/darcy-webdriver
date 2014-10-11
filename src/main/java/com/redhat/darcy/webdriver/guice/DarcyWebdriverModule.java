@@ -24,6 +24,7 @@ import com.redhat.darcy.web.api.BrowserFactory;
 import com.redhat.darcy.webdriver.RemoteBrowserFactory;
 
 import com.google.guiceberry.GuiceBerryModule;
+import com.google.guiceberry.TestScoped;
 import com.google.inject.AbstractModule;
 
 import java.net.MalformedURLException;
@@ -52,7 +53,7 @@ public class DarcyWebdriverModule extends AbstractModule {
         install(new GuiceBerryModule());
 
         bind(BrowserFactory.class).toInstance(getBrowserFactory());
-        bind(Browser.class).toProvider(BrowserProvider.class);
+        bind(Browser.class).toProvider(BrowserProvider.class).in(TestScoped.class);
     }
 
     protected BrowserFactory getBrowserFactory() {
