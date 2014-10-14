@@ -10,7 +10,6 @@ import com.redhat.darcy.webdriver.internal.ElementLookup;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
-import java.util.Optional;
 
 public class WebDriverMultiSelect extends WebDriverElement implements HtmlMultiSelect {
     public WebDriverMultiSelect(ElementLookup source, ElementContext context) {
@@ -28,20 +27,16 @@ public class WebDriverMultiSelect extends WebDriverElement implements HtmlMultiS
     }
 
     @Override
-    public List<Optional<SelectOption>> getCurrentlySelectedOptions() {
-        List<Optional<SelectOption>> options = Lists.newArrayList();
+    public List<SelectOption> getCurrentlySelectedOptions() {
+        List<SelectOption> selectedOptions = Lists.newArrayList();
 
         for (SelectOption option : getOptions()) {
             if (option.isSelected()) {
-               options.add(Optional.of(option));
+                selectedOptions.add(option);
             }
         }
 
-        if (options.isEmpty()) {
-            options.add(Optional.empty());
-        }
-
-        return options;
+        return selectedOptions;
     }
 
     @Override
