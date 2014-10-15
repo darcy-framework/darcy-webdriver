@@ -17,7 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.internal.webdriver;
+package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;

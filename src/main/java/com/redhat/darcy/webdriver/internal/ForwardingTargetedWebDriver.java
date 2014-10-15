@@ -17,10 +17,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.internal.webdriver;
-
-import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
-import com.redhat.darcy.webdriver.internal.WebDriverTarget;
+package com.redhat.darcy.webdriver.internal;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;

@@ -19,9 +19,6 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.webdriver.internal.webdriver.CachingTargetLocator;
-import com.redhat.darcy.webdriver.internal.webdriver.ForwardingTargetedWebDriver;
-
 import org.openqa.selenium.WebDriver;
 
 public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory {

@@ -17,12 +17,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver.internal.webdriver;
+package com.redhat.darcy.webdriver.internal;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
 import com.redhat.darcy.ui.api.elements.Findable;
-import com.redhat.darcy.webdriver.internal.WebDriverTarget;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
