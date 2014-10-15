@@ -54,7 +54,7 @@ public class TargetedTargetLocator implements TargetLocator {
 
     @Override
     public WebDriver parentFrame() {
-        return locator.parentFrame();
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.parentOf(self));
     }
 
     @Override

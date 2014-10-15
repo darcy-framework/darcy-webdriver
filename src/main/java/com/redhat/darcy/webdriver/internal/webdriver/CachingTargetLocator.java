@@ -40,8 +40,6 @@ public class CachingTargetLocator implements TargetLocator, Caching {
     private WebDriverTarget currentTarget;
     private WebDriver driver;
 
-    private static final Logger logger = Logger.getLogger(CachingTargetLocator.class.toString());
-
     public CachingTargetLocator(WebDriverTarget currentTarget, WebDriver driver) {
         this.currentTarget = currentTarget;
         this.driver = Objects.requireNonNull(driver);
@@ -61,23 +59,22 @@ public class CachingTargetLocator implements TargetLocator, Caching {
 
     @Override
     public WebDriver frame(int index) {
-        return switchTo(WebDriverTargets.frame(currentTarget, index));
+        return frame(currentTarget, index);
     }
 
     @Override
     public WebDriver frame(String nameOrId) {
-        return switchTo(WebDriverTargets.frame(currentTarget, nameOrId));
+        return frame(currentTarget, nameOrId);
     }
 
     @Override
     public WebDriver frame(WebElement frameElement) {
-        return switchTo(WebDriverTargets.frame(currentTarget, frameElement));
+        return frame(currentTarget, frameElement);
     }
 
     @Override
     public WebDriver parentFrame() {
-        invalidateCache();
-        return driver.switchTo().parentFrame();
+        return switchTo(WebDriverTargets.parentOf(currentTarget));
     }
 
     @Override
@@ -118,7 +115,6 @@ public class CachingTargetLocator implements TargetLocator, Caching {
 
     private WebDriver switchTo(WebDriverTarget newTarget) {
         if (!newTarget.equals(currentTarget)) {
-            logger.info("Switching to new target... " + newTarget.toString());
             newTarget.switchTo(driver.switchTo());
             currentTarget = newTarget;
         }

@@ -44,10 +44,18 @@ public abstract class WebDriverTargets {
     public static WebDriverTarget frame(WebDriverTarget parent, WebElement frameElement) {
         return new FrameByElementWebDriverTarget(parent, frameElement);
     }
-    
-    @Deprecated
-    public static WebDriverTarget nested(WebDriverTarget parent, WebDriverTarget child) {
-        return new NestedWebDriverTarget(parent, child);
+
+    /**
+     * Determines the parent target of the specified
+     * {@link com.redhat.darcy.webdriver.internal.WebDriverTarget}. If the target has no parent
+     * (that is, it is not a target to a frame),
+     */
+    public static WebDriverTarget parentOf(WebDriverTarget target) {
+        if (target instanceof FrameTarget) {
+            return ((FrameTarget) target).getParent();
+        }
+
+        return target;
     }
     
     public static class WindowWebDriverTarget implements WebDriverTarget {
@@ -83,13 +91,18 @@ public abstract class WebDriverTargets {
         }
     }
     
-    public static class FrameByIndexWebDriverTarget implements WebDriverTarget {
+    public static class FrameByIndexWebDriverTarget implements FrameTarget {
         private final WebDriverTarget parent;
         private final int index;
         
         FrameByIndexWebDriverTarget(WebDriverTarget parent, int index) {
             this.parent = parent;
             this.index = index;
+        }
+
+        @Override
+        public WebDriverTarget getParent() {
+            return parent;
         }
         
         @Override
@@ -120,13 +133,18 @@ public abstract class WebDriverTargets {
         }
     }
     
-    public static class FrameByNameOrIdWebDriverTarget implements WebDriverTarget {
+    public static class FrameByNameOrIdWebDriverTarget implements FrameTarget {
         private final WebDriverTarget parent;
         private final String nameOrId;
         
         FrameByNameOrIdWebDriverTarget(WebDriverTarget parent, String nameOrId) {
             this.parent = parent;
             this.nameOrId = nameOrId;
+        }
+
+        @Override
+        public WebDriverTarget getParent() {
+            return parent;
         }
         
         @Override
@@ -163,13 +181,18 @@ public abstract class WebDriverTargets {
         }
     }
     
-    public static class FrameByElementWebDriverTarget implements WebDriverTarget {
+    public static class FrameByElementWebDriverTarget implements FrameTarget {
         private final WebDriverTarget parent;
         private final WebElement frameElement;
         
         FrameByElementWebDriverTarget(WebDriverTarget parent, WebElement frameElement) {
             this.parent = parent;
             this.frameElement = frameElement;
+        }
+
+        @Override
+        public WebDriverTarget getParent() {
+            return parent;
         }
         
         @Override
@@ -203,44 +226,6 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "FrameByElementWebDriverTarget: {parent: " + parent + ", frameElement: " 
                     + frameElement + "}";
-        }
-    }
-    
-    @Deprecated
-    public static class NestedWebDriverTarget implements WebDriverTarget {
-        private final WebDriverTarget parent;
-        private final WebDriverTarget child;
-        
-        public NestedWebDriverTarget(WebDriverTarget parent, WebDriverTarget child) {
-            this.parent = parent;
-            this.child = child;
-        }
-        
-        @Override
-        public WebDriver switchTo(TargetLocator targetLocator) {
-            parent.switchTo(targetLocator);
-            return child.switchTo(targetLocator);
-        }
-        
-        @Override
-        public boolean equals(Object object) {
-            if (this == object) {
-                return true;
-            }
-            
-            if (!(object instanceof NestedWebDriverTarget)) {
-                return false;
-            }
-            
-            NestedWebDriverTarget other = (NestedWebDriverTarget) object;
-            
-            return this.child.equals(other.child)
-                    && this.parent.equals(other.parent);
-        }
-        
-        @Override
-        public String toString() {
-            return "NestedWebDriverTarget: {parent: " + parent + ", child: " + child + "}";
         }
     }
 }
