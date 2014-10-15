@@ -64,12 +64,12 @@ public class WebDriverAlert implements Alert, Caching {
     }
     
     @Override
-    public void sendKeys(String keysToSend) {
-        alert().sendKeys(keysToSend);
+    public void sendKeys(CharSequence keysToSend) {
+        alert().sendKeys(keysToSend.toString());
     }
     
     @Override
-    public String readText() {
+    public String getText() {
         return alert().getText();
     }
 
