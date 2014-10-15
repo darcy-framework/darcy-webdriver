@@ -21,28 +21,37 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.elements.Button;
+import com.redhat.darcy.ui.api.elements.Checkbox;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.api.elements.FileSelect;
 import com.redhat.darcy.ui.api.elements.Label;
 import com.redhat.darcy.ui.api.elements.Link;
+import com.redhat.darcy.ui.api.elements.MultiSelect;
+import com.redhat.darcy.ui.api.elements.Radio;
 import com.redhat.darcy.ui.api.elements.Select;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.ui.api.elements.Text;
 import com.redhat.darcy.ui.api.elements.TextInput;
 import com.redhat.darcy.web.api.elements.HtmlButton;
+import com.redhat.darcy.web.api.elements.HtmlCheckbox;
 import com.redhat.darcy.web.api.elements.HtmlElement;
 import com.redhat.darcy.web.api.elements.HtmlFileSelect;
 import com.redhat.darcy.web.api.elements.HtmlLabel;
 import com.redhat.darcy.web.api.elements.HtmlLink;
+import com.redhat.darcy.web.api.elements.HtmlMultiSelect;
+import com.redhat.darcy.web.api.elements.HtmlRadio;
 import com.redhat.darcy.web.api.elements.HtmlSelect;
 import com.redhat.darcy.web.api.elements.HtmlSelectOption;
 import com.redhat.darcy.web.api.elements.HtmlText;
 import com.redhat.darcy.web.api.elements.HtmlTextInput;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
+import com.redhat.darcy.webdriver.elements.WebDriverCheckbox;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.elements.WebDriverFileSelect;
 import com.redhat.darcy.webdriver.elements.WebDriverLabel;
 import com.redhat.darcy.webdriver.elements.WebDriverLink;
+import com.redhat.darcy.webdriver.elements.WebDriverMultiSelect;
+import com.redhat.darcy.webdriver.elements.WebDriverRadio;
 import com.redhat.darcy.webdriver.elements.WebDriverSelect;
 import com.redhat.darcy.webdriver.elements.WebDriverSelectOption;
 import com.redhat.darcy.webdriver.elements.WebDriverText;
@@ -86,6 +95,9 @@ public class ElementConstructorMap {
         map.put(HtmlLabel.class, WebDriverLabel::new);
         map.put(HtmlText.class, WebDriverText::new);
         map.put(HtmlFileSelect.class, WebDriverFileSelect::new);
+        map.put(HtmlRadio.class, WebDriverRadio::new);
+        map.put(HtmlCheckbox.class, WebDriverCheckbox::new);
+        map.put(HtmlMultiSelect.class, WebDriverMultiSelect::new);
         map.put(HtmlElement.class, WebDriverElement::new);
 
         map.point(TextInput.class, HtmlTextInput.class);
@@ -96,6 +108,9 @@ public class ElementConstructorMap {
         map.point(Label.class, HtmlLabel.class);
         map.point(Text.class, HtmlText.class);
         map.point(FileSelect.class, HtmlFileSelect.class);
+        map.point(Radio.class, HtmlRadio.class);
+        map.point(Checkbox.class, HtmlCheckbox.class);
+        map.point(MultiSelect.class, HtmlMultiSelect.class);
         map.point(Element.class, HtmlElement.class);
         
         return map;
