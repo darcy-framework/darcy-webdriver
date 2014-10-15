@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver.elements;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.web.api.elements.HtmlRadio;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
+
 import org.openqa.selenium.WebElement;
 
 public class WebDriverRadio extends WebDriverElement implements HtmlRadio {
