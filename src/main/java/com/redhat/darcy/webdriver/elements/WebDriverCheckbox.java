@@ -49,6 +49,11 @@ public class WebDriverCheckbox extends WebDriverElement implements HtmlCheckbox 
     }
 
     @Override
+    public void toggle() {
+        click();
+    }
+
+    @Override
     public void click() {
         attempt(WebElement::click);
     }
