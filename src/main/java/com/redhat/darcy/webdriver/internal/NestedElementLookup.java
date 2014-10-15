@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver.internal;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 public class NestedElementLookup implements ElementLookup {
@@ -35,7 +36,13 @@ public class NestedElementLookup implements ElementLookup {
 
     @Override
     public WebElement lookup() {
-        return child.find(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+        try {
+            return child.find(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+        } catch (StaleElementReferenceException e) {
+            parent.invalidateCache();
+
+            return child.find(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+        }
     }
 
     @Override

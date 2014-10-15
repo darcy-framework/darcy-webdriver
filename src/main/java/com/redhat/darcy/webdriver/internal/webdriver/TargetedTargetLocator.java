@@ -53,6 +53,11 @@ public class TargetedTargetLocator implements TargetLocator {
     }
 
     @Override
+    public WebDriver parentFrame() {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.parentOf(self));
+    }
+
+    @Override
     public ForwardingTargetedWebDriver window(String nameOrHandle) {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.window(nameOrHandle));
     }
