@@ -1,15 +1,16 @@
 package com.redhat.darcy.webdriver.elements;
 
-import com.google.common.collect.Lists;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.web.api.elements.HtmlMultiSelect;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
+
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WebDriverMultiSelect extends WebDriverElement implements HtmlMultiSelect {
     public WebDriverMultiSelect(ElementLookup source, ElementContext context) {
@@ -28,15 +29,10 @@ public class WebDriverMultiSelect extends WebDriverElement implements HtmlMultiS
 
     @Override
     public List<SelectOption> getCurrentlySelectedOptions() {
-        List<SelectOption> selectedOptions = Lists.newArrayList();
-
-        for (SelectOption option : getOptions()) {
-            if (option.isSelected()) {
-                selectedOptions.add(option);
-            }
-        }
-
-        return selectedOptions;
+        return getOptions()
+                .stream()
+                .filter(SelectOption::isSelected)
+                .collect(Collectors.toList());
     }
 
     @Override
