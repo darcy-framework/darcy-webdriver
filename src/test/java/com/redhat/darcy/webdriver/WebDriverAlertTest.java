@@ -124,7 +124,7 @@ public class WebDriverAlertTest {
         when(mockedTargetLocator.alert()).thenReturn(mockedAlert);
 
         WebDriverAlert alert = new WebDriverAlert(mockedDriver);
-        alert.readText();
+        alert.getText();
 
         verify(mockedAlert).getText();
     }
@@ -137,7 +137,7 @@ public class WebDriverAlertTest {
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
         WebDriverAlert alert = new WebDriverAlert(mockedDriver);
-        alert.readText();
+        alert.getText();
         alert.accept();
 
         // Fails if called more than once
