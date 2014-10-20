@@ -23,6 +23,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
+import java.util.Objects;
+
 /**
  * Factories for the various possible {@link WebDriverTarget}s.
  */
@@ -66,12 +68,17 @@ public abstract class WebDriverTargets {
         private final String nameOrHandle;
         
         WindowWebDriverTarget(String nameOrHandle) {
-            this.nameOrHandle = nameOrHandle;
+            this.nameOrHandle = Objects.requireNonNull(nameOrHandle, "nameOrHandle");
         }
         
         @Override
         public WebDriver switchTo(TargetLocator targetLocator) {
             return targetLocator.window(nameOrHandle);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(nameOrHandle);
         }
         
         @Override
@@ -100,7 +107,7 @@ public abstract class WebDriverTargets {
         private final int index;
         
         FrameByIndexWebDriverTarget(WebDriverTarget parent, int index) {
-            this.parent = parent;
+            this.parent = Objects.requireNonNull(parent, "parent");
             this.index = index;
         }
 
@@ -118,6 +125,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(index);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, index);
         }
         
         @Override
@@ -142,7 +154,7 @@ public abstract class WebDriverTargets {
         private final String nameOrId;
         
         FrameByNameOrIdWebDriverTarget(WebDriverTarget parent, String nameOrId) {
-            this.parent = parent;
+            this.parent = Objects.requireNonNull(parent, "parent");
             this.nameOrId = nameOrId;
         }
 
@@ -160,6 +172,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(nameOrId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, nameOrId);
         }
         
         @Override
@@ -190,8 +207,8 @@ public abstract class WebDriverTargets {
         private final WebElement frameElement;
         
         FrameByElementWebDriverTarget(WebDriverTarget parent, WebElement frameElement) {
-            this.parent = parent;
-            this.frameElement = frameElement;
+            this.parent = Objects.requireNonNull(parent, "parent");
+            this.frameElement = Objects.requireNonNull(frameElement, "frameElement");
         }
 
         @Override
@@ -208,6 +225,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(frameElement);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, frameElement);
         }
         
         @Override
