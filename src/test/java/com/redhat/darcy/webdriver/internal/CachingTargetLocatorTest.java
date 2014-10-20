@@ -430,4 +430,34 @@ public class CachingTargetLocatorTest {
 
         assertEquals(WebDriverTargets.window("test"), targetLocator.getCurrentTarget());
     }
+
+    @Test
+    public void shouldDetermineParentOfCurrentTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("parent"), "frame"), mockDriver);
+
+        targetLocator.parentFrame();
+
+        assertEquals(WebDriverTargets.window("parent"), targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldNotSwitchTargetIfAttemptingToSwitchToParentOfTargetThatIsNotAFrame() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+
+        targetLocator.parentFrame();
+
+        assertEquals(WebDriverTargets.window("test"), targetLocator.getCurrentTarget());
+    }
 }
