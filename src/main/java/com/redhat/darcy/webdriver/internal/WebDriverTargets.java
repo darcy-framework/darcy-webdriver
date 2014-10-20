@@ -23,6 +23,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
+import java.util.Objects;
+
 /**
  * Factories for the various possible {@link WebDriverTarget}s.
  */
@@ -43,10 +45,16 @@ public abstract class WebDriverTargets {
         return new FrameByElementWebDriverTarget(parent, frameElement);
     }
 
+    public static WebDriverTarget defaultContent() {
+        return new DefaultContextWebDriverTarget();
+    }
+
     /**
      * Determines the parent target of the specified
      * {@link com.redhat.darcy.webdriver.internal.WebDriverTarget}. If the target has no parent
-     * (that is, it is not a target to a frame),
+     * (that is, it is not a target to a frame), then this returns the same target that it was
+     * passed. This matches the behavior of
+     * {@link org.openqa.selenium.WebDriver.TargetLocator#parentFrame()}.
      */
     public static WebDriverTarget parentOf(WebDriverTarget target) {
         if (target instanceof FrameTarget) {
@@ -60,12 +68,17 @@ public abstract class WebDriverTargets {
         private final String nameOrHandle;
         
         WindowWebDriverTarget(String nameOrHandle) {
-            this.nameOrHandle = nameOrHandle;
+            this.nameOrHandle = Objects.requireNonNull(nameOrHandle, "nameOrHandle");
         }
         
         @Override
         public WebDriver switchTo(TargetLocator targetLocator) {
             return targetLocator.window(nameOrHandle);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(nameOrHandle);
         }
         
         @Override
@@ -94,7 +107,7 @@ public abstract class WebDriverTargets {
         private final int index;
         
         FrameByIndexWebDriverTarget(WebDriverTarget parent, int index) {
-            this.parent = parent;
+            this.parent = Objects.requireNonNull(parent, "parent");
             this.index = index;
         }
 
@@ -112,6 +125,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(index);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, index);
         }
         
         @Override
@@ -136,7 +154,7 @@ public abstract class WebDriverTargets {
         private final String nameOrId;
         
         FrameByNameOrIdWebDriverTarget(WebDriverTarget parent, String nameOrId) {
-            this.parent = parent;
+            this.parent = Objects.requireNonNull(parent, "parent");
             this.nameOrId = nameOrId;
         }
 
@@ -154,6 +172,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(nameOrId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, nameOrId);
         }
         
         @Override
@@ -184,8 +207,8 @@ public abstract class WebDriverTargets {
         private final WebElement frameElement;
         
         FrameByElementWebDriverTarget(WebDriverTarget parent, WebElement frameElement) {
-            this.parent = parent;
-            this.frameElement = frameElement;
+            this.parent = Objects.requireNonNull(parent, "parent");
+            this.frameElement = Objects.requireNonNull(frameElement, "frameElement");
         }
 
         @Override
@@ -202,6 +225,11 @@ public abstract class WebDriverTargets {
             
             parent.switchTo(targetLocator);
             return targetLocator.frame(frameElement);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(parent, frameElement);
         }
         
         @Override
@@ -224,6 +252,29 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "FrameByElementWebDriverTarget: {parent: " + parent + ", frameElement: " 
                     + frameElement + "}";
+        }
+    }
+
+    public static class DefaultContextWebDriverTarget implements WebDriverTarget {
+
+        @Override
+        public WebDriver switchTo(TargetLocator targetLocator) {
+            return targetLocator.defaultContent();
+        }
+
+        @Override
+        public int hashCode() {
+            return toString().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            return object instanceof DefaultContextWebDriverTarget;
+        }
+
+        @Override
+        public String toString() {
+            return "DefaultContextWebDriverTarget";
         }
     }
 }

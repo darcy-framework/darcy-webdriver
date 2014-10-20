@@ -23,7 +23,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
 /**
- * Represents a "target" within a {@link WebDriver}.
+ * Represents a "target" within a {@link WebDriver} that is accessible via a {@link WebDriver}
+ * instance (as opposed to targets which refer to {@link org.openqa.selenium.WebElement WebElements}
+ * or {@link org.openqa.selenium.Alert Alerts}).
  * 
  * @see WebDriver.TargetLocator
  * @see WebDriverTargets

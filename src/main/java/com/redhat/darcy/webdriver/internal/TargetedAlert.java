@@ -19,18 +19,9 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import org.openqa.selenium.WebDriver;
+import com.redhat.darcy.ui.api.elements.Findable;
 
-public class CachingTargetedWebDriverFactory implements TargetedWebDriverFactory {
-    private final CachingTargetLocator cachingTargetLocator;
+import org.openqa.selenium.Alert;
 
-    public CachingTargetedWebDriverFactory(WebDriver untargetedDriver,
-            WebDriverTarget currentTarget) {
-        cachingTargetLocator = new CachingTargetLocator(currentTarget, untargetedDriver);
-    }
-
-    @Override
-    public TargetedWebDriver getTargetedWebDriver(WebDriverTarget target) {
-        return new ForwardingTargetedWebDriver(cachingTargetLocator, target);
-    }
+public interface TargetedAlert extends Alert, Findable {
 }

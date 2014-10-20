@@ -63,7 +63,6 @@ import java.util.function.Supplier;
  * wait for those page objects to load as is required by implementers.
  *
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
- * @see com.redhat.darcy.webdriver.internal.TargetedWebDriverFactory
  */
 public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, WrapsDriver {
     private final TargetedWebDriver driver;

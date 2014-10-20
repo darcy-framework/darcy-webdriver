@@ -39,22 +39,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TargetedWebElement implements WebElement, FindsByClassName,
-        FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath,
-        Findable {
+        FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath {
     private final TargetLocator locator;
     private final WebDriverTarget target;
+
+    /**
+     * The backing {@link org.openqa.selenium.WebElement}. Using this directly may result in
+     * {@link org.openqa.selenium.StaleElementReferenceException StaleElementReferenceExceptions}.
+     * Use {@link #element()} instead.
+     */
     private final WebElement element;
 
-    public TargetedWebElement(TargetLocator locator, WebDriverTarget target,
-            WebElement element) {
+    public TargetedWebElement(TargetLocator locator, WebDriverTarget target, WebElement element) {
         this.locator = locator;
         this.target = target;
         this.element = element;
-    }
-
-    @Override
-    public boolean isPresent() {
-        return ((Findable) element()).isPresent();
     }
 
     @Override
@@ -212,6 +211,10 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
         return targetedWebElements(((FindsByXPath) element()).findElementsByXPath(using));
     }
 
+    /**
+     * @return The backing {@link org.openqa.selenium.WebElement}, with the driver switched to the
+     * appropriate target.
+     */
     private WebElement element() {
         target.switchTo(locator);
         return element;

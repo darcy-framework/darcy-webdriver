@@ -20,8 +20,10 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -34,7 +36,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 @RunWith(JUnit4.class)
 public class CachingTargetLocatorTest {
@@ -96,7 +100,7 @@ public class CachingTargetLocatorTest {
     }
 
     @Test
-    public void shouldNotSwitchDriverIfSameFrameIsSwitchedTo() {
+    public void shouldNotSwitchDriverIfSameFrameIsSwitchedToUsingName() {
         WebDriver mockedDriver = mock(WebDriver.class);
         TargetLocator mockedTargetLocator = mock(TargetLocator.class);
 
@@ -107,6 +111,41 @@ public class CachingTargetLocatorTest {
                 mockedDriver);
 
         targetLocator.frame(WebDriverTargets.window("testwindow"), "testframe");
+
+        verifyZeroInteractions(mockedDriver);
+        verifyZeroInteractions(mockedTargetLocator);
+    }
+
+    @Test
+    public void shouldNotSwitchDriverIfSameFrameIsSwitchedToUsingIndex() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("testwindow"), 1),
+                mockedDriver);
+
+        targetLocator.frame(WebDriverTargets.window("testwindow"), 1);
+
+        verifyZeroInteractions(mockedDriver);
+        verifyZeroInteractions(mockedTargetLocator);
+    }
+
+    @Test
+    public void shouldNotSwitchDriverIfSameFrameIsSwitchedToUsingElement() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+        WebElement frameElement = mock(WebElement.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("testwindow"), frameElement),
+                mockedDriver);
+
+        targetLocator.frame(WebDriverTargets.window("testwindow"), frameElement);
 
         verifyZeroInteractions(mockedDriver);
         verifyZeroInteractions(mockedTargetLocator);
@@ -133,14 +172,28 @@ public class CachingTargetLocatorTest {
     }
 
     @Test
-    public void shouldSwitchToFrameWithinCurrentTargetIfNoParentIsGiven() {
+    public void shouldSwitchDriverIfFrameOfSameIndexButDifferentParentWindowIsSwitchedTo() {
         WebDriver mockedDriver = mock(WebDriver.class);
         TargetLocator mockedTargetLocator = mock(TargetLocator.class);
 
         when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
-        // Stub locator in case implementation uses the returned driver
-        when(mockedTargetLocator.window("testwindow2")).thenReturn(mockedDriver);
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("testwindow1"), 1),
+                mockedDriver);
+
+        targetLocator.frame(WebDriverTargets.window("testwindow2"), 1);
+
+        verify(mockedTargetLocator).window("testwindow2");
+        verify(mockedTargetLocator).frame(1);
+    }
+
+    @Test
+    public void shouldSwitchToFrameWithinCurrentTargetIfNoParentIsGivenUsingName() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
 
         CachingTargetLocator targetLocator = new CachingTargetLocator(
                 WebDriverTargets.frame(WebDriverTargets.window("window"), "outterframe"),
@@ -156,5 +209,225 @@ public class CachingTargetLocatorTest {
                                 "outterframe"),
                         "innerframe"),
                 targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldSwitchToFrameWithinCurrentTargetIfNoParentIsGivenUsingIndex() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("window"), "outterframe"),
+                mockedDriver);
+
+        targetLocator.frame(1);
+
+        verify(mockedTargetLocator).frame(1);
+
+        assertEquals(WebDriverTargets.frame(
+                        WebDriverTargets.frame(
+                                WebDriverTargets.window("window"),
+                                "outterframe"),
+                        1),
+                targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldSwitchToFrameWithinCurrentTargetIfNoParentIsGivenUsingElement() {
+        WebDriver mockedDriver = mock(WebDriver.class);
+        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+        WebElement frameElement = mock(WebElement.class);
+
+        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.frame(WebDriverTargets.window("window"), "outterframe"),
+                mockedDriver);
+
+        targetLocator.frame(frameElement);
+
+        verify(mockedTargetLocator).frame(frameElement);
+
+        assertEquals(WebDriverTargets.frame(
+                        WebDriverTargets.frame(
+                                WebDriverTargets.window("window"),
+                                "outterframe"),
+                        frameElement),
+                targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNotAlert() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+
+        verify(mockLocator).alert();
+    }
+
+    @Test
+    public void shouldNotSwitchDriverToAlertIfCurrentTargetIsAlert() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.alert();
+
+        verify(mockLocator, times(1)).alert();
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNoLongerAlertAndIsSameAsOriginalTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.window("test");
+        targetLocator.alert();
+
+        verify(mockLocator, times(2)).alert();
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNoLongerAlertAndIsDifferentThanOriginalTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.window("different");
+        targetLocator.alert();
+
+        verify(mockLocator, times(2)).alert();
+    }
+
+    @Test
+    public void shouldKeepTrackOfPreviousWebDriverTargetIfAlertIsCurrentTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.frame("frame");
+
+        assertEquals(WebDriverTargets.frame(WebDriverTargets.window("test"), "frame"),
+                targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldSwitchDriverToDefaultContent() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.defaultContent();
+
+        verify(mockLocator).defaultContent();
+    }
+
+    @Test
+    public void shouldNotSwitchDriverIfNewTargetAndPreviousTargetAreDefaultContent() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.defaultContent();
+        targetLocator.defaultContent();
+
+        verify(mockLocator, times(1)).defaultContent();
+    }
+
+    @Test
+    public void shouldSwitchDriverBackToDefaultContentIfWasSwitchedAwayFrom() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.defaultContent();
+        targetLocator.window("test");
+        targetLocator.defaultContent();
+
+        verify(mockLocator, times(2)).defaultContent();
+    }
+
+    @Test
+    public void shouldSwitchToActiveElement() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+        WebElement activeElement = mock(WebElement.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.activeElement()).thenReturn(activeElement);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+
+        assertSame(activeElement, targetLocator.activeElement());
+    }
+
+    @Test
+    public void shouldNotCacheActiveElement() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+        WebElement firstActiveElement = mock(WebElement.class);
+        WebElement secondActiveElement = mock(WebElement.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.activeElement()).thenReturn(firstActiveElement, secondActiveElement);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+
+        assertSame(firstActiveElement, targetLocator.activeElement());
+        assertSame(secondActiveElement, targetLocator.activeElement());
+    }
+
+    @Test
+    public void shouldKeepCurrentTargetUnchangedWhenActiveElementIsSwitchedTo() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+
+        targetLocator.activeElement();
+
+        assertEquals(WebDriverTargets.window("test"), targetLocator.getCurrentTarget());
     }
 }
