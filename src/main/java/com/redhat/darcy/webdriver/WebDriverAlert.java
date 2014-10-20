@@ -19,8 +19,14 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.webdriver.internal.TargetedAlert;
+
+import org.openqa.selenium.NoAlertPresentException;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Implements the darcy-web Alert interface by forwarding calls to WebDriver's
@@ -40,21 +46,37 @@ public class WebDriverAlert implements Alert {
     
     @Override
     public void accept() {
-        alert.accept();
+        attempt(org.openqa.selenium.Alert::accept);
     }
     
     @Override
     public void dismiss() {
-        alert.dismiss();
+        attempt(org.openqa.selenium.Alert::dismiss);
     }
     
     @Override
     public void sendKeys(CharSequence keysToSend) {
-        alert.sendKeys(keysToSend.toString());
+        attempt(a -> a.sendKeys(keysToSend.toString()));
     }
     
     @Override
     public String getText() {
-        return alert.getText();
+        return attemptAndGet(org.openqa.selenium.Alert::getText);
+    }
+
+    private void attempt(Consumer<org.openqa.selenium.Alert> action) {
+        try {
+            action.accept(alert);
+        } catch (NoAlertPresentException e) {
+            throw new FindableNotPresentException(this, e);
+        }
+    }
+
+    private <T> T attemptAndGet(Function<org.openqa.selenium.Alert, T> action) {
+        try {
+            return action.apply(alert);
+        } catch (NoAlertPresentException e) {
+            throw new FindableNotPresentException(this, e);
+        }
     }
 }
