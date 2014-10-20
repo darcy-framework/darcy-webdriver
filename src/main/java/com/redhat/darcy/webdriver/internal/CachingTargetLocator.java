@@ -46,14 +46,15 @@ public class CachingTargetLocator implements TargetLocator {
      *
      * <p>When Alert is non-null, this is used as a flag to tell the target locator that the current
      * WebDriver target is not actually the current target&mdash;the Alert is instead. The WebDriver
-     * target must remain non-null however, as if new targets are switched to while after the alert,
-     * they will be switched to within the context of the previous WebDriver target. For example:
+     * target must remain non-null however, as if new targets are switched to after the alert, they
+     * will be switched to within the context of the previous WebDriver target. Therefore, we must
+     * keep track of the previous target. For example, this is how a native WebDriver should behave:
      *
      * <pre><code>
      *     driver.switchTo().frame("frame1");
      *     driver.findElement(By.id("alertButton")).click();
-     *     driver.switchTo().alert();                   // Previous "frame1" context tracked
-     *     driver.switchTo().frame("innerframe");       // Switches to "innerframe" within "frame1"
+     *     driver.switchTo().alert();                // Previous "frame1" context tracked
+     *     driver.switchTo().frame("innerframe");    // Switches to "innerframe" within "frame1"
      *     driver.switchTo().alert().accept();
      *     driver.findElement(By.id("innerButton")); // Searches within "innerframe"
      * </code></pre>

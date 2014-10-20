@@ -50,7 +50,9 @@ public abstract class WebDriverTargets {
     /**
      * Determines the parent target of the specified
      * {@link com.redhat.darcy.webdriver.internal.WebDriverTarget}. If the target has no parent
-     * (that is, it is not a target to a frame),
+     * (that is, it is not a target to a frame), then this returns the same target that it was
+     * passed. This matches the behavior of
+     * {@link org.openqa.selenium.WebDriver.TargetLocator#parentFrame()}.
      */
     public static WebDriverTarget parentOf(WebDriverTarget target) {
         if (target instanceof FrameTarget) {
