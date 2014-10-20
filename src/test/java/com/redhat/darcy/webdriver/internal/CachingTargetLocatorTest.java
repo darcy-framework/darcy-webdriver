@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -35,6 +36,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 
 @RunWith(JUnit4.class)
@@ -171,5 +173,55 @@ public class CachingTargetLocatorTest {
         targetLocator.alert();
 
         verify(mockLocator).alert();
+    }
+
+    @Test
+    public void shouldNotSwitchDriverToAlertIfCurrentTargetIsAlert() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.alert();
+
+        verify(mockLocator, times(1)).alert();
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNoLongerAlertAndIsSameAsOriginalTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.window("test");
+        targetLocator.alert();
+
+        verify(mockLocator, times(2)).alert();
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNoLongerAlertAndIsDifferentThanOriginalTarget() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+        when(mockLocator.alert()).thenReturn(mock(Alert.class));
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+        targetLocator.window("different");
+        targetLocator.alert();
+
+        verify(mockLocator, times(2)).alert();
     }
 }

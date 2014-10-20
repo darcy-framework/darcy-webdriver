@@ -126,7 +126,7 @@ public class CachingTargetLocator implements TargetLocator, Caching {
     }
 
     private WebDriver switchTo(WebDriverTarget newTarget) {
-        if (!newTarget.equals(currentTarget)) {
+        if (!newTarget.equals(currentTarget) || alert != null) {
             newTarget.switchTo(driver.switchTo());
             currentTarget = newTarget;
             alert = null;
