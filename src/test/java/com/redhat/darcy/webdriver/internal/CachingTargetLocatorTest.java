@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.RETURNS_MOCKS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -156,5 +157,19 @@ public class CachingTargetLocatorTest {
                                 "outterframe"),
                         "innerframe"),
                 targetLocator.getCurrentTarget());
+    }
+
+    @Test
+    public void shouldSwitchDriverToAlertIfCurrentTargetIsNotAlert() {
+        WebDriver mockDriver = mock(WebDriver.class);
+        TargetLocator mockLocator = mock(TargetLocator.class);
+
+        when(mockDriver.switchTo()).thenReturn(mockLocator);
+
+        CachingTargetLocator targetLocator = new CachingTargetLocator(
+                WebDriverTargets.window("test"), mockDriver);
+        targetLocator.alert();
+
+        verify(mockLocator).alert();
     }
 }

@@ -108,7 +108,7 @@ public class CachingTargetLocator implements TargetLocator, Caching {
 
     @Override
     public Alert alert() {
-        if (alert != null) {
+        if (alert == null) {
             alert = driver.switchTo().alert();
         }
 
