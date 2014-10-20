@@ -59,13 +59,13 @@ public class TargetedTargetLocator implements TargetLocator {
     }
 
     @Override
-    public WebDriver defaultContent() {
-        // TODO: This target is kind of irrelevant to darcy, how to deal?
-        return locator.defaultContent();
+    public TargetedWebDriver defaultContent() {
+        return new ForwardingTargetedWebDriver(locator, WebDriverTargets.defaultContent());
     }
 
     @Override
     public WebElement activeElement() {
+        // TODO: Can this be targeted? Would have to figure out a locator for it after the fact
         return locator.activeElement();
     }
 

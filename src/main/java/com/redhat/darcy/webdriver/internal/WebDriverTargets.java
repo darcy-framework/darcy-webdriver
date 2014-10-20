@@ -43,6 +43,10 @@ public abstract class WebDriverTargets {
         return new FrameByElementWebDriverTarget(parent, frameElement);
     }
 
+    public static WebDriverTarget defaultContent() {
+        return new DefaultContextWebDriverTarget();
+    }
+
     /**
      * Determines the parent target of the specified
      * {@link com.redhat.darcy.webdriver.internal.WebDriverTarget}. If the target has no parent
@@ -224,6 +228,29 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "FrameByElementWebDriverTarget: {parent: " + parent + ", frameElement: " 
                     + frameElement + "}";
+        }
+    }
+
+    public static class DefaultContextWebDriverTarget implements WebDriverTarget {
+
+        @Override
+        public WebDriver switchTo(TargetLocator targetLocator) {
+            return targetLocator.defaultContent();
+        }
+
+        @Override
+        public int hashCode() {
+            return toString().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            return object instanceof DefaultContextWebDriverTarget;
+        }
+
+        @Override
+        public String toString() {
+            return "DefaultContextWebDriverTarget";
         }
     }
 }
