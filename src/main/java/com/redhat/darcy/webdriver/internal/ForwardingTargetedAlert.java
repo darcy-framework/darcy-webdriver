@@ -66,6 +66,9 @@ public class ForwardingTargetedAlert implements TargetedAlert {
         alert().authenticateUsing(credentials);
     }
 
+    /**
+     * @return The switched-to {@link org.openqa.selenium.Alert}.
+     */
     private Alert alert() {
         return locator.alert();
     }

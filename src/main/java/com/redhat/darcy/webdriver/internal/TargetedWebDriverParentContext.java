@@ -72,7 +72,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
             throw new DarcyException("Cannot find Contexts of type: " + type);
         }
         
-        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo()); //targetedWdFactory.getTargetedWebDriver(target);
+        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo());
         Browser newBrowser = new WebDriverBrowser(targetedDriver,
                 new TargetedWebDriverParentContext(targetedDriver, elementMap),
                 new DefaultWebDriverElementContext(targetedDriver, elementMap));

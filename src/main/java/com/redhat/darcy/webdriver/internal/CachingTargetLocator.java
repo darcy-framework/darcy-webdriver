@@ -39,14 +39,19 @@ import java.util.logging.Logger;
 public class CachingTargetLocator implements TargetLocator, Caching {
     private WebDriverTarget currentTarget;
     private WebDriver driver;
+
+    /**
+     * An Alert, if one is currently switched-to. Otherwise, it should be `null`. Which means that
+     * if switching to a new target from an Alert, this should be reset to `null`.
+     */
     private Alert alert;
 
     /**
-     * @param driver Untargeted (original driver)
+     * @param driver The original, untargeted driver.
      */
     public CachingTargetLocator(WebDriverTarget currentTarget, WebDriver driver) {
-        this.currentTarget = currentTarget;
-        this.driver = Objects.requireNonNull(driver);
+        this.currentTarget = Objects.requireNonNull(currentTarget, "currentTarget");
+        this.driver = Objects.requireNonNull(driver, "driver");
     }
 
     public WebDriver frame(WebDriverTarget parent, int index) {

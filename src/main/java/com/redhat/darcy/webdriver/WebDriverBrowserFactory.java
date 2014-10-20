@@ -54,10 +54,8 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
     protected static Browser makeBrowser(WebDriver driver, ElementConstructorMap elementMap) {
         WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
 
-//        TargetedWebDriverFactory targetedWdFactory =
-//                new CachingTargetedWebDriverFactory(driver, target);
-//        TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
-        TargetedWebDriver targetedDriver = new ForwardingTargetedWebDriver(new CachingTargetLocator(target, driver), target);
+        CachingTargetLocator cachingLocator = new CachingTargetLocator(target, driver);
+        TargetedWebDriver targetedDriver = new ForwardingTargetedWebDriver(cachingLocator, target);
 
         return new WebDriverBrowser(targetedDriver,
                 new TargetedWebDriverParentContext(targetedDriver, elementMap),
