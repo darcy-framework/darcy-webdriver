@@ -23,6 +23,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.openqa.selenium.WebDriver.TargetLocator;
 
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
@@ -43,13 +45,13 @@ public class TargetedWebDriverParentContextTest {
 
     @Test
     public void shouldCreateTargetedDriversForBrowsers() {
-        TargetedWebDriverFactory targetedWebDriverFactory =
-                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
-                        WebDriverTargets.window("shouldn't-matter"));
+        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+        TargetedTargetLocator locator = new TargetedTargetLocator(mock(TargetLocator.class),
+                WebDriverTargets.window("shouldnt-matter"));
+        when(mockDriver.switchTo()).thenReturn(locator);
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
-                new TargetedWebDriverParentContext(mock(TargetedWebDriver.class),
-                        targetedWebDriverFactory, mock(ElementConstructorMap.class));
+                new TargetedWebDriverParentContext(mockDriver, mock(ElementConstructorMap.class));
 
         Browser browser = targetedWebDriverParentContext.findById(Browser.class, "test");
 
@@ -63,16 +65,15 @@ public class TargetedWebDriverParentContextTest {
 
     @Test
     public void shouldCreateTargetedDriversForFrames() {
-        TargetedWebDriverFactory targetedWebDriverFactory =
-                new CachingTargetedWebDriverFactory(mock(WebDriver.class),
-                        WebDriverTargets.window("parent"));
+        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+        TargetedTargetLocator locator = new TargetedTargetLocator(mock(TargetLocator.class),
+                WebDriverTargets.window("parent"));
+
+        when(mockDriver.switchTo()).thenReturn(locator);
+        when(mockDriver.getWebDriverTarget()).thenReturn(WebDriverTargets.window("parent"));
 
         TargetedWebDriverParentContext targetedWebDriverParentContext =
-                new TargetedWebDriverParentContext(
-                        targetedWebDriverFactory
-                                .getTargetedWebDriver(WebDriverTargets.window("parent")),
-                        targetedWebDriverFactory,
-                        mock(ElementConstructorMap.class));
+                new TargetedWebDriverParentContext(mockDriver, mock(ElementConstructorMap.class));
 
         Frame frame = targetedWebDriverParentContext.findById(Frame.class, "test");
 

@@ -19,6 +19,7 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
@@ -54,6 +55,10 @@ public abstract class WebDriverTargets {
         }
 
         return target;
+    }
+
+    public static AlertTarget alert() {
+        return new AlertTarget();
     }
     
     public static class WindowWebDriverTarget implements WebDriverTarget {
@@ -224,6 +229,29 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "FrameByElementWebDriverTarget: {parent: " + parent + ", frameElement: " 
                     + frameElement + "}";
+        }
+    }
+
+    public static class AlertTarget {
+
+        public Alert switchTo(TargetLocator targetLocator) {
+            return targetLocator.alert();
+        }
+
+        @Override
+        public int hashCode() {
+            return toString().hashCode();
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            return this == object || object instanceof AlertTarget;
+
+        }
+
+        @Override
+        public String toString() {
+            return "AlertTarget";
         }
     }
 }

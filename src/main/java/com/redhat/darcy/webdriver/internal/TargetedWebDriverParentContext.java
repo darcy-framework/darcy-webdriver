@@ -34,30 +34,27 @@ import java.util.List;
 
 /**
  * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other 
- * {@link com.redhat.darcy.webdriver.WebDriverBrowser}s with {@link TargetedWebDriver}s assigned to them that point to
- * the found driver.
+ * {@link com.redhat.darcy.webdriver.WebDriverBrowser}s with {@link TargetedWebDriver}s assigned to
+ * them that point to the found driver.
  */
 // TODO: Consider tracking reference of a frame's parent browser in order to forward certain methods
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
-    private final TargetedWebDriverFactory targetedWdFactory;
     private final ElementConstructorMap elementMap;
 
     /**
-     *
-     * @param driver The targeted driver for which this context is a parent of. (Frames will be
-     *               found within this target).
+     * @param driver The targeted driver for which we are finding contexts aside or under.
+     * Specifically, frames will be found within the target of this driver.
      */
     public TargetedWebDriverParentContext(TargetedWebDriver driver,
-            TargetedWebDriverFactory targetedWdFactory, ElementConstructorMap elementMap) {
+            ElementConstructorMap elementMap) {
         this.driver = driver;
-        this.targetedWdFactory = targetedWdFactory;
         this.elementMap = elementMap;
     }
 
     @Override
     public Alert alert() {
-        return new WebDriverAlert(driver);
+        return new WebDriverAlert(driver.switchTo().alert());
     }
     
     @SuppressWarnings("unchecked")
@@ -75,9 +72,9 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
             throw new DarcyException("Cannot find Contexts of type: " + type);
         }
         
-        TargetedWebDriver targetedDriver = targetedWdFactory.getTargetedWebDriver(target);
+        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo()); //targetedWdFactory.getTargetedWebDriver(target);
         Browser newBrowser = new WebDriverBrowser(targetedDriver,
-                new TargetedWebDriverParentContext(targetedDriver, targetedWdFactory, elementMap),
+                new TargetedWebDriverParentContext(targetedDriver, elementMap),
                 new DefaultWebDriverElementContext(targetedDriver, elementMap));
         
         found.add((T) newBrowser);

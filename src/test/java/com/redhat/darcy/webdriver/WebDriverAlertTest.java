@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
+import com.redhat.darcy.webdriver.internal.TargetedAlert;
 import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
 import org.junit.Rule;
@@ -43,105 +44,56 @@ public class WebDriverAlertTest {
     public TraceTestName traceTestName = new TraceTestName();
 
     @Test
-    public void shouldReturnFalseForIsPresentIfDriverCannotSwitchToAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
+    public void shouldCheckForPresence() {
+        TargetedAlert mockAlert = mock(TargetedAlert.class);
+        when(mockAlert.isPresent()).thenReturn(true);
 
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert())
-                .thenThrow(new NoAlertPresentException("No alert present."));
+        WebDriverAlert alert = new WebDriverAlert(mockAlert);
 
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
+        assertTrue(alert.isPresent());
+
+        when(mockAlert.isPresent()).thenReturn(false);
 
         assertFalse(alert.isPresent());
     }
 
     @Test
-    public void shouldReturnTrueForIsPresentIfDriverCanSwitchToAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert()).thenReturn(mock(Alert.class));
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
-
-        assertTrue(alert.isPresent());
-    }
-
-    @Test
     public void shouldAcceptAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-        Alert mockedAlert = mock(Alert.class);
+        TargetedAlert mockAlert = mock(TargetedAlert.class);
 
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert()).thenReturn(mockedAlert);
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
+        WebDriverAlert alert = new WebDriverAlert(mockAlert);
         alert.accept();
 
-        verify(mockedAlert).accept();
+        verify(mockAlert).accept();
     }
 
     @Test
     public void shouldDismissAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-        Alert mockedAlert = mock(Alert.class);
+        TargetedAlert mockAlert = mock(TargetedAlert.class);
 
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert()).thenReturn(mockedAlert);
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
+        WebDriverAlert alert = new WebDriverAlert(mockAlert);
         alert.dismiss();
 
-        verify(mockedAlert).dismiss();
+        verify(mockAlert).dismiss();
     }
 
     @Test
     public void shouldSendKeysToAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-        Alert mockedAlert = mock(Alert.class);
+        TargetedAlert mockAlert = mock(TargetedAlert.class);
 
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert()).thenReturn(mockedAlert);
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
+        WebDriverAlert alert = new WebDriverAlert(mockAlert);
         alert.sendKeys("sent keys");
 
-        verify(mockedAlert).sendKeys("sent keys");
+        verify(mockAlert).sendKeys("sent keys");
     }
 
     @Test
     public void shouldGetTextFromAlert() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class);
-        Alert mockedAlert = mock(Alert.class);
+        TargetedAlert mockAlert = mock(TargetedAlert.class);
 
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-        when(mockedTargetLocator.alert()).thenReturn(mockedAlert);
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
+        WebDriverAlert alert = new WebDriverAlert(mockAlert);
         alert.getText();
 
-        verify(mockedAlert).getText();
-    }
-
-    @Test
-    public void shouldCacheAlertReference() {
-        WebDriver mockedDriver = mock(WebDriver.class);
-        TargetLocator mockedTargetLocator = mock(TargetLocator.class, Mockito.RETURNS_MOCKS);
-
-        when(mockedDriver.switchTo()).thenReturn(mockedTargetLocator);
-
-        WebDriverAlert alert = new WebDriverAlert(mockedDriver);
-        alert.getText();
-        alert.accept();
-
-        // Fails if called more than once
-        verify(mockedDriver).switchTo();
-        verify(mockedTargetLocator).alert();
+        verify(mockAlert).getText();
     }
 }

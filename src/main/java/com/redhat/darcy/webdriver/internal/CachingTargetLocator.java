@@ -34,12 +34,16 @@ import java.util.logging.Logger;
 /**
  * An implementation of {@link org.openqa.selenium.WebDriver.TargetLocator} that caches the current
  * target, so that attempting to switch to the same target multiple times in a row will make no call
- * to the driver.
+ * to the underlying driver.
  */
 public class CachingTargetLocator implements TargetLocator, Caching {
     private WebDriverTarget currentTarget;
     private WebDriver driver;
+    private Alert alert;
 
+    /**
+     * @param driver Untargeted (original driver)
+     */
     public CachingTargetLocator(WebDriverTarget currentTarget, WebDriver driver) {
         this.currentTarget = currentTarget;
         this.driver = Objects.requireNonNull(driver);
@@ -99,14 +103,17 @@ public class CachingTargetLocator implements TargetLocator, Caching {
 
     @Override
     public Alert alert() {
-        // Don't cache this
-        invalidateCache();
-        return driver.switchTo().alert();
+        if (alert != null) {
+            alert = driver.switchTo().alert();
+        }
+
+        return alert;
     }
 
     @Override
     public void invalidateCache() {
         currentTarget = null;
+        alert = null;
     }
 
     public WebDriverTarget getCurrentTarget() {
@@ -117,6 +124,7 @@ public class CachingTargetLocator implements TargetLocator, Caching {
         if (!newTarget.equals(currentTarget)) {
             newTarget.switchTo(driver.switchTo());
             currentTarget = newTarget;
+            alert = null;
         }
 
         return driver;

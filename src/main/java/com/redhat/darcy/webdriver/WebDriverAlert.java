@@ -19,72 +19,42 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.web.api.Alert;
-import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
-
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.WebDriver;
+import com.redhat.darcy.webdriver.internal.TargetedAlert;
 
 /**
  * Implements the darcy-web Alert interface by forwarding calls to WebDriver's
  * {@link org.openqa.selenium.Alert} interface.
  */
-public class WebDriverAlert implements Alert, Caching {
-    private final WebDriver driver;
-    private org.openqa.selenium.Alert cachedAlert;
-    
-    /**
-     * 
-     * @param driver May be a {@link TargetedWebDriver}.
-     */
-    public WebDriverAlert(WebDriver driver) {
-        this.driver = driver;
+public class WebDriverAlert implements Alert {
+    private final TargetedAlert alert;
+
+    public WebDriverAlert(TargetedAlert alert) {
+        this.alert = alert;
     }
     
     @Override
     public boolean isPresent() {
-        try {
-            invalidateCache();
-            alert();
-            return true;
-        } catch (NotFoundException e) {
-            return false;
-        }
+        return alert.isPresent();
     }
     
     @Override
     public void accept() {
-        alert().accept();
+        alert.accept();
     }
     
     @Override
     public void dismiss() {
-        alert().dismiss();
+        alert.dismiss();
     }
     
     @Override
     public void sendKeys(CharSequence keysToSend) {
-        alert().sendKeys(keysToSend.toString());
+        alert.sendKeys(keysToSend.toString());
     }
     
     @Override
     public String getText() {
-        return alert().getText();
-    }
-
-    @Override
-    public void invalidateCache() {
-        cachedAlert = null;
-    }
-    
-    private org.openqa.selenium.Alert alert() {
-        if (cachedAlert == null) {
-            cachedAlert = driver.switchTo().alert();
-        }
-        
-        // TODO: What happens if alert gets cached, user switches to something else, then cached
-        // alert is used?
-        return cachedAlert;
+        return alert.getText();
     }
 }

@@ -21,7 +21,6 @@ package com.redhat.darcy.webdriver.internal;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -35,27 +34,27 @@ public class TargetedTargetLocator implements TargetLocator {
     }
 
     @Override
-    public ForwardingTargetedWebDriver frame(int index) {
+    public TargetedWebDriver frame(int index) {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, index));
     }
 
     @Override
-    public ForwardingTargetedWebDriver frame(String nameOrId) {
+    public TargetedWebDriver frame(String nameOrId) {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, nameOrId));
     }
 
     @Override
-    public ForwardingTargetedWebDriver frame(WebElement frameElement) {
+    public TargetedWebDriver frame(WebElement frameElement) {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.frame(self, frameElement));
     }
 
     @Override
-    public WebDriver parentFrame() {
+    public TargetedWebDriver parentFrame() {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.parentOf(self));
     }
 
     @Override
-    public ForwardingTargetedWebDriver window(String nameOrHandle) {
+    public TargetedWebDriver window(String nameOrHandle) {
         return new ForwardingTargetedWebDriver(locator, WebDriverTargets.window(nameOrHandle));
     }
 
@@ -71,8 +70,7 @@ public class TargetedTargetLocator implements TargetLocator {
     }
 
     @Override
-    public Alert alert() {
-        // TODO
-        return locator.alert();
+    public TargetedAlert alert() {
+        return new ForwardingTargetedAlert(locator);
     }
 }

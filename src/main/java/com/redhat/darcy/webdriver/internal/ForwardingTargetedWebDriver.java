@@ -47,6 +47,10 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
     private final TargetLocator locator;
     private final WebDriverTarget target;
 
+    /**
+     * @param locator Should not be a {@link com.redhat.darcy.webdriver.internal.TargetedTargetLocator}.
+     * @param target The target this driver will always refer to.
+     */
     public ForwardingTargetedWebDriver(TargetLocator locator, WebDriverTarget target) {
         this.locator = locator;
         this.target = target;
@@ -236,6 +240,10 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
         return driver();
     }
 
+    /**
+     * @return The switched-to {@link org.openqa.selenium.WebDriver} instance which we can forward
+     * calls to.
+     */
     private WebDriver driver() {
         return target.switchTo(locator);
     }
