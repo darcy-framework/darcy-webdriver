@@ -290,6 +290,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
+    public <T> List<T> findAllByValue(Class<T> type, String value) {
+        return attemptAndGet(() -> webContext.findAllByValue(type, value));
+    }
+
+    @Override
+    public <T> T findByValue(Class<T> type, String value) {
+        return attemptAndGet(() -> webContext.findByValue(type, value));
+    }
+
+    @Override
     public WebDriverBrowser withRootLocator(Locator root) {
         return new WebDriverBrowser(driver, webContext.withRootLocator(root));
     }

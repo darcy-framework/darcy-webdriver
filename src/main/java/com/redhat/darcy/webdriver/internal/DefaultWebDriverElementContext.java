@@ -28,6 +28,7 @@ import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.locators.ByChained;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
+import com.redhat.darcy.webdriver.locators.ByValue;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
 
 import org.openqa.selenium.By;
@@ -166,6 +167,16 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
         }
 
         return newElement(type, new NestedElementLookup((WebDriverElement) parent, child));
+    }
+
+    @Override
+    public <T> List<T> findAllByValue(Class<T> type, String value) {
+        return newElementList(type, new WebElementListLookup(new ByValue(value), sc));
+    }
+
+    @Override
+    public <T> T findByValue(Class<T> type, String value) {
+        return newElement(type, new WebElementLookup(new ByValue(value), sc));
     }
 
     @Override

@@ -35,6 +35,7 @@ import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
+import com.redhat.darcy.web.internal.FindsByValue;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
@@ -309,6 +310,28 @@ public class DelegatingWebContext implements WebDriverWebContext {
             return context.findByClassName(type, className);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("HTML class name", type);
+        }
+    }
+
+    @Override
+    public <T> List<T> findAllByValue(Class<T> type, String value) {
+        try {
+            FindsByValue context = (FindsByValue) contextForType(type);
+
+            return context.findAllByValue(type, value);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("HTML value", type);
+        }
+    }
+
+    @Override
+    public <T> T findByValue(Class<T> type, String value) {
+        try {
+            FindsByValue context = (FindsByValue) contextForType(type);
+
+            return context.findByValue(type, value);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("HTML value", type);
         }
     }
 

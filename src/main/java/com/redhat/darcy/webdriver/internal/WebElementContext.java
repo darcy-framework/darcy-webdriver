@@ -25,6 +25,7 @@ import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
+import com.redhat.darcy.webdriver.locators.ByValue;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
 
 import org.openqa.selenium.By;
@@ -152,6 +153,18 @@ public class WebElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByName(Class<T> type, String name) {
         return (T) By.name(name).findElement(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByValue(Class<T> type, String value) {
+        return (List<T>) new ByValue(value).findElements(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByValue(Class<T> type, String value) {
+        return (T) new ByValue(value).findElement(sc);
     }
 
     @SuppressWarnings("unchecked")
