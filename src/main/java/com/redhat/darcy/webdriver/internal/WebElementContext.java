@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
+import com.redhat.darcy.webdriver.locators.ByAttribute;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByValue;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
@@ -157,18 +158,6 @@ public class WebElementContext implements WebDriverElementContext {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
-        return (List<T>) new ByValue(value).findElements(sc);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T findByValue(Class<T> type, String value) {
-        return (T) new ByValue(value).findElement(sc);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
     public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
         if (!(parent instanceof WrapsElement)) {
             throw new DarcyException("Parent element does not wrap a WebElement. Is this "
@@ -249,5 +238,17 @@ public class WebElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByClassName(Class<T> type, String className) {
         return (T) By.className(className).findElement(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return (List<T>) new ByAttribute(attribute, value).findElements(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return (T) new ByAttribute(attribute, value).findElement(sc);
     }
 }

@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
+import com.redhat.darcy.webdriver.locators.ByAttribute;
 
 import java.util.List;
 
@@ -162,12 +163,12 @@ public class ChainedWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
-        return context.findAllByChained(type, parent, By.value(value));
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return context.findAllByChained(type, parent, new By.ByAttribute(attribute, value));
     }
 
     @Override
-    public <T> T findByValue(Class<T> type, String value) {
-        return context.findByChained(type, parent, By.value(value));
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return context.findByChained(type, parent, new By.ByAttribute(attribute, value));
     }
 }

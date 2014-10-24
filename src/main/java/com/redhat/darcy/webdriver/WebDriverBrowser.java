@@ -290,13 +290,13 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
-        return attemptAndGet(() -> webContext.findAllByValue(type, value));
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return attemptAndGet(() -> webContext.findAllByAttribute(type, attribute, value));
     }
 
     @Override
-    public <T> T findByValue(Class<T> type, String value) {
-        return attemptAndGet(() -> webContext.findByValue(type, value));
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return attemptAndGet(() -> webContext.findByAttribute(type, attribute, value));
     }
 
     @Override

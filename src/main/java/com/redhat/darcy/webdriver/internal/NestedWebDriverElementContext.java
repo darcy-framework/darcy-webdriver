@@ -162,12 +162,12 @@ public class NestedWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
-        return context.findAllByNested(type, root, By.value(value));
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return context.findAllByNested(type, root, new By.ByAttribute(attribute, value));
     }
 
     @Override
-    public <T> T findByValue(Class<T> type, String value) {
-        return context.findByNested(type, root, By.value(value));
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return context.findByNested(type, root, new By.ByAttribute(attribute, value));
     }
 }

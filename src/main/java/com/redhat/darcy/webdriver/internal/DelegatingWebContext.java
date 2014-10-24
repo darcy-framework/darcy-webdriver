@@ -23,6 +23,7 @@ import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.FindsByAttribute;
 import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.ui.internal.FindsByLinkText;
 import com.redhat.darcy.ui.internal.FindsByName;
@@ -35,7 +36,6 @@ import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
-import com.redhat.darcy.web.internal.FindsByValue;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
@@ -314,24 +314,24 @@ public class DelegatingWebContext implements WebDriverWebContext {
     }
 
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
         try {
-            FindsByValue context = (FindsByValue) contextForType(type);
+            FindsByAttribute context = (FindsByAttribute) contextForType(type);
 
-            return context.findAllByValue(type, value);
+            return context.findAllByAttribute(type, attribute, value);
         } catch (ClassCastException e) {
-            throw unsupportedLocatorForType("HTML value", type);
+            throw unsupportedLocatorForType("HTML " + attribute, type);
         }
     }
 
     @Override
-    public <T> T findByValue(Class<T> type, String value) {
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
         try {
-            FindsByValue context = (FindsByValue) contextForType(type);
+            FindsByAttribute context = (FindsByAttribute) contextForType(type);
 
-            return context.findByValue(type, value);
-        } catch (ClassCastException e) {
-            throw unsupportedLocatorForType("HTML value", type);
+            return context.findByAttribute(type, attribute, value);
+        } catch (ClassCastException cce) {
+            throw unsupportedLocatorForType("HTML " + attribute, type);
         }
     }
 

@@ -26,6 +26,7 @@ import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
+import com.redhat.darcy.webdriver.locators.ByAttribute;
 import com.redhat.darcy.webdriver.locators.ByChained;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByValue;
@@ -170,13 +171,13 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public <T> List<T> findAllByValue(Class<T> type, String value) {
-        return newElementList(type, new WebElementListLookup(new ByValue(value), sc));
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return newElementList(type, new WebElementListLookup(new ByAttribute(attribute, value), sc));
     }
 
     @Override
-    public <T> T findByValue(Class<T> type, String value) {
-        return newElement(type, new WebElementLookup(new ByValue(value), sc));
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return newElement(type, new WebElementLookup(new ByAttribute(attribute, value), sc));
     }
 
     @Override

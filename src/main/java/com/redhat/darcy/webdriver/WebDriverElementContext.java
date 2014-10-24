@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver;
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.FindsByAttribute;
 import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.ui.internal.FindsByLinkText;
 import com.redhat.darcy.ui.internal.FindsByName;
@@ -32,11 +33,10 @@ import com.redhat.darcy.ui.internal.FindsByXPath;
 import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
-import com.redhat.darcy.web.internal.FindsByValue;
 
 public interface WebDriverElementContext extends ElementContext, FindsById, FindsByName,
         FindsByLinkText, FindsByTextContent, FindsByPartialTextContent, FindsByXPath,
-        FindsByCss, FindsByHtmlTag, FindsByClassName, FindsByNested, FindsByValue {
+        FindsByCss, FindsByHtmlTag, FindsByClassName, FindsByNested, FindsByAttribute {
     @Override
     WebDriverElementContext withRootLocator(Locator root);
 
