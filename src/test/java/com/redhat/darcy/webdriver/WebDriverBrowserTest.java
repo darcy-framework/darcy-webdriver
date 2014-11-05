@@ -31,6 +31,8 @@ import static org.openqa.selenium.WebDriver.Navigation;
 
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
+import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
@@ -41,7 +43,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.safari.SafariDriver;
 
 import java.time.Duration;
 
@@ -385,5 +392,59 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         assertThat(browser, instanceOf(WrapsDriver.class));
+    }
+
+    @Test
+    public void shouldBeInstanceOfUntargetedFirefoxDriver() {
+        WebDriverBrowserFactory browserFactory = new FirefoxBrowserFactory();
+
+        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
+        CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
+
+        assertThat(targetLocator.getUntargetedDriver(), instanceOf(FirefoxDriver.class));
+    }
+
+    @Test
+    public void shouldBeInstanceOfUntargetedChromeDriver() {
+        WebDriverBrowserFactory browserFactory = new ChromeBrowserFactory();
+
+        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
+        CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
+
+        assertThat(targetLocator.getUntargetedDriver(), instanceOf(ChromeDriver.class));
+    }
+
+    @Test
+    public void shouldBeInstanceOfUntargetedHtmlUnitDriver() {
+        WebDriverBrowserFactory browserFactory = new HtmlUnitBrowserFactory();
+
+        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
+        CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
+
+        assertThat(targetLocator.getUntargetedDriver(), instanceOf(HtmlUnitDriver.class));
+    }
+
+    @Test
+    public void shouldBeInstanceOfUntargetedInternetExplorerDriver() {
+        WebDriverBrowserFactory browserFactory = new InternetExplorerBrowserFactory();
+
+        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
+        CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
+
+        assertThat(targetLocator.getUntargetedDriver(), instanceOf(InternetExplorerDriver.class));
+    }
+
+    @Test
+    public void shouldBeInstanceOfUntargetedSafariDriver() {
+        WebDriverBrowserFactory browserFactory = new SafariBrowserFactory();
+
+        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
+        CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
+        assertThat(targetLocator.getUntargetedDriver(), instanceOf(SafariDriver.class));
     }
 }
