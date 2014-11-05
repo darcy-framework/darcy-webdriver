@@ -26,7 +26,6 @@ import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.locators.ByAttribute;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
-import com.redhat.darcy.webdriver.locators.ByValue;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
 
 import org.openqa.selenium.By;
