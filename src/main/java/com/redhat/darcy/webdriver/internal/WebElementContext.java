@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
+import com.redhat.darcy.webdriver.locators.ByAttribute;
 import com.redhat.darcy.webdriver.locators.ByPartialVisibleText;
 import com.redhat.darcy.webdriver.locators.ByVisibleText;
 
@@ -236,5 +237,17 @@ public class WebElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByClassName(Class<T> type, String className) {
         return (T) By.className(className).findElement(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return (List<T>) new ByAttribute(attribute, value).findElements(sc);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return (T) new ByAttribute(attribute, value).findElement(sc);
     }
 }

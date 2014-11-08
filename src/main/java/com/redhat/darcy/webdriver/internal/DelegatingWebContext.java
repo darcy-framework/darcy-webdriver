@@ -23,6 +23,7 @@ import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.FindsByAttribute;
 import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.ui.internal.FindsByLinkText;
 import com.redhat.darcy.ui.internal.FindsByName;
@@ -309,6 +310,28 @@ public class DelegatingWebContext implements WebDriverWebContext {
             return context.findByClassName(type, className);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("HTML class name", type);
+        }
+    }
+
+    @Override
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        try {
+            FindsByAttribute context = (FindsByAttribute) contextForType(type);
+
+            return context.findAllByAttribute(type, attribute, value);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("HTML attribute, " + attribute + "'", type);
+        }
+    }
+
+    @Override
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        try {
+            FindsByAttribute context = (FindsByAttribute) contextForType(type);
+
+            return context.findByAttribute(type, attribute, value);
+        } catch (ClassCastException cce) {
+            throw unsupportedLocatorForType("HTML attribute, " + attribute + "'", type);
         }
     }
 
