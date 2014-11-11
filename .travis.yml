@@ -2,9 +2,9 @@ language: java
 jdk:
 - oraclejdk8
 
-before_install: git clone -b travis `git config --get remote.origin.url` target/travis
+before_script: git clone -b travis `git config --get remote.origin.url` target/travis
 
-install: '[ ${TRAVIS_PULL_REQUEST} = ''false'' ] && mvn clean deploy -P sonatype-oss-release -Dgpg.skip=true --settings target/travis/settings.xml || mvn clean verify --settings target/travis/settings.xml'
+script: '[ ${TRAVIS_PULL_REQUEST} = ''false'' ] && mvn clean deploy -P sonatype-oss-release -Dgpg.skip=true --settings target/travis/settings.xml || mvn clean verify --settings target/travis/settings.xml'
 
 after_success:
   - mvn clean jacoco:prepare-agent test jacoco:report coveralls:jacoco
