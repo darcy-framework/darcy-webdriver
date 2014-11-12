@@ -2,7 +2,10 @@ language: java
 jdk:
 - oraclejdk8
 
-before_install: git clone -b travis `git config --get remote.origin.url` target/travis
+before_install:
+  - git clone -b travis `git config --get remote.origin.url` target/travis
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 
 install: '[ ${TRAVIS_PULL_REQUEST} = ''false'' ] && mvn clean deploy -P sonatype-oss-release -Dgpg.skip=true --settings target/travis/settings.xml || mvn clean verify --settings target/travis/settings.xml'
 
