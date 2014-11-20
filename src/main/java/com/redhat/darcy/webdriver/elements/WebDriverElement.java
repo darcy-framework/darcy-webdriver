@@ -35,6 +35,7 @@ import org.openqa.selenium.internal.WrapsElement;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -91,15 +92,15 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
     }
 
     @Override
-    public Set<String> getClasses() {
+    public List<String> getClasses() {
         String classList = getAttribute("class");
 
         if (classList == null || classList.isEmpty()) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
 
         return Arrays.stream(classList.split(" "))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override
