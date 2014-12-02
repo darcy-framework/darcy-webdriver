@@ -210,7 +210,9 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
 
         return new LazyList<>(() -> source.lookup()
                 .stream()
-                .map(e -> newElement(type, new ListElementLookup(source, e)))
+                .map(e -> e.getAttribute("id") != null
+                        ? newElement(type, new WebElementLookup(By.id(e.getAttribute("id")), sc))
+                        : newElement(type, new ListElementLookup(source, e)))
                 .collect(Collectors.toList()));
     }
 }
