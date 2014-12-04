@@ -20,6 +20,8 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.StaleElementReferenceException;
@@ -29,6 +31,8 @@ public class NestedElementLookup implements ElementLookup {
     private final WebDriverElement parent;
     private final Locator child;
 
+    private static final ElementConstructorMap elMap = ElementConstructorMap.webDriverElementOnly();
+
     public NestedElementLookup(WebDriverElement parent, Locator child) {
         this.parent = parent;
         this.child = child;
@@ -37,11 +41,11 @@ public class NestedElementLookup implements ElementLookup {
     @Override
     public WebElement lookup() {
         try {
-            return child.find(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+            return actualLookup();
         } catch (StaleElementReferenceException e) {
             parent.invalidateCache();
 
-            return child.find(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+            return actualLookup();
         }
     }
 
@@ -50,5 +54,14 @@ public class NestedElementLookup implements ElementLookup {
         return "An element found nested within another element.\n" +
                 "The parent element is a " + parent + ".\n" +
                 "The locator to find the child element is " + child;
+    }
+
+    private WebElement actualLookup() {
+        WebDriverElement element = child.find(WebDriverElement.class, getNestedContext());
+        return element.getWrappedElement();
+    }
+
+    private WebDriverElementContext getNestedContext() {
+        return new DefaultWebDriverElementContext(parent.getWrappedElement(), elMap);
     }
 }
