@@ -20,7 +20,10 @@
 package com.redhat.darcy.webdriver.locators;
 
 import com.redhat.darcy.ui.api.Locator;
-import com.redhat.darcy.webdriver.internal.WebElementContext;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.WebDriverElementContext;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
+import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
@@ -29,9 +32,12 @@ import org.openqa.selenium.WebElement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ByChained extends By {
     private Locator[] locators;
+
+    private static final ElementConstructorMap elMap = ElementConstructorMap.webDriverElementOnly();
 
     public ByChained(Locator[] locators) {
         this.locators = Objects.requireNonNull(locators, "locators");
@@ -39,7 +45,13 @@ public class ByChained extends By {
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        return new WebElementContext(context).findAllByChained(WebElement.class, locators);
+        WebDriverElementContext darcyContext = new DefaultWebDriverElementContext(context, elMap);
+        List<WebDriverElement> found = darcyContext.findAllByChained(WebDriverElement.class,
+                locators);
+
+        return found.stream()
+                .map(WebDriverElement::getWrappedElement)
+                .collect(Collectors.toList());
     }
 
     @Override

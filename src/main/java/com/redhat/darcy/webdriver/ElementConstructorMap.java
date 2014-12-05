@@ -84,7 +84,7 @@ public class ElementConstructorMap {
      * consume that updated implementation. This way, a browser factory need not override every
      * interface that may point to the
      */
-    public static ElementConstructorMap newElementConstructorMapWithDefaults() {
+    public static ElementConstructorMap defaultMap() {
         ElementConstructorMap map = new ElementConstructorMap();
 
         map.put(HtmlTextInput.class, WebDriverTextInput::new);
@@ -113,6 +113,21 @@ public class ElementConstructorMap {
         map.point(MultiSelect.class, HtmlMultiSelect.class);
         map.point(Element.class, HtmlElement.class);
         
+        return map;
+    }
+
+    /**
+     * @return A new {@link com.redhat.darcy.webdriver.ElementConstructorMap} that only maps
+     * {@link com.redhat.darcy.webdriver.elements.WebDriverElement}.class to
+     * {@link com.redhat.darcy.webdriver.elements.WebDriverElement}. Useful when you only need a
+     * {@link com.redhat.darcy.webdriver.elements.WebDriverElement} in order to get at the
+     * underlying {@link org.openqa.selenium.WebElement}.
+     */
+    public static ElementConstructorMap webDriverElementOnly() {
+        ElementConstructorMap map = new ElementConstructorMap();
+
+        map.put(WebDriverElement.class, WebDriverElement::new);
+
         return map;
     }
 

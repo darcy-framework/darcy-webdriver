@@ -39,7 +39,7 @@ public class FirefoxBrowserFactory extends WebDriverBrowserFactory<FirefoxBrowse
     private FirefoxProfile profile;
     private FirefoxBinary binary;
     private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+            .defaultMap();
     
     @Override
     public Browser newBrowser() {
