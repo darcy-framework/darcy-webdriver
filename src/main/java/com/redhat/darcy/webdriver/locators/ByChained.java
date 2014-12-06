@@ -29,6 +29,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -39,17 +40,33 @@ public class ByChained extends By {
 
     private static final ElementConstructorMap elMap = ElementConstructorMap.webDriverElementOnly();
 
-    public ByChained(Locator[] locators) {
+    public ByChained(Locator... locators) {
         this.locators = Objects.requireNonNull(locators, "locators");
     }
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        WebDriverElementContext darcyContext = new DefaultWebDriverElementContext(context, elMap);
-        List<WebDriverElement> found = darcyContext.findAllByChained(WebDriverElement.class,
-                locators);
+        List<WebDriverElement> parents = null;
+        List<WebDriverElement> children = new ArrayList<>();
 
-        return found.stream()
+        WebDriverElementContext nestedContext = getNestedContext(context);
+
+        for (Locator locator : locators) {
+            if (parents == null) {
+                parents = locator.findAll(WebDriverElement.class, nestedContext);
+            } else {
+                for (WebDriverElement parent : parents) {
+                    nestedContext = getNestedContext(parent.getWrappedElement());
+                    children.addAll(locator.findAll(WebDriverElement.class, nestedContext));
+                }
+
+                parents.clear();
+                parents.addAll(children);
+                children.clear();
+            }
+        }
+
+        return children.stream()
                 .map(WebDriverElement::getWrappedElement)
                 .collect(Collectors.toList());
     }
@@ -57,5 +74,9 @@ public class ByChained extends By {
     @Override
     public String toString() {
         return "ByChained: {locators: " + Arrays.toString(locators) + "}";
+    }
+
+    private WebDriverElementContext getNestedContext(SearchContext sc) {
+        return new DefaultWebDriverElementContext(sc, elMap);
     }
 }
