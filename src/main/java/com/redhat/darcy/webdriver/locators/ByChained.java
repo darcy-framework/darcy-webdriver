@@ -29,6 +29,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -39,15 +40,36 @@ public class ByChained extends By {
 
     private static final ElementConstructorMap elMap = ElementConstructorMap.webDriverElementOnly();
 
-    public ByChained(Locator[] locators) {
+    public ByChained(Locator... locators) {
         this.locators = Objects.requireNonNull(locators, "locators");
+
+        if(locators.length == 0) {
+            throw new IllegalArgumentException("Must pass at least 1 locator, but instead got an "
+                    + "empty array.");
+        }
     }
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        WebDriverElementContext darcyContext = new DefaultWebDriverElementContext(context, elMap);
-        List<WebDriverElement> found = darcyContext.findAllByChained(WebDriverElement.class,
-                locators);
+        List<WebDriverElement> found = null;
+        List<WebDriverElement> children = new ArrayList<>();
+
+        WebDriverElementContext nestedContext = getNestedContext(context);
+
+        for (Locator locator : locators) {
+            if (found == null) {
+                found = new ArrayList<>(locator.findAll(WebDriverElement.class, nestedContext));
+            } else {
+                for (WebDriverElement parent : found) {
+                    nestedContext = getNestedContext(parent.getWrappedElement());
+                    children.addAll(locator.findAll(WebDriverElement.class, nestedContext));
+                }
+
+                found.clear();
+                found.addAll(children);
+                children.clear();
+            }
+        }
 
         return found.stream()
                 .map(WebDriverElement::getWrappedElement)
@@ -57,5 +79,9 @@ public class ByChained extends By {
     @Override
     public String toString() {
         return "ByChained: {locators: " + Arrays.toString(locators) + "}";
+    }
+
+    private WebDriverElementContext getNestedContext(SearchContext sc) {
+        return new DefaultWebDriverElementContext(sc, elMap);
     }
 }
