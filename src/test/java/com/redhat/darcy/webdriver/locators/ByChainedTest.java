@@ -24,7 +24,6 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.web.By;
 
 import org.junit.Test;
