@@ -42,31 +42,36 @@ public class ByChained extends By {
 
     public ByChained(Locator... locators) {
         this.locators = Objects.requireNonNull(locators, "locators");
+
+        if(locators.length == 0) {
+            throw new IllegalArgumentException("Must pass at least 1 locator, but instead got an "
+                    + "empty array.");
+        }
     }
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        List<WebDriverElement> parents = null;
+        List<WebDriverElement> found = null;
         List<WebDriverElement> children = new ArrayList<>();
 
         WebDriverElementContext nestedContext = getNestedContext(context);
 
         for (Locator locator : locators) {
-            if (parents == null) {
-                parents = locator.findAll(WebDriverElement.class, nestedContext);
+            if (found == null) {
+                found = new ArrayList<>(locator.findAll(WebDriverElement.class, nestedContext));
             } else {
-                for (WebDriverElement parent : parents) {
+                for (WebDriverElement parent : found) {
                     nestedContext = getNestedContext(parent.getWrappedElement());
                     children.addAll(locator.findAll(WebDriverElement.class, nestedContext));
                 }
 
-                parents.clear();
-                parents.addAll(children);
+                found.clear();
+                found.addAll(children);
                 children.clear();
             }
         }
 
-        return children.stream()
+        return found.stream()
                 .map(WebDriverElement::getWrappedElement)
                 .collect(Collectors.toList());
     }
