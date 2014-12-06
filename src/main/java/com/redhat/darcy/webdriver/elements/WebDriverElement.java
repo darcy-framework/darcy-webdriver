@@ -52,6 +52,12 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
 
     private WebElement cached;
 
+    /**
+     * @param source Provides a means to lookup the backing {@link org.openqa.selenium.WebElement}
+     * for this WebDriverElement.
+     * @param context The context in which this element was found. Using this context will not nest
+     * underneath this element (by you may do so by using {@code By.nested(this, ...);}.
+     */
     public WebDriverElement(ElementLookup source, ElementContext context) {
         this.source = source;
         this.context = context;
