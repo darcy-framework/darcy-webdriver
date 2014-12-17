@@ -24,6 +24,7 @@ import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.web.api.elements.HtmlSelect;
+import com.redhat.darcy.web.api.elements.HtmlSelectOption;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
@@ -43,13 +44,13 @@ public class WebDriverSelect extends WebDriverElement implements HtmlSelect {
     }
 
     @Override
-    public List<SelectOption> getOptions() {
-        return By.nested(this, By.htmlTag("option")).findAll(SelectOption.class, getContext());
+    public List<HtmlSelectOption> getOptions() {
+        return By.nested(this, By.htmlTag("option")).findAll(HtmlSelectOption.class, getContext());
     }
 
     @Override
-    public Optional<SelectOption> getSelectedOption() {
-        for (SelectOption option : getOptions()) {
+    public Optional<HtmlSelectOption> getSelectedOption() {
+        for (HtmlSelectOption option : getOptions()) {
             if (option.isSelected()) {
                 return Optional.of(option);
             }
