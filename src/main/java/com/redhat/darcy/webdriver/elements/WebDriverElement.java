@@ -66,8 +66,8 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
     @Override
     public boolean isDisplayed() {
         try {
-            return getWrappedElement().isDisplayed();
-        } catch (NotFoundException e) {
+            return attemptAndGet(WebElement::isDisplayed);
+        } catch (FindableNotPresentException e) {
             return false;
         }
     }
