@@ -39,7 +39,7 @@ public class RemoteBrowserFactory extends WebDriverBrowserFactory<RemoteBrowserF
     private DesiredCapabilities required;
     private URL hub;
     private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+            .defaultMap();
     
     public RemoteBrowserFactory(URL hub, Capabilities desired) {
         this.hub = hub;

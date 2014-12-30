@@ -160,4 +160,14 @@ public class ChainedWebDriverElementContext implements WebDriverElementContext {
     public <T> T findByClassName(Class<T> type, String className) {
         return context.findByChained(type, parent, By.className(className));
     }
+
+    @Override
+    public <T> List<T> findAllByAttribute(Class<T> type, String attribute, String value) {
+        return context.findAllByChained(type, parent, By.attribute(attribute, value));
+    }
+
+    @Override
+    public <T> T findByAttribute(Class<T> type, String attribute, String value) {
+        return context.findByChained(type, parent, By.attribute(attribute, value));
+    }
 }

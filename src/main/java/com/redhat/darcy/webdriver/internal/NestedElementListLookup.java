@@ -20,15 +20,20 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.api.Locator;
+import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NestedElementListLookup implements ElementListLookup {
     private final WebDriverElement parent;
     private final Locator children;
+
+    private static final ElementConstructorMap elMap = ElementConstructorMap.webDriverElementOnly();
 
     public NestedElementListLookup(WebDriverElement parent, Locator children) {
         this.parent = parent;
@@ -37,12 +42,20 @@ public class NestedElementListLookup implements ElementListLookup {
 
     @Override
     public List<WebElement> lookup() {
-        return children.findAll(WebElement.class, new WebElementContext(parent.getWrappedElement()));
+        List<WebDriverElement> found = children.findAll(WebDriverElement.class, getNestedContext());
+
+        return found.stream()
+                .map(WebDriverElement::getWrappedElement)
+                .collect(Collectors.toList());
     }
 
     @Override
     public String toString() {
         return "A list of elements found nested within a parent element, " + parent + "\n" +
                 "with locator, " + children;
+    }
+
+    private WebDriverElementContext getNestedContext() {
+        return new DefaultWebDriverElementContext(parent.getWrappedElement(), elMap);
     }
 }

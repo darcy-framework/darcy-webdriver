@@ -35,6 +35,7 @@ import org.openqa.selenium.internal.WrapsElement;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -51,6 +52,12 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
 
     private WebElement cached;
 
+    /**
+     * @param source Provides a means to lookup the backing {@link org.openqa.selenium.WebElement}
+     * for this WebDriverElement.
+     * @param context The context in which this element was found. Using this context will not nest
+     * underneath this element (by you may do so by using {@code By.nested(this, ...);}.
+     */
     public WebDriverElement(ElementLookup source, ElementContext context) {
         this.source = source;
         this.context = context;
@@ -91,15 +98,15 @@ public class WebDriverElement implements Element, Caching, HtmlElement, WrapsEle
     }
 
     @Override
-    public Set<String> getClasses() {
+    public List<String> getClasses() {
         String classList = getAttribute("class");
 
         if (classList == null || classList.isEmpty()) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
 
         return Arrays.stream(classList.split(" "))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.elements.SelectOption;
 import com.redhat.darcy.web.By;
 import com.redhat.darcy.web.api.elements.HtmlMultiSelect;
+import com.redhat.darcy.web.api.elements.HtmlSelectOption;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
 import org.openqa.selenium.WebElement;
@@ -23,12 +24,12 @@ public class WebDriverMultiSelect extends WebDriverElement implements HtmlMultiS
     }
 
     @Override
-    public List<SelectOption> getOptions() {
-        return By.nested(this, By.htmlTag("option")).findAll(SelectOption.class, getContext());
+    public List<HtmlSelectOption> getOptions() {
+        return By.nested(this, By.htmlTag("option")).findAll(HtmlSelectOption.class, getContext());
     }
 
     @Override
-    public List<SelectOption> getCurrentlySelectedOptions() {
+    public List<HtmlSelectOption> getSelectedOptions() {
         return getOptions()
                 .stream()
                 .filter(SelectOption::isSelected)

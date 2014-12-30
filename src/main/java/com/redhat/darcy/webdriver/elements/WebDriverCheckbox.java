@@ -60,6 +60,11 @@ public class WebDriverCheckbox extends WebDriverElement implements HtmlCheckbox 
     }
 
     @Override
+    public boolean isEnabled() {
+        return attemptAndGet(WebElement::isEnabled);
+    }
+
+    @Override
     public String toString() {
         return "A WebDriverCheckbox backed by, " + source;
     }
