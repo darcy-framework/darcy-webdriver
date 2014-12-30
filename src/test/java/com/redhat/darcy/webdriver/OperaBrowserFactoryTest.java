@@ -9,15 +9,17 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 public class OperaBrowserFactoryTest {
     @Before
     public void checkForDriver() {
         assumeTrue(System.getProperty("java.class.path").contains("operadriver"));
+        assumeNotNull(System.getProperty("webdriver.opera.driver"));
     }
     @Test
-    public void shouldBeInstanceOfUntargetedChromeDriver() {
+    public void shouldBeInstanceOfUntargetedOperaDriver() {
         WebDriverBrowserFactory browserFactory = new OperaBrowserFactory();
 
         WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
