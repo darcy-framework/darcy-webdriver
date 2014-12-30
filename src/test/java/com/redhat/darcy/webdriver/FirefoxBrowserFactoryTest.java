@@ -2,17 +2,20 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
-import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
-import org.junit.Rule;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 public class FirefoxBrowserFactoryTest {
-    @Rule
-    public TraceTestName traceTestName = new TraceTestName();
+    @Before
+    public void checkForDriver() {
+        assumeTrue(System.getProperty("java.class.path").contains("firefox-driver"));
+    }
 
     @Test
     public void shouldBeInstanceOfUntargetedFirefoxDriver() {
@@ -25,6 +28,4 @@ public class FirefoxBrowserFactoryTest {
         assertThat(targetLocator.getUntargetedDriver(), instanceOf(FirefoxDriver.class));
         browser.close();
     }
-
-
 }

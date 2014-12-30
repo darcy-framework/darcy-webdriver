@@ -15,8 +15,7 @@ public class InternetExplorerBrowserFactory extends WebDriverBrowserFactory<Inte
     private InternetExplorerDriverService service;
     private Capabilities capabilities;
     private Integer port;
-    private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+    private ElementConstructorMap elementImpls = ElementConstructorMap.defaultMap();
 
     @Override
     public Browser newBrowser() {

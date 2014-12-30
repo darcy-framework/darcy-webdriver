@@ -15,8 +15,7 @@ public class HtmlUnitBrowserFactory extends WebDriverBrowserFactory<HtmlUnitBrow
     private Capabilities capabilities;
     private BrowserVersion version;
     private Boolean enableJavascript;
-    private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+    private ElementConstructorMap elementImpls = ElementConstructorMap.defaultMap();
 
     @Override
     public Browser newBrowser() {

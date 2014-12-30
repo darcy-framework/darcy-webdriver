@@ -29,9 +29,6 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
-
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -42,9 +39,6 @@ import org.openqa.selenium.WebElement;
 
 @RunWith(JUnit4.class)
 public class CachingTargetLocatorTest {
-    @Rule
-    public TraceTestName traceTestName = new TraceTestName();
-
     @Test
     public void shouldKnowInitialTarget() {
         CachingTargetLocator targetLocator = new CachingTargetLocator(

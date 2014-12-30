@@ -15,8 +15,7 @@ public class OperaBrowserFactory extends WebDriverBrowserFactory<OperaBrowserFac
     private Capabilities capabilities;
     private OperaProfile profile;
     private OperaSettings settings;
-    private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+    private ElementConstructorMap elementImpls = ElementConstructorMap.defaultMap();
 
     @Override
     public Browser newBrowser() {

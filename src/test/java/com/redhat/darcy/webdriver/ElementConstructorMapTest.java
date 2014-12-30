@@ -31,18 +31,13 @@ import com.redhat.darcy.ui.api.elements.Button;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverButton;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
-import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class ElementConstructorMapTest {
-    @Rule
-    public TraceTestName traceTestName = new TraceTestName();
-
     @Test
     public void shouldRegisterElementConstructorsByElementType() {
         ElementConstructorMap elementConstructorMap = new ElementConstructorMap();

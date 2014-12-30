@@ -18,8 +18,7 @@ public class ChromeBrowserFactory extends WebDriverBrowserFactory<ChromeBrowserF
     private DesiredCapabilities capabilities;
     private ChromeOptions options;
     private ChromeDriverService service;
-    private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+    private ElementConstructorMap elementImpls = ElementConstructorMap.defaultMap();
 
     @Override
     public Browser newBrowser() {

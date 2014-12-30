@@ -14,8 +14,7 @@ import org.openqa.selenium.safari.SafariOptions;
 public class SafariBrowserFactory extends WebDriverBrowserFactory<SafariBrowserFactory> {
     private Capabilities capabilities;
     private SafariOptions safariOptions;
-    private ElementConstructorMap elementImpls = ElementConstructorMap
-            .newElementConstructorMapWithDefaults();
+    private ElementConstructorMap elementImpls = ElementConstructorMap.defaultMap();
 
     @Override
     public Browser newBrowser() {
