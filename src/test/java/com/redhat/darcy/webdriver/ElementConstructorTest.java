@@ -20,9 +20,7 @@
 package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
-import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -32,9 +30,6 @@ import java.util.List;
 
 @RunWith(JUnit4.class)
 public class ElementConstructorTest {
-    @Rule
-    public TraceTestName traceTestName = new TraceTestName();
-
     @Test
     public void shouldMatchSignatureForWebDriverElementConstructor() {
         List<ElementConstructor> ctorList = new ArrayList<>(1);

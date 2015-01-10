@@ -29,9 +29,7 @@ import static org.openqa.selenium.WebDriver.TargetLocator;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
-import com.redhat.darcy.webdriver.testing.rules.TraceTestName;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -40,9 +38,6 @@ import org.openqa.selenium.internal.WrapsDriver;
 
 @RunWith(JUnit4.class)
 public class TargetedWebDriverParentContextTest {
-    @Rule
-    public TraceTestName traceTestName = new TraceTestName();
-
     @Test
     public void shouldCreateTargetedDriversForBrowsers() {
         TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);

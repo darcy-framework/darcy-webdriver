@@ -81,7 +81,11 @@
             <artifactId>guice</artifactId>
             <version>4.0-beta5</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <version>1.5</version>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>

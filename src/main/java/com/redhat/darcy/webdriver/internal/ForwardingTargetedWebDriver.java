@@ -56,6 +56,10 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
         this.target = target;
     }
 
+    public TargetLocator getTargetLocator() {
+        return locator;
+    }
+
     @Override
     public WebDriverTarget getWebDriverTarget() {
         return target;
