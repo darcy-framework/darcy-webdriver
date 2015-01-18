@@ -36,6 +36,11 @@ public class WebDriverLink extends WebDriverElement implements HtmlLink {
     }
 
     @Override
+    public String getText() {
+        return attemptAndGet(WebElement::getText);
+    }
+
+    @Override
     public boolean isEnabled() {
         return attemptAndGet(WebElement::isEnabled);
     }
