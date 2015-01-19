@@ -19,6 +19,9 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.ui.api.elements.Element;
+import com.redhat.darcy.ui.internal.NestedViewFactory;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
@@ -27,6 +30,7 @@ import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
+import com.redhat.darcy.webdriver.internal.ViewElementConstructor;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
 import com.redhat.darcy.webdriver.internal.WebDriverTargets;
 
