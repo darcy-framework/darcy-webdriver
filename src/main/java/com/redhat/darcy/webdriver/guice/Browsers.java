@@ -20,12 +20,22 @@
 package com.redhat.darcy.webdriver.guice;
 
 import com.redhat.darcy.web.api.BrowserFactory;
+import com.redhat.darcy.webdriver.ChromeBrowserFactory;
 import com.redhat.darcy.webdriver.FirefoxBrowserFactory;
+import com.redhat.darcy.webdriver.HtmlUnitBrowserFactory;
+import com.redhat.darcy.webdriver.InternetExplorerBrowserFactory;
+import com.redhat.darcy.webdriver.OperaBrowserFactory;
+import com.redhat.darcy.webdriver.SafariBrowserFactory;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public enum Browsers implements BrowserType {
-    FIREFOX(DesiredCapabilities.firefox(), new FirefoxBrowserFactory());
+    FIREFOX(DesiredCapabilities.firefox(), new FirefoxBrowserFactory()),
+    CHROME(DesiredCapabilities.chrome(), new ChromeBrowserFactory()),
+    HTMLUNIT(DesiredCapabilities.htmlUnit(), new HtmlUnitBrowserFactory()),
+    INTERNETEXPLORER(DesiredCapabilities.internetExplorer(), new InternetExplorerBrowserFactory()),
+    OPERA(DesiredCapabilities.opera(), new OperaBrowserFactory()),
+    SAFARI(DesiredCapabilities.safari(), new SafariBrowserFactory());
 
     /**
      * Picks a browser type based off of the "darcy.browser" environment variable. Case-insensitive.
