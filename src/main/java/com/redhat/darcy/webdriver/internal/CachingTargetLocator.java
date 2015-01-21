@@ -69,6 +69,10 @@ public class CachingTargetLocator implements TargetLocator {
         this.driver = Objects.requireNonNull(driver, "driver");
     }
 
+    public WebDriver getUntargetedDriver() {
+        return driver;
+    }
+
     public WebDriver frame(WebDriverTarget parent, int index) {
         return switchTo(WebDriverTargets.frame(parent, index));
     }
