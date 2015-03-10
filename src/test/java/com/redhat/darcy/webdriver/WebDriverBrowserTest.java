@@ -30,18 +30,26 @@ import static org.mockito.Mockito.when;
 import static org.openqa.selenium.WebDriver.Navigation;
 
 import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.web.Cookie;
+import com.redhat.darcy.web.SimpleUrlView;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Set;
 
 @RunWith(JUnit4.class)
 public class WebDriverBrowserTest {
@@ -380,5 +388,41 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         assertThat(browser, instanceOf(WrapsDriver.class));
+    }
+
+    @Test
+    public void shouldTransformCookieWith4ArgsProperly() {
+        WebDriverCookieManager manager = new WebDriverCookieManager(mock(TargetedWebDriver.class));
+
+        manager.transformToSeleniumCookie(new Cookie("chocolate4", "chip", "",
+                LocalDateTime.now().plusDays(1)))
+                .validate();
+    }
+
+    @Test
+    public void shouldTransformCookieWith5ArgsProperly() {
+        WebDriverCookieManager manager = new WebDriverCookieManager(mock(TargetedWebDriver.class));
+
+        manager.transformToSeleniumCookie(new Cookie("chocolate3", "chip", "", "",
+                LocalDateTime.now().plusDays(1)))
+                .validate();
+    }
+
+    @Test
+    public void shouldTransformCookieWith6ArgsProperly() {
+        WebDriverCookieManager manager = new WebDriverCookieManager(mock(TargetedWebDriver.class));
+
+        manager.transformToSeleniumCookie(new Cookie("chocolate2", "chip", "", "",
+                LocalDateTime.now().plusDays(1), false))
+                .validate();
+    }
+
+    @Test
+    public void shouldTransformCookieWith7ArgsProperly() {
+        WebDriverCookieManager manager = new WebDriverCookieManager(mock(TargetedWebDriver.class));
+
+        manager.transformToSeleniumCookie(new Cookie("chocolate", "chip", "", "",
+                LocalDateTime.now().plusDays(1), false, false))
+                .validate();
     }
 }
