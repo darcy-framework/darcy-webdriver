@@ -22,8 +22,6 @@ package com.redhat.darcy.webdriver.internal;
 import com.redhat.darcy.web.Cookie;
 import com.redhat.darcy.web.api.CookieManager;
 
-import org.openqa.selenium.WebDriver;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -67,37 +65,41 @@ public class WebDriverCookieManager implements CookieManager {
     }
 
     public org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
-        // From java.time.LocalDateTime to java.util.Date
+        if (cookie.getExpiry() == null) {
+            if(cookie.getPath() == null || cookie.getPath().equals("/")) {
+                return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue());
+            }
+            return new org.openqa.selenium.Cookie(cookie.getName(),
+                cookie.getValue(), cookie.getPath());
+        }
+        //From java.time.LocalDateTime to java.util.Date
         Date legacyDate = Date.from(cookie.getExpiry().atZone(ZoneId.systemDefault()).toInstant());
 
-        if (!cookie.isHttpOnly()) {
-            if(!cookie.isSecure()) {
-                if (cookie.getExpiry() == null) {
-                    if(cookie.getPath() == null) {
-                        if(cookie.getDomain() == null) {
-                            return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue());
-                        }
-                        return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue());
-                    }
-                    return new org.openqa.selenium.Cookie(cookie.getName(),
-                        cookie.getValue(), cookie.getPath());
-                }
-                return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
-                        cookie.getDomain(), cookie.getPath(), legacyDate);
-            }
+        if(cookie.getDomain() == null) {
             return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
-                    cookie.getDomain(), cookie.getPath(), legacyDate, cookie.isSecure());
+                    cookie.getPath(), legacyDate);
         }
-        return new org.openqa.selenium.Cookie(cookie.getName(),
-                cookie.getValue(), cookie.getDomain(), cookie.getPath(), legacyDate,
-                cookie.isSecure(), cookie.isHttpOnly());
+        return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
+                cookie.getDomain(), cookie.getPath(), legacyDate, cookie.isSecure(),
+                cookie.isHttpOnly());
     }
+
     public Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
+        if (cookie.getExpiry() == null) {
+            if(cookie.getPath() == null || cookie.getPath().equals("/")) {
+                return new Cookie(cookie.getName(), cookie.getValue());
+            }
+            return new Cookie(cookie.getName(), cookie.getValue(), cookie.getPath());
+        }
         // From java.util.Date to java.time.LocalDateTime
         LocalDateTime localDateTime = LocalDateTime.ofInstant(cookie.getExpiry().toInstant(),
                 ZoneId.systemDefault());
-        //TODO: Handle nulls
-        return new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(),
-                cookie.getPath(), localDateTime, cookie.isSecure(), cookie.isHttpOnly());
+
+        if(cookie.getDomain() == null) {
+            return new Cookie(cookie.getName(), cookie.getValue(),  cookie.getPath(), localDateTime);
+        }
+        return new Cookie(cookie.getName(), cookie.getValue(),
+                cookie.getDomain(), cookie.getPath(), localDateTime, cookie.isSecure(),
+                cookie.isHttpOnly());
     }
 }
