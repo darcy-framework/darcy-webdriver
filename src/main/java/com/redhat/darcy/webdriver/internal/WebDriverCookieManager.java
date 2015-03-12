@@ -61,6 +61,9 @@ public class WebDriverCookieManager implements CookieManager {
 
     @Override
     public Cookie get(String name) {
+        if(driver.manage().getCookieNamed(name) == null) {
+            return null;
+        }
         return transformToDarcyCookie(driver.manage().getCookieNamed(name));
     }
 
