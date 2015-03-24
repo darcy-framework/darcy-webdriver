@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WebDriverCookieManager implements CookieManager {
-    private TargetedWebDriver driver;
+    private final TargetedWebDriver driver;
 
     public WebDriverCookieManager(TargetedWebDriver driver) {
         this.driver = driver;
@@ -67,7 +67,7 @@ public class WebDriverCookieManager implements CookieManager {
         return transformToDarcyCookie(driver.manage().getCookieNamed(name));
     }
 
-    public org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
+    private org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
         if (cookie.getExpiry() == null) {
             if(cookie.getPath() == null || cookie.getPath().equals("/")) {
                 return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue());
@@ -87,7 +87,7 @@ public class WebDriverCookieManager implements CookieManager {
                 cookie.isHttpOnly());
     }
 
-    public Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
+    private Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
         if (cookie.getExpiry() == null) {
             if(cookie.getPath() == null || cookie.getPath().equals("/")) {
                 return new Cookie(cookie.getName(), cookie.getValue());
