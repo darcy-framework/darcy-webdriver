@@ -25,6 +25,7 @@ import com.redhat.darcy.web.api.CookieManager;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,9 @@ public class WebDriverCookieManager implements CookieManager {
 
     private org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
         //From java.time.LocalDateTime to java.util.Date
-        Date expiry = Date.from(cookie.getExpiry().atZone(ZoneId.systemDefault()).toInstant());
+        Date expiry = Optional.ofNullable(cookie.getExpiry())
+                .map(e -> Date.from(e.atZone(ZoneId.systemDefault()).toInstant()))
+                        .orElse(null);
 
         return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
                 cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
@@ -78,8 +81,9 @@ public class WebDriverCookieManager implements CookieManager {
 
     private Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
         // From java.util.Date to java.time.LocalDateTime
-        LocalDateTime expiry = LocalDateTime.ofInstant(cookie.getExpiry().toInstant(),
-                ZoneId.systemDefault());
+        LocalDateTime expiry = Optional.ofNullable(cookie.getExpiry().toInstant())
+                .map(e -> LocalDateTime.ofInstant(e, ZoneId.systemDefault()))
+                        .orElse(null);
 
         return new Cookie(cookie.getName(), cookie.getValue(),
                 cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
