@@ -68,41 +68,21 @@ public class WebDriverCookieManager implements CookieManager {
     }
 
     private org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
-        if (cookie.getExpiry() == null) {
-            if(cookie.getPath() == null || cookie.getPath().equals("/")) {
-                return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue());
-            }
-            return new org.openqa.selenium.Cookie(cookie.getName(),
-                cookie.getValue(), cookie.getPath());
-        }
         //From java.time.LocalDateTime to java.util.Date
-        Date legacyDate = Date.from(cookie.getExpiry().atZone(ZoneId.systemDefault()).toInstant());
+        Date expiry = Date.from(cookie.getExpiry().atZone(ZoneId.systemDefault()).toInstant());
 
-        if(cookie.getDomain() == null) {
-            return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
-                    cookie.getPath(), legacyDate);
-        }
         return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
-                cookie.getDomain(), cookie.getPath(), legacyDate, cookie.isSecure(),
+                cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
                 cookie.isHttpOnly());
     }
 
     private Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
-        if (cookie.getExpiry() == null) {
-            if(cookie.getPath() == null || cookie.getPath().equals("/")) {
-                return new Cookie(cookie.getName(), cookie.getValue());
-            }
-            return new Cookie(cookie.getName(), cookie.getValue(), cookie.getPath());
-        }
         // From java.util.Date to java.time.LocalDateTime
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(cookie.getExpiry().toInstant(),
+        LocalDateTime expiry = LocalDateTime.ofInstant(cookie.getExpiry().toInstant(),
                 ZoneId.systemDefault());
 
-        if(cookie.getDomain() == null) {
-            return new Cookie(cookie.getName(), cookie.getValue(),  cookie.getPath(), localDateTime);
-        }
         return new Cookie(cookie.getName(), cookie.getValue(),
-                cookie.getDomain(), cookie.getPath(), localDateTime, cookie.isSecure(),
+                cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
                 cookie.isHttpOnly());
     }
 }

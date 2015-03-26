@@ -23,27 +23,41 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
-import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
-import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
+import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
 public class WebDriverCookieManagerTest {
+
     @Test
-    public void shouldUseWebDriverOptionsManageImplementation() {
-        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
+    public void shouldDeleteAllCookies() {
+        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
 
-        when(mockedDriver.manage())
-                .thenReturn(mock(WebDriver.Options.class));
+        when(mockDriver.manage())
+                .thenReturn(mockOptions);
 
-        Browser browser = new WebDriverBrowser(mockedDriver,
-                new StubWebDriverParentContext(), new StubWebDriverElementContext());
+        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
+        cookieManager.deleteAll();
 
-        browser.cookies();
+        verify(mockOptions)
+                .deleteAllCookies();
+    }
 
-        verify(mockedDriver).manage();
+    @Test
+    public void shouldGetAllCookies() {
+        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
+
+        when(mockDriver.manage())
+                .thenReturn(mockOptions);
+
+        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
+        cookieManager.getAll();
+
+        verify(mockOptions)
+                .getCookies();
     }
 }

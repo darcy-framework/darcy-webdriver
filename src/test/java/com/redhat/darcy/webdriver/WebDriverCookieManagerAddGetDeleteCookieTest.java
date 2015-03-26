@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @RunWith(Parameterized.class)
-public class WebDriverCookieManagerAddGetCookieTest {
+public class WebDriverCookieManagerAddGetDeleteCookieTest {
 
     private static final Object[][] parameterizedChars = {
             {new Cookie("chocolate", "chip")},
@@ -60,7 +60,7 @@ public class WebDriverCookieManagerAddGetCookieTest {
     }
 
     @Test
-    public void shouldAddCookieToBrowser() {
+    public void shouldAddCookie() {
         TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
         WebDriver.Options mockOptions = mock(WebDriver.Options.class);
 
@@ -75,7 +75,7 @@ public class WebDriverCookieManagerAddGetCookieTest {
     }
 
     @Test
-    public void shouldGetCookieFromBrowser() {
+    public void shouldGetCookie() {
         TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
         WebDriver.Options mockOptions = mock(WebDriver.Options.class);
 
@@ -87,5 +87,20 @@ public class WebDriverCookieManagerAddGetCookieTest {
 
         verify(mockOptions)
                 .getCookieNamed(cookie.getName());
+    }
+
+    @Test
+    public void shouldDeleteCookie() {
+        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
+
+        when(mockDriver.manage())
+                .thenReturn(mockOptions);
+
+        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
+        cookieManager.delete(cookie);
+
+        verify(mockOptions)
+                .deleteCookieNamed(cookie.getName());
     }
 }
