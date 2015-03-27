@@ -72,7 +72,7 @@ public class WebDriverCookieManager implements CookieManager {
         //From java.time.LocalDateTime to java.util.Date
         Date expiry = Optional.ofNullable(cookie.getExpiry())
                 .map(e -> Date.from(e.atZone(ZoneId.systemDefault()).toInstant()))
-                        .orElse(null);
+                .orElse(null);
 
         return new org.openqa.selenium.Cookie(cookie.getName(), cookie.getValue(),
                 cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
@@ -83,7 +83,7 @@ public class WebDriverCookieManager implements CookieManager {
         // From java.util.Date to java.time.LocalDateTime
         LocalDateTime expiry = Optional.ofNullable(cookie.getExpiry().toInstant())
                 .map(e -> LocalDateTime.ofInstant(e, ZoneId.systemDefault()))
-                        .orElse(null);
+                .orElse(null);
 
         return new Cookie(cookie.getName(), cookie.getValue(),
                 cookie.getDomain(), cookie.getPath(), expiry, cookie.isSecure(),
