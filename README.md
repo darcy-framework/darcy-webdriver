@@ -37,4 +37,4 @@ Check out the [darcy tutorials][4], which use darcy-webdriver as the implementat
  [1]: https://github.com/darcy-framework/darcy-ui
  [2]: https://github.com/darcy-framework/darcy-web
  [3]: http://docs.seleniumhq.org/
- [4]: https://www.gitbook.io/book/alechenninger/automating-applications-with-darcy
+ [4]: http://darcy-framework.gitbooks.io/automating-applications-with-darcy/
