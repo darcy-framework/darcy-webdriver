@@ -81,7 +81,8 @@ public class WebDriverCookieManager implements CookieManager {
 
     private Cookie transformToDarcyCookie(org.openqa.selenium.Cookie cookie) {
         // From java.util.Date to java.time.LocalDateTime
-        LocalDateTime expiry = Optional.ofNullable(cookie.getExpiry().toInstant())
+        LocalDateTime expiry = Optional.ofNullable(cookie.getExpiry())
+                .map(Date::toInstant)
                 .map(e -> LocalDateTime.ofInstant(e, ZoneId.systemDefault()))
                 .orElse(null);
 
