@@ -29,14 +29,26 @@ import com.redhat.darcy.web.Cookie;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class WebDriverCookieManagerTest {
+
+    private TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
+    private WebDriver.Options mockOptions = mock(WebDriver.Options.class);
+    private WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
+
+    @Before
+    public void stubDriver() {
+        when(mockDriver.manage())
+                .thenReturn(mockOptions);
+    }
 
     @Test
     public void shouldProperlyAddACookieWithANameAndValue() {
@@ -44,13 +56,6 @@ public class WebDriverCookieManagerTest {
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip");
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
         cookieManager.add(cookie);
 
         verify(mockOptions)
@@ -63,13 +68,6 @@ public class WebDriverCookieManagerTest {
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip", null);
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
         cookieManager.add(cookie);
 
         verify(mockOptions)
@@ -78,17 +76,12 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValuePathAndExpiry() {
-        Cookie cookie = new Cookie("chocolate", "chip", "home", LocalDateTime.now());
+        Instant instantNow = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", "home", LocalDateTime.ofInstant(instantNow,
+                ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip", "home", Date.from(Instant.now()));
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
         cookieManager.add(cookie);
 
         verify(mockOptions)
@@ -101,13 +94,6 @@ public class WebDriverCookieManagerTest {
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip", "home", null);
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
         cookieManager.add(cookie);
 
         verify(mockOptions)
@@ -116,18 +102,13 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValueDomainPathAndExpiry() {
-        Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.now());
+        Instant instantNow = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.ofInstant(instantNow,
+                ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip", null, "",
-                        Date.from(Instant.now()));
+                        Date.from(instantNow));
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
         cookieManager.add(cookie);
 
         verify(mockOptions)
@@ -140,15 +121,8 @@ public class WebDriverCookieManagerTest {
         org.openqa.selenium.Cookie seleniumCookie =
                 new org.openqa.selenium.Cookie("chocolate", "chip");
 
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        WebDriver.Options mockOptions = mock(WebDriver.Options.class);
-
-        when(mockDriver.manage())
-                .thenReturn(mockOptions);
         when(mockOptions.getCookieNamed(cookie.getName()))
                 .thenReturn(seleniumCookie);
-
-        WebDriverCookieManager cookieManager = new WebDriverCookieManager(mockDriver);
 
         assertThat("The retrieved cookie should be transformed properly",
                 cookieManager.get(cookie), equalTo(cookie));
