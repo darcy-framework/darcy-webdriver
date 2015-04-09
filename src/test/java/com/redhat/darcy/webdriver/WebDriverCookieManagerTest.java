@@ -109,8 +109,7 @@ public class WebDriverCookieManagerTest {
         Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.ofInstant(instantNow,
                 ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip", null, "",
-                        Date.from(instantNow));
+                new org.openqa.selenium.Cookie("chocolate", "chip", null, "", Date.from(instantNow));
 
         cookieManager.add(cookie);
 
@@ -120,9 +119,11 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldGetCookie() {
-        Cookie cookie = new Cookie("chocolate", "chip");
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip");
+        Instant instantNow = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.ofInstant(instantNow,
+                ZoneId.systemDefault()));
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", null, "", Date.from(instantNow));
 
         when(mockOptions.getCookieNamed(cookie.getName()))
                 .thenReturn(seleniumCookie);

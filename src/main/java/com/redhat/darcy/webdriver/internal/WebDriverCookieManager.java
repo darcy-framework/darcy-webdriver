@@ -62,13 +62,8 @@ public class WebDriverCookieManager implements CookieManager {
 
     @Override
     public Optional<Cookie> get(String name) {
-        org.openqa.selenium.Cookie retrievedCookie = driver.manage().getCookieNamed(name);
-
-        if(retrievedCookie == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(transformToDarcyCookie(retrievedCookie));
+        return Optional.ofNullable(driver.manage().getCookieNamed(name))
+                .map(this::transformToDarcyCookie);
     }
 
     private org.openqa.selenium.Cookie transformToSeleniumCookie(Cookie cookie) {
