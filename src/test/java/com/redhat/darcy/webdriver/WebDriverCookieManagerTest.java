@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,6 +38,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
+import java.util.Set;
 
 public class WebDriverCookieManagerTest {
 
@@ -124,7 +127,45 @@ public class WebDriverCookieManagerTest {
         when(mockOptions.getCookieNamed(cookie.getName()))
                 .thenReturn(seleniumCookie);
 
+        Cookie retrievedCookie = cookieManager.get(cookie)
+                .get();
+
         assertThat("The retrieved cookie should be transformed properly",
-                cookieManager.get(cookie), equalTo(cookie));
+                retrievedCookie, equalTo(cookie));
+    }
+
+    @Test
+    public void shouldReturnEmptyIfNoCookieFound() {
+        Cookie cookie = new Cookie("chocolate", "chip");
+
+        assertThat(cookieManager.get(cookie), equalTo(Optional.empty()));
+    }
+
+    @Test
+    public void shouldDeleteCookie() {
+        Cookie cookie = new Cookie("chocolate", "chip");
+
+        cookieManager.delete(cookie);
+
+        verify(mockOptions)
+                .deleteCookieNamed(cookie.getName());
+    }
+
+    @Test
+    public void shouldGetAllCookies() {
+        Set allCookies = cookieManager.getAll();
+
+        verify(mockOptions)
+                .getCookies();
+
+        assertTrue(allCookies.isEmpty());
+    }
+
+    @Test
+    public void shouldDeleteAllCookies() {
+        cookieManager.deleteAll();
+
+        verify(mockOptions)
+                .deleteAllCookies();
     }
 }
