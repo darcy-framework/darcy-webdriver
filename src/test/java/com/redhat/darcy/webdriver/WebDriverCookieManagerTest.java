@@ -56,8 +56,8 @@ public class WebDriverCookieManagerTest {
     @Test
     public void shouldProperlyAddACookieWithANameAndValue() {
         Cookie cookie = new Cookie("chocolate", "chip");
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip");
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip");
 
         cookieManager.add(cookie);
 
@@ -67,9 +67,9 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValueAndPath() {
-        Cookie cookie = new Cookie("chocolate", "chip", null);
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip", null);
+        Cookie cookie = new Cookie("chocolate", "chip", "/home/");
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", "/home/");
 
         cookieManager.add(cookie);
 
@@ -79,11 +79,11 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValuePathAndExpiry() {
-        Instant instantNow = Instant.now();
-        Cookie cookie = new Cookie("chocolate", "chip", "home", LocalDateTime.ofInstant(instantNow,
+        Instant now = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", "/home/", LocalDateTime.ofInstant(now,
                 ZoneId.systemDefault()));
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip", "home", Date.from(Instant.now()));
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", "/home/", Date.from(Instant.now()));
 
         cookieManager.add(cookie);
 
@@ -93,9 +93,9 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValuePathAndNullExpiry() {
-        Cookie cookie = new Cookie("chocolate", "chip", "home", null);
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip", "home", null);
+        Cookie cookie = new Cookie("chocolate", "chip", "/home/", null);
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", "/home/", null);
 
         cookieManager.add(cookie);
 
@@ -105,11 +105,11 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldProperlyAddACookieWithANameValueDomainPathAndExpiry() {
-        Instant instantNow = Instant.now();
-        Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.ofInstant(instantNow,
-                ZoneId.systemDefault()));
-        org.openqa.selenium.Cookie seleniumCookie =
-                new org.openqa.selenium.Cookie("chocolate", "chip", null, "", Date.from(instantNow));
+        Instant now = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
+                LocalDateTime.ofInstant(now, ZoneId.systemDefault()));
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", "test.com", "/home/", Date.from(now));
 
         cookieManager.add(cookie);
 
@@ -119,17 +119,16 @@ public class WebDriverCookieManagerTest {
 
     @Test
     public void shouldGetCookie() {
-        Instant instantNow = Instant.now();
-        Cookie cookie = new Cookie("chocolate", "chip", null, "", LocalDateTime.ofInstant(instantNow,
-                ZoneId.systemDefault()));
+        Instant now = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
+                LocalDateTime.ofInstant(now,ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
-                "chip", null, "", Date.from(instantNow));
+                "chip", "test.com", "/home/", Date.from(now));
 
         when(mockOptions.getCookieNamed(cookie.getName()))
                 .thenReturn(seleniumCookie);
 
-        Cookie retrievedCookie = cookieManager.get(cookie)
-                .get();
+        Cookie retrievedCookie = cookieManager.get(cookie).get();
 
         assertThat("The retrieved cookie should be transformed properly",
                 retrievedCookie, equalTo(cookie));
