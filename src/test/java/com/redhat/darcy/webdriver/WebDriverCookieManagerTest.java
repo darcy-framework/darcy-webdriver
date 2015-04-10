@@ -107,9 +107,9 @@ public class WebDriverCookieManagerTest {
     public void shouldProperlyAddACookieWithANameValueDomainPathAndExpiry() {
         Instant now = Instant.now();
         Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
-                LocalDateTime.ofInstant(now, ZoneId.systemDefault()));
+                LocalDateTime.ofInstant(now, ZoneId.systemDefault()), true, true);
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
-                "chip", "test.com", "/home/", Date.from(now));
+                "chip", "test.com", "/home/", Date.from(now), true, true);
 
         cookieManager.add(cookie);
 
