@@ -37,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -107,9 +108,9 @@ public class WebDriverCookieManagerTest {
     public void shouldProperlyAddACookieWithANameValueDomainPathAndExpiry() {
         Instant now = Instant.now();
         Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
-                LocalDateTime.ofInstant(now, ZoneId.systemDefault()), true, true);
+                LocalDateTime.ofInstant(now, ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
-                "chip", "test.com", "/home/", Date.from(now), true, true);
+                "chip", "test.com", "/home/", Date.from(now));
 
         cookieManager.add(cookie);
 
@@ -120,10 +121,12 @@ public class WebDriverCookieManagerTest {
     @Test
     public void shouldGetCookie() {
         Instant now = Instant.now();
+        LocalDateTime localdateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault())
+                .truncatedTo(ChronoUnit.SECONDS);
         Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
-                LocalDateTime.ofInstant(now,ZoneId.systemDefault()));
+                localdateTime, true, true);
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
-                "chip", "test.com", "/home/", Date.from(now));
+                "chip", "test.com", "/home/", Date.from(now), true, true);
 
         when(mockOptions.getCookieNamed(cookie.getName()))
                 .thenReturn(seleniumCookie);
