@@ -55,7 +55,7 @@ public class WebDriverCookieManagerTest {
     }
 
     @Test
-    public void shouldProperlyAddACookieWithANameAndValue() {
+    public void shouldProperlyAddCookieWithNameAndValue() {
         Cookie cookie = new Cookie("chocolate", "chip");
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
                 "chip");
@@ -67,7 +67,7 @@ public class WebDriverCookieManagerTest {
     }
 
     @Test
-    public void shouldProperlyAddACookieWithANameValueAndPath() {
+    public void shouldProperlyAddCookieWithNameValueAndPath() {
         Cookie cookie = new Cookie("chocolate", "chip", "/home/");
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
                 "chip", "/home/");
@@ -79,7 +79,7 @@ public class WebDriverCookieManagerTest {
     }
 
     @Test
-    public void shouldProperlyAddACookieWithANameValuePathAndExpiry() {
+    public void shouldProperlyAddCookieWithNameValuePathAndExpiry() {
         Instant now = Instant.now();
         Cookie cookie = new Cookie("chocolate", "chip", "/home/", LocalDateTime.ofInstant(now,
                 ZoneId.systemDefault()));
@@ -93,7 +93,7 @@ public class WebDriverCookieManagerTest {
     }
 
     @Test
-    public void shouldProperlyAddACookieWithANameValuePathAndNullExpiry() {
+    public void shouldProperlyAddCookieWithNameValuePathAndNullExpiry() {
         Cookie cookie = new Cookie("chocolate", "chip", "/home/", null);
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
                 "chip", "/home/", null);
@@ -105,12 +105,26 @@ public class WebDriverCookieManagerTest {
     }
 
     @Test
-    public void shouldProperlyAddACookieWithANameValueDomainPathAndExpiry() {
+    public void shouldProperlyAddCookieWithNameValueDomainPathAndExpiry() {
         Instant now = Instant.now();
         Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
                 LocalDateTime.ofInstant(now, ZoneId.systemDefault()));
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
                 "chip", "test.com", "/home/", Date.from(now));
+
+        cookieManager.add(cookie);
+
+        verify(mockOptions)
+                .addCookie(seleniumCookie);
+    }
+
+    @Test
+    public void shouldProperlyAddCookieWithNameValueDomainPathExpiryThatIsSecureAndHttpOnly() {
+        Instant now = Instant.now();
+        Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
+                LocalDateTime.ofInstant(now, ZoneId.systemDefault()), true, true);
+        org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
+                "chip", "test.com", "/home/", Date.from(now), true, true);
 
         cookieManager.add(cookie);
 
