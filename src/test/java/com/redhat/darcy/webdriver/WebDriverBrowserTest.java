@@ -32,6 +32,7 @@ import static org.openqa.selenium.WebDriver.Navigation;
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverElementContext;
 import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
@@ -380,5 +381,15 @@ public class WebDriverBrowserTest {
                 new StubWebDriverParentContext(), new StubWebDriverElementContext());
 
         assertThat(browser, instanceOf(WrapsDriver.class));
+    }
+
+    @Test
+    public void shouldReturnWebDriverCookieManager() {
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
+
+        Browser browser = new WebDriverBrowser(mockedDriver,
+                new StubWebDriverParentContext(), new StubWebDriverElementContext());
+
+        assertThat(browser.cookies(), instanceOf(WebDriverCookieManager.class));
     }
 }

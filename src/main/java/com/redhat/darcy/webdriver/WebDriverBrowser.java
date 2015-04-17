@@ -27,6 +27,7 @@ import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.SimpleTransition;
+import com.redhat.darcy.web.api.CookieManager;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
@@ -34,6 +35,7 @@ import com.redhat.darcy.web.api.ViewUrl;
 import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import com.redhat.synq.Event;
@@ -151,6 +153,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
         return after(() -> attempt(() -> driver.navigate().refresh()))
                 .expect(transition().to(destination));
+    }
+
+    @Override
+    public CookieManager cookies() {
+        return new WebDriverCookieManager(driver);
     }
 
     @Override
