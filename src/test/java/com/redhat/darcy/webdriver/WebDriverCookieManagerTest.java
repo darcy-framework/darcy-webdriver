@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,7 +38,6 @@ import org.openqa.selenium.WebDriver;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -135,8 +135,7 @@ public class WebDriverCookieManagerTest {
     @Test
     public void shouldGetCookie() {
         Instant now = Instant.now();
-        LocalDateTime localdateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault())
-                .truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime localdateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
         Cookie cookie = new Cookie("chocolate", "chip", "test.com", "/home/",
                 localdateTime, true, true);
         org.openqa.selenium.Cookie seleniumCookie = new org.openqa.selenium.Cookie("chocolate",
@@ -184,5 +183,17 @@ public class WebDriverCookieManagerTest {
 
         verify(mockOptions)
                 .deleteAllCookies();
+    }
+
+    @Test
+    public void shouldRejectInvalidCookieWhenAdding() {
+        Cookie cookie = new Cookie("chocolate;", "chip");
+
+        try {
+            cookieManager.add(cookie);
+            fail();
+        } catch(IllegalArgumentException e) {
+            // Expected
+        }
     }
 }
