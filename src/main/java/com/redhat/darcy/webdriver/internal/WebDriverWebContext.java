@@ -19,8 +19,6 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.ui.api.Locator;
-import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.WebContext;
 import com.redhat.darcy.web.api.WebSelection;
@@ -31,12 +29,6 @@ public interface WebDriverWebContext extends WebContext, WebDriverElementContext
         WebDriverParentContext {
     @Override
     WebSelection find();
-
-    @Override
-    WebDriverWebContext withRootLocator(Locator root);
-
-    @Override
-    WebDriverWebContext withRootElement(Element root);
 
     Alert alert();
 }
