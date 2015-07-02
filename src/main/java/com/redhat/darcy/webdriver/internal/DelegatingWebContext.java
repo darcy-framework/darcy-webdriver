@@ -335,16 +335,6 @@ public class DelegatingWebContext implements WebDriverWebContext {
         }
     }
 
-    @Override
-    public WebDriverWebContext withRootLocator(Locator root) {
-        return new DelegatingWebContext(elementContext.withRootLocator(root), parentContext);
-    }
-
-    @Override
-    public WebDriverWebContext withRootElement(Element root) {
-        return new DelegatingWebContext(elementContext.withRootElement(root), parentContext);
-    }
-
     /**
      * Returns the ElementContext or PraentContext depending on if the type of thing we're looking
      * for is an element or a context.

@@ -52,11 +52,6 @@ public class ChainedWebDriverElementContext implements WebDriverElementContext {
     }
 
     @Override
-    public WebDriverElementContext withRootLocator(Locator root) {
-        return new ChainedWebDriverElementContext(root, this);
-    }
-
-    @Override
     public <T> List<T> findAllByNested(Class<T> type, Element parent, Locator child) {
         return context.findAllByChained(type, this.parent, By.nested(parent, child));
     }
@@ -64,11 +59,6 @@ public class ChainedWebDriverElementContext implements WebDriverElementContext {
     @Override
     public <T> T findByNested(Class<T> type, Element parent, Locator child) {
         return context.findByChained(type, this.parent, By.nested(parent, child));
-    }
-
-    @Override
-    public WebDriverElementContext withRootElement(Element root) {
-        return new NestedWebDriverElementContext(root, this);
     }
 
     @Override

@@ -179,18 +179,6 @@ public class DefaultWebDriverElementContext implements WebDriverElementContext {
         return newElement(type, new WebElementLookup(new ByAttribute(attribute, value), sc));
     }
 
-    @Override
-    public WebDriverElementContext withRootLocator(Locator root) {
-        return new ChainedWebDriverElementContext(root, this);
-    }
-
-    @Override
-    public WebDriverElementContext withRootElement(Element root) {
-        // Reuse the original transition to prevent the view transitioned to from having a context
-        // also nested under some root element
-        return new NestedWebDriverElementContext(root, this);
-    }
-
     @SuppressWarnings("unchecked")
     private <T> T newElement(Class<T> type, ElementLookup source) {
         if (!Element.class.isAssignableFrom(type)) {

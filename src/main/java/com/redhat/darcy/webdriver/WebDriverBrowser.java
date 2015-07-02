@@ -307,16 +307,6 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public WebDriverBrowser withRootLocator(Locator root) {
-        return new WebDriverBrowser(driver, webContext.withRootLocator(root));
-    }
-
-    @Override
-    public WebDriverBrowser withRootElement(Element root) {
-        return new WebDriverBrowser(driver, webContext.withRootElement(root));
-    }
-
-    @Override
     public WebDriver getWrappedDriver() {
         return driver;
     }

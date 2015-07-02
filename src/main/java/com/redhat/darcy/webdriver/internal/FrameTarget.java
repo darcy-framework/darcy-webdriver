@@ -19,8 +19,6 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import org.openqa.selenium.WebDriver;
-
 public interface FrameTarget extends WebDriverTarget {
     WebDriverTarget getParent();
 }
