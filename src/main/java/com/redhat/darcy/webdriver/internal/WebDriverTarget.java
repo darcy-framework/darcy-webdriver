@@ -31,5 +31,9 @@ import org.openqa.selenium.WebDriver.TargetLocator;
  * @see WebDriverTargets
  */
 public interface WebDriverTarget {
+    /**
+     * @throws org.openqa.selenium.NotFoundException if this target is not able to be switched to,
+     * as per {@link WebDriver#switchTo()} behavior.
+     */
     WebDriver switchTo(TargetLocator targetLocator);
 }

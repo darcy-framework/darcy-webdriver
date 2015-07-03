@@ -21,15 +21,15 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.api.ParentContext;
+import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Alert;
-import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,7 +37,6 @@ import java.util.List;
  * {@link com.redhat.darcy.webdriver.WebDriverBrowser}s with {@link TargetedWebDriver}s assigned to
  * them that point to the found driver.
  */
-// TODO: Consider tracking reference of a frame's parent browser in order to forward certain methods
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
     private final TargetedWebDriver driver;
     private final ElementConstructorMap elementMap;
@@ -56,34 +55,70 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
     public Alert alert() {
         return new WebDriverAlert(driver.switchTo().alert());
     }
-    
-    @SuppressWarnings("unchecked")
+
+
     @Override
-    public <T> List<T> findAllById(Class<T> type, String nameOrId) {
-        List<T> found = new ArrayList<>(1);
-        WebDriverTarget target;
-        
-        if (Browser.class.isAssignableFrom(type)) {
-            target = WebDriverTargets.window(nameOrId);
-        } else if (Frame.class.isAssignableFrom(type)) {
-            target = WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId);
-        } else {
-            // TODO: check for more generic types
-            throw new DarcyException("Cannot find Contexts of type: " + type);
-        }
-        
-        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo());
-        Browser newBrowser = new WebDriverBrowser(targetedDriver,
-                new TargetedWebDriverParentContext(targetedDriver, elementMap),
-                new DefaultWebDriverElementContext(targetedDriver, elementMap));
-        
-        found.add((T) newBrowser);
-        
-        return found;
+    public <T> List<T> findAllById(Class<T> type, String id) {
+        return findAllByNameOrId(type, id);
     }
 
     @Override
     public <T> T findById(Class<T> type, String id) {
-        return findAllById(type, id).get(0);
+        return findByNameOrId(type, id);
+    }
+
+    @Override
+    public <T> List<T> findAllByName(Class<T> type, String name) {
+        return findAllByNameOrId(type, name);
+    }
+
+    @Override
+    public <T> T findByName(Class<T> type, String name) {
+        return findByNameOrId(type, name);
+    }
+
+    @Override
+    public <T> List<T> findAllByView(Class<T> type, View view) {
+        return Collections.singletonList(findByView(type, view));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByView(Class<T> type, View view) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by view. Unable to iterate through all "
+                    + "available frames.");
+        }
+
+        return (T) newBrowser(WebDriverTargets.withViewLoaded(view, this));
+    }
+
+    public <T> List<T> findAllByNameOrId(Class<T> type, String nameOrId) {
+        return Collections.singletonList(findByNameOrId(type, nameOrId));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T findByNameOrId(Class<T> type, String nameOrId) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        WebDriverTarget target = Frame.class.equals(type)
+                ? WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId)
+                : WebDriverTargets.window(nameOrId);
+
+        return (T) newBrowser(target);
+    }
+
+    private WebDriverBrowser newBrowser(WebDriverTarget target) {
+        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo());
+
+        return new WebDriverBrowser(targetedDriver,
+            new TargetedWebDriverParentContext(targetedDriver, elementMap),
+            new DefaultWebDriverElementContext(targetedDriver, elementMap));
     }
 }

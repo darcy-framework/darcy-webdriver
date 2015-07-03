@@ -19,6 +19,14 @@
 
 package com.redhat.darcy.webdriver.internal;
 
+import com.redhat.darcy.ui.By;
+import com.redhat.darcy.ui.api.ParentContext;
+import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.webdriver.WebDriverBrowser;
+import com.redhat.darcy.webdriver.WebDriverParentContext;
+
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
@@ -47,6 +55,10 @@ public abstract class WebDriverTargets {
 
     public static WebDriverTarget defaultContent() {
         return new DefaultContextWebDriverTarget();
+    }
+
+    public static WebDriverTarget withViewLoaded(View view, ParentContext parentContext) {
+        return new ViewWebDriverTarget(view, parentContext);
     }
 
     /**
@@ -275,6 +287,32 @@ public abstract class WebDriverTargets {
         @Override
         public String toString() {
             return "DefaultContextWebDriverTarget";
+        }
+    }
+
+    public static final class ViewWebDriverTarget implements WebDriverTarget {
+        private final View view;
+        private final ParentContext parentContext;
+
+        public ViewWebDriverTarget(View view, ParentContext parentContext) {
+            this.view = view;
+            this.parentContext = parentContext;
+        }
+
+        @Override
+        public WebDriver switchTo(TargetLocator targetLocator) {
+            for (String windowHandle : targetLocator.defaultContent().getWindowHandles()) {
+                Browser forWindow = By.id(windowHandle).find(Browser.class, parentContext);
+
+                view.setContext(forWindow);
+
+                if (view.isLoaded()) {
+                    return targetLocator.window(windowHandle);
+                }
+            }
+
+            throw new NotFoundException("No window in driver found which has " + view + " "
+                    + "currently loaded.");
         }
     }
 }

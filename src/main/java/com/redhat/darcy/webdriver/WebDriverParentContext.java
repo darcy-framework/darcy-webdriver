@@ -21,8 +21,10 @@ package com.redhat.darcy.webdriver;
 
 import com.redhat.darcy.ui.api.ParentContext;
 import com.redhat.darcy.ui.internal.FindsById;
+import com.redhat.darcy.ui.internal.FindsByName;
+import com.redhat.darcy.ui.internal.FindsByView;
 import com.redhat.darcy.web.api.Alert;
 
-public interface WebDriverParentContext extends ParentContext, FindsById {
+public interface WebDriverParentContext extends ParentContext, FindsById, FindsByName, FindsByView {
     Alert alert();
 }
