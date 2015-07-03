@@ -19,6 +19,7 @@
 
 package com.redhat.darcy.webdriver.testing.doubles;
 
+import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
@@ -38,5 +39,25 @@ public class StubWebDriverParentContext implements WebDriverParentContext {
     @Override
     public Alert alert() {
         throw new UnsupportedOperationException("alert");
+    }
+
+    @Override
+    public <T> List<T> findAllByName(Class<T> type, String name) {
+        throw new UnsupportedOperationException("findAllByName");
+    }
+
+    @Override
+    public <T> T findByName(Class<T> type, String name) {
+        throw new UnsupportedOperationException("findByName");
+    }
+
+    @Override
+    public <T> List<T> findAllByView(Class<T> type, View view) {
+        throw new UnsupportedOperationException("findllByView");
+    }
+
+    @Override
+    public <T> T findByView(Class<T> type, View view) {
+        throw new UnsupportedOperationException("findByView");
     }
 }

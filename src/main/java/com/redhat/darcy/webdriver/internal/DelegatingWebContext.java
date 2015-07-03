@@ -22,6 +22,7 @@ package com.redhat.darcy.webdriver.internal;
 import com.redhat.darcy.ui.api.Context;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
+import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.FindsByAttribute;
 import com.redhat.darcy.ui.internal.FindsById;
@@ -30,6 +31,7 @@ import com.redhat.darcy.ui.internal.FindsByName;
 import com.redhat.darcy.ui.internal.FindsByNested;
 import com.redhat.darcy.ui.internal.FindsByPartialTextContent;
 import com.redhat.darcy.ui.internal.FindsByTextContent;
+import com.redhat.darcy.ui.internal.FindsByView;
 import com.redhat.darcy.ui.internal.FindsByXPath;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.WebSelection;
@@ -335,12 +337,33 @@ public class DelegatingWebContext implements WebDriverWebContext {
         }
     }
 
+    @Override
+    public <T> List<T> findAllByView(Class<T> type, View view) {
+        try {
+            FindsByView context = (FindsByView) contextForType(type);
+
+            return context.findAllByView(type, view);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("view, " + view, type);
+        }
+    }
+
+    @Override
+    public <T> T findByView(Class<T> type, View view) {
+        try {
+            FindsByView context = (FindsByView) contextForType(type);
+
+            return context.findByView(type, view);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("view, " + view, type);
+        }
+    }
+
     /**
      * Returns the ElementContext or PraentContext depending on if the type of thing we're looking
      * for is an element or a context.
      *
      * @param type The type of thing we're looking for.
-     * @return
      */
     private Context contextForType(Class<?> type) {
         if (Element.class.isAssignableFrom(type)) {

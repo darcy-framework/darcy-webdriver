@@ -307,6 +307,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
+    public <T> List<T> findAllByView(Class<T> type, View view) {
+        return attemptAndGet(() -> webContext.findAllByView(type, view));
+    }
+
+    @Override
+    public <T> T findByView(Class<T> type, View view) {
+        return attemptAndGet(() -> webContext.findByView(type, view));
+    }
+
+    @Override
     public WebDriver getWrappedDriver() {
         return driver;
     }
