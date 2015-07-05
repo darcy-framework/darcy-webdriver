@@ -38,6 +38,7 @@ import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -242,6 +243,32 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
     @Override
     public WebDriver getWrappedDriver() {
         return driver();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ForwardingTargetedWebDriver that = (ForwardingTargetedWebDriver) o;
+        return Objects.equals(locator, that.locator) &&
+                Objects.equals(target, that.target);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(locator, target);
+    }
+
+    @Override
+    public String toString() {
+        return "ForwardingTargetedWebDriver{" +
+                "locator=" + locator +
+                ", target=" + target +
+                '}';
     }
 
     /**

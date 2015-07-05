@@ -31,6 +31,7 @@ import com.redhat.darcy.webdriver.WebDriverParentContext;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other 
@@ -112,6 +113,32 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
                 : WebDriverTargets.window(nameOrId);
 
         return (T) newBrowser(target);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TargetedWebDriverParentContext that = (TargetedWebDriverParentContext) o;
+        return Objects.equals(driver, that.driver) &&
+                Objects.equals(elementMap, that.elementMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(driver, elementMap);
+    }
+
+    @Override
+    public String toString() {
+        return "TargetedWebDriverParentContext{" +
+                "driver=" + driver +
+                ", elementMap=" + elementMap +
+                '}';
     }
 
     private WebDriverBrowser newBrowser(WebDriverTarget target) {

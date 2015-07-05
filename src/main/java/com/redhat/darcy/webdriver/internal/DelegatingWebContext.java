@@ -54,8 +54,8 @@ public class DelegatingWebContext implements WebDriverWebContext {
 
     public DelegatingWebContext(WebDriverElementContext elementContext,
             WebDriverParentContext parentContext) {
-        this.elementContext = Objects.requireNonNull(elementContext);
-        this.parentContext = Objects.requireNonNull(parentContext);
+        this.elementContext = Objects.requireNonNull(elementContext, "elementContext");
+        this.parentContext = Objects.requireNonNull(parentContext, "parentContext");
     }
 
     @Override

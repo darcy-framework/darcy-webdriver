@@ -20,64 +20,85 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.openqa.selenium.WebDriver.TargetLocator;
 
+import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
+import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInDriver;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.internal.WrapsDriver;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 @RunWith(JUnit4.class)
 public class TargetedWebDriverParentContextTest {
+    private TargetedWebDriver mockTargetedDriver = mock(TargetedWebDriver.class);
+    private TargetedTargetLocator mockTargetedLocator = mock(TargetedTargetLocator.class);
+    private TargetedWebDriver foundTargetedDriver = mock(TargetedWebDriver.class);
+
+    private TargetedWebDriverParentContext context =
+            new TargetedWebDriverParentContext(mockTargetedDriver, mock(ElementConstructorMap.class));
+
+    @Before
+    public void stubMocks() {
+        when(mockTargetedDriver.getWebDriverTarget()).thenReturn(WebDriverTargets.window("self"));
+        when(mockTargetedDriver.switchTo()).thenReturn(mockTargetedLocator);
+        when(mockTargetedLocator.defaultContent()).thenReturn(mockTargetedDriver);
+    }
+
     @Test
-    public void shouldCreateTargetedDriversForBrowsers() {
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        TargetedTargetLocator locator = new TargetedTargetLocator(mock(TargetLocator.class),
-                WebDriverTargets.window("shouldnt-matter"));
-        when(mockDriver.switchTo()).thenReturn(locator);
+    public void shouldFindBrowsersById() {
+        when(mockTargetedLocator.window("test")).thenReturn(foundTargetedDriver);
 
-        TargetedWebDriverParentContext targetedWebDriverParentContext =
-                new TargetedWebDriverParentContext(mockDriver, mock(ElementConstructorMap.class));
-
-        Browser browser = targetedWebDriverParentContext.findById(Browser.class, "test");
+        Browser browser = context.findById(Browser.class, "test");
 
         WebDriver driver = ((WrapsDriver) browser).getWrappedDriver();
-        assertThat(driver, instanceOf(TargetedWebDriver.class));
-
-        TargetedWebDriver targetedDriver = (TargetedWebDriver) driver;
-
-        assertEquals(WebDriverTargets.window("test"), targetedDriver.getWebDriverTarget());
+        assertThat(driver, sameInstance(foundTargetedDriver));
     }
 
     @Test
-    public void shouldCreateTargetedDriversForFrames() {
-        TargetedWebDriver mockDriver = mock(TargetedWebDriver.class);
-        TargetedTargetLocator locator = new TargetedTargetLocator(mock(TargetLocator.class),
-                WebDriverTargets.window("parent"));
+    public void shouldByFramesById() {
+        when(mockTargetedLocator.frame("test")).thenReturn(foundTargetedDriver);
 
-        when(mockDriver.switchTo()).thenReturn(locator);
-        when(mockDriver.getWebDriverTarget()).thenReturn(WebDriverTargets.window("parent"));
-
-        TargetedWebDriverParentContext targetedWebDriverParentContext =
-                new TargetedWebDriverParentContext(mockDriver, mock(ElementConstructorMap.class));
-
-        Frame frame = targetedWebDriverParentContext.findById(Frame.class, "test");
+        Frame frame = context.findById(Frame.class, "test");
 
         WebDriver driver = ((WrapsDriver) frame).getWrappedDriver();
-        assertThat(driver, instanceOf(TargetedWebDriver.class));
-
-        TargetedWebDriver targetedDriver = (TargetedWebDriver) driver;
-
-        assertEquals(WebDriverTargets.frame(WebDriverTargets.window("parent"), "test"),
-                targetedDriver.getWebDriverTarget());
+        assertThat(driver, sameInstance(foundTargetedDriver));
     }
+
+    @Test
+    public void shouldFindBrowsersByView() {
+        TargetedWebDriver hasView = mock(TargetedWebDriver.class);
+        TargetedWebDriver doesNotHaveView = mock(TargetedWebDriver.class);
+
+        View view = new ViewLoadedInDriver(hasView);
+
+        when(mockTargetedDriver.getWindowHandles())
+                .thenReturn(new HashSet<String>(Arrays.asList("hasView", "doesNotHaveView")));
+        when(mockTargetedLocator.window("hasView")).thenReturn(hasView);
+        when(mockTargetedLocator.window("doesNotHaveView")).thenReturn(doesNotHaveView);
+
+        Browser browser = context.findByView(Browser.class, view);
+
+        WebDriver driver = ((WrapsDriver) browser).getWrappedDriver();
+        assertThat(driver, sameInstance(hasView));
+    }
+
+    @Test(expected = DarcyException.class)
+    public void shouldNotCreateTargetedDriversForFramesByView() {
+        context.findByView(Frame.class, new AlwaysLoadedView());
+    }
+
 }

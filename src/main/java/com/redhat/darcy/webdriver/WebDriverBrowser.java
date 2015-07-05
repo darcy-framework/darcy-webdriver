@@ -78,8 +78,8 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      *                   implementation.
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverWebContext webContext) {
-        this.driver = Objects.requireNonNull(driver);
-        this.webContext = Objects.requireNonNull(webContext);
+        this.driver = Objects.requireNonNull(driver, "driver");
+        this.webContext = Objects.requireNonNull(webContext, "webContext");
     }
 
     /**
