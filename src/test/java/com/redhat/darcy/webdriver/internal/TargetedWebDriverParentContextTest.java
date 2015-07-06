@@ -20,7 +20,10 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,71 +32,102 @@ import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
+import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
-import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInDriver;
+import com.redhat.darcy.webdriver.testing.doubles.NeverLoadedView;
+import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInTarget;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsDriver;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(JUnit4.class)
 public class TargetedWebDriverParentContextTest {
     private TargetedWebDriver mockTargetedDriver = mock(TargetedWebDriver.class);
     private TargetedTargetLocator mockTargetedLocator = mock(TargetedTargetLocator.class);
-    private TargetedWebDriver foundTargetedDriver = mock(TargetedWebDriver.class);
+    private WebDriverTarget contextTarget = WebDriverTargets.window("self");
 
     private TargetedWebDriverParentContext context =
-            new TargetedWebDriverParentContext(mockTargetedDriver, mock(ElementConstructorMap.class));
+            new TargetedWebDriverParentContext(contextTarget, mockTargetedLocator,
+                    mock(ElementConstructorMap.class));
 
     @Before
     public void stubMocks() {
-        when(mockTargetedDriver.getWebDriverTarget()).thenReturn(WebDriverTargets.window("self"));
         when(mockTargetedDriver.switchTo()).thenReturn(mockTargetedLocator);
         when(mockTargetedLocator.defaultContent()).thenReturn(mockTargetedDriver);
     }
 
     @Test
     public void shouldFindBrowsersById() {
-        when(mockTargetedLocator.window("test")).thenReturn(foundTargetedDriver);
-
         Browser browser = context.findById(Browser.class, "test");
 
-        WebDriver driver = ((WrapsDriver) browser).getWrappedDriver();
-        assertThat(driver, sameInstance(foundTargetedDriver));
+        TargetedWebDriver driver = ((WebDriverBrowser) browser).getWrappedDriver();
+        assertThat(driver.getWebDriverTarget(), is(WebDriverTargets.window("test")));
     }
 
     @Test
-    public void shouldByFramesById() {
-        when(mockTargetedLocator.frame("test")).thenReturn(foundTargetedDriver);
-
+    public void shouldByFramesByIdUnderneathCurrentTarget() {
         Frame frame = context.findById(Frame.class, "test");
 
-        WebDriver driver = ((WrapsDriver) frame).getWrappedDriver();
-        assertThat(driver, sameInstance(foundTargetedDriver));
+        TargetedWebDriver driver = ((WebDriverBrowser) frame).getWrappedDriver();
+        assertThat(driver.getWebDriverTarget(), is(WebDriverTargets.frame(contextTarget, "test")));
     }
 
     @Test
-    public void shouldFindBrowsersByView() {
-        TargetedWebDriver hasView = mock(TargetedWebDriver.class);
-        TargetedWebDriver doesNotHaveView = mock(TargetedWebDriver.class);
-
-        View view = new ViewLoadedInDriver(hasView);
-
-        when(mockTargetedDriver.getWindowHandles())
-                .thenReturn(new HashSet<String>(Arrays.asList("hasView", "doesNotHaveView")));
-        when(mockTargetedLocator.window("hasView")).thenReturn(hasView);
-        when(mockTargetedLocator.window("doesNotHaveView")).thenReturn(doesNotHaveView);
+    public void shouldFindBrowserByView() {
+        View view = new AlwaysLoadedView();
 
         Browser browser = context.findByView(Browser.class, view);
 
-        WebDriver driver = ((WrapsDriver) browser).getWrappedDriver();
-        assertThat(driver, sameInstance(hasView));
+        TargetedWebDriver driver = ((WebDriverBrowser) browser).getWrappedDriver();
+        assertThat(driver.getWebDriverTarget(), is(WebDriverTargets.withViewLoaded(view, context)));
+    }
+
+    @Test
+    public void shouldFindAllBrowsersByView() {
+        TargetedWebDriver hasView = mock(TargetedWebDriver.class);
+        TargetedWebDriver alsoHasView = mock(TargetedWebDriver.class);
+
+        View view = new AlwaysLoadedView();
+
+        when(mockTargetedDriver.getWindowHandles())
+                .thenReturn(new HashSet<String>(Arrays.asList("hasView", "alsoHasView")));
+        when(mockTargetedLocator.window("hasView")).thenReturn(hasView);
+        when(mockTargetedLocator.window("alsoHasView")).thenReturn(alsoHasView);
+
+        List<Browser> browser = context.findAllByView(Browser.class, view);
+
+        assertThat(browser.stream()
+                .map(b -> (WebDriverBrowser) b)
+                .map(WebDriverBrowser::getWrappedDriver)
+                .map(TargetedWebDriver::getWebDriverTarget)
+                .collect(Collectors.toList()),
+                containsInAnyOrder(
+                        WebDriverTargets.window("hasView"),
+                        WebDriverTargets.window("alsoHasView")));
+    }
+
+    @Test
+    public void shouldNotFailImmediatelyIfFindingBrowserByViewAndNoneMatch() {
+        TargetedWebDriver doesNotHaveView = mock(TargetedWebDriver.class);
+        TargetedWebDriver alsoDoesNotHaveView = mock(TargetedWebDriver.class);
+
+        View view = new NeverLoadedView();
+
+        when(mockTargetedDriver.getWindowHandles())
+                .thenReturn(new HashSet<String>(Arrays.asList("doesNotHaveView", "alsoDoesNotHaveView")));
+        when(mockTargetedLocator.window("doesNotHaveView")).thenReturn(doesNotHaveView);
+        when(mockTargetedLocator.window("alsoDoesNotHaveView")).thenReturn(alsoDoesNotHaveView);
+
+        Browser browser = context.findByView(Browser.class, view);
+
+        assertFalse(browser.isPresent());
     }
 
     @Test(expected = DarcyException.class)

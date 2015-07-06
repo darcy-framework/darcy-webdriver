@@ -19,17 +19,12 @@
 
 package com.redhat.darcy.webdriver.internal;
 
-import com.redhat.darcy.util.Caching;
-import com.redhat.darcy.webdriver.internal.WebDriverTarget;
-import com.redhat.darcy.webdriver.internal.WebDriverTargets;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.WebElement;
 
 import java.util.Objects;
-import java.util.logging.Logger;
 
 /**
  * An implementation of {@link org.openqa.selenium.WebDriver.TargetLocator} that caches the current

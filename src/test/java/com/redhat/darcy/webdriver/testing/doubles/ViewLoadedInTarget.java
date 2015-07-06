@@ -21,24 +21,28 @@ package com.redhat.darcy.webdriver.testing.doubles;
 
 import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
+import com.redhat.darcy.webdriver.internal.WebDriverTarget;
+import com.redhat.darcy.webdriver.internal.WrapsTargetedDriver;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsDriver;
-
-public class ViewLoadedInDriver implements View {
-    private final WebDriver hasView;
+public class ViewLoadedInTarget implements View {
+    private final WebDriverTarget target;
     private boolean isLoaded;
     private ElementContext context;
 
-    public ViewLoadedInDriver(WebDriver hasView) {
-        this.hasView = hasView;
-        isLoaded = false;
+    public ViewLoadedInTarget(WebDriverTarget target) {
+        this.target = target;
+        this.isLoaded = false;
     }
 
     @Override
     public void setContext(ElementContext context) {
         this.context = context;
-        this.isLoaded = ((WrapsDriver) context).getWrappedDriver().equals(hasView);
+
+        TargetedWebDriver driver = ((WrapsTargetedDriver) context).getWrappedDriver();
+        WebDriverTarget driverTarget = driver.getWebDriverTarget();
+
+        this.isLoaded = driverTarget.equals(target);
     }
 
     @Override

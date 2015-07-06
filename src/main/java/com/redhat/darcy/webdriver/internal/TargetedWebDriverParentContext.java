@@ -20,18 +20,25 @@
 package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.DarcyException;
+import com.redhat.darcy.ui.api.ElementContext;
 import com.redhat.darcy.ui.api.ParentContext;
 import com.redhat.darcy.ui.api.View;
+import com.redhat.darcy.util.LazyList;
 import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
+import org.openqa.selenium.WebDriver.TargetLocator;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other 
@@ -39,24 +46,30 @@ import java.util.Objects;
  * them that point to the found driver.
  */
 public class TargetedWebDriverParentContext implements WebDriverParentContext {
-    private final TargetedWebDriver driver;
+    private final WebDriverTarget myTarget;
+    private final TargetLocator locator;
     private final ElementConstructorMap elementMap;
 
     /**
-     * @param driver The targeted driver for which we are finding contexts aside or under.
-     * Specifically, frames will be found within the target of this driver.
+     * @param myTarget Parent contexts must be targeted because frame targets depend on another,
+     *         "parent" target. So each parent context must have its own WebDriver target that is
+     *         associated with, because this state is used when finding frames.
+     * @param locator Means of finding other WebDrivers for new targets. Each new browser shares the
+     *         same locator.
+     * @param elementMap Each new browser must have an element constructor map so it may create
+     *         element objects. Each new browser shares the same map.
      */
-    public TargetedWebDriverParentContext(TargetedWebDriver driver,
+    public TargetedWebDriverParentContext(WebDriverTarget myTarget, TargetLocator locator,
             ElementConstructorMap elementMap) {
-        this.driver = driver;
+        this.myTarget = myTarget;
+        this.locator = locator;
         this.elementMap = elementMap;
     }
 
     @Override
     public Alert alert() {
-        return new WebDriverAlert(driver.switchTo().alert());
+        return new WebDriverAlert(new ForwardingTargetedAlert(locator));
     }
-
 
     @Override
     public <T> List<T> findAllById(Class<T> type, String id) {
@@ -80,7 +93,16 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
 
     @Override
     public <T> List<T> findAllByView(Class<T> type, View view) {
-        return Collections.singletonList(findByView(type, view));
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by view. Unable to iterate through all "
+                    + "available frames.");
+        }
+
+        return (List<T>) new LazyList<Browser>(new FoundByViewSupplier(view));
     }
 
     @SuppressWarnings("unchecked")
@@ -108,11 +130,11 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
             throw new DarcyException("Cannot find contexts of type: " + type);
         }
 
-        WebDriverTarget target = Frame.class.equals(type)
-                ? WebDriverTargets.frame(driver.getWebDriverTarget(), nameOrId)
+        WebDriverTarget newTarget = Frame.class.equals(type)
+                ? WebDriverTargets.frame(myTarget, nameOrId)
                 : WebDriverTargets.window(nameOrId);
 
-        return (T) newBrowser(target);
+        return (T) newBrowser(newTarget);
     }
 
     @Override
@@ -124,28 +146,60 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
             return false;
         }
         TargetedWebDriverParentContext that = (TargetedWebDriverParentContext) o;
-        return Objects.equals(driver, that.driver) &&
+        return Objects.equals(myTarget, that.myTarget) &&
+                Objects.equals(locator, that.locator) &&
                 Objects.equals(elementMap, that.elementMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(driver, elementMap);
+        return Objects.hash(myTarget, locator, elementMap);
     }
 
     @Override
     public String toString() {
         return "TargetedWebDriverParentContext{" +
-                "driver=" + driver +
+                "myTarget=" + myTarget +
+                ", locator=" + locator +
                 ", elementMap=" + elementMap +
                 '}';
     }
 
     private WebDriverBrowser newBrowser(WebDriverTarget target) {
-        TargetedWebDriver targetedDriver = (TargetedWebDriver) target.switchTo(driver.switchTo());
+        TargetedWebDriver targetedDriver = new ForwardingTargetedWebDriver(locator, target);
 
         return new WebDriverBrowser(targetedDriver,
-            new TargetedWebDriverParentContext(targetedDriver, elementMap),
+            new TargetedWebDriverParentContext(target, locator, elementMap),
             new DefaultWebDriverElementContext(targetedDriver, elementMap));
+    }
+
+    class FoundByViewSupplier implements Supplier<List<Browser>> {
+        private final View view;
+
+        FoundByViewSupplier(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public List<Browser> get() {
+            List<Browser> found = new ArrayList<>();
+
+            for (String windowHandle : locator.defaultContent().getWindowHandles()) {
+                Browser forWindowHandle = findById(Browser.class, windowHandle);
+
+                ElementContext priorContext = view.getContext();
+                view.setContext(forWindowHandle);
+
+                if (view.isLoaded()) {
+                    found.add(forWindowHandle);
+                }
+
+                if (priorContext != null) {
+                    view.setContext(priorContext);
+                }
+            }
+
+            return found;
+        }
     }
 }

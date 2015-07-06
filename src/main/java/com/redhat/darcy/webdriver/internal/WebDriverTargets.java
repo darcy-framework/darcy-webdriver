@@ -23,6 +23,7 @@ import com.redhat.darcy.ui.By;
 import com.redhat.darcy.ui.api.ParentContext;
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.internal.FindsById;
+import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.web.api.Browser;
 
 import org.openqa.selenium.NoSuchWindowException;
@@ -289,9 +290,15 @@ public abstract class WebDriverTargets {
         }
     }
 
-    public static final class ViewWebDriverTarget implements WebDriverTarget {
+    public static final class ViewWebDriverTarget implements WebDriverTarget, Caching {
         private final View view;
         private final ParentContext parentContext;
+
+        /**
+         * Stores window handle of window which has view loaded so subsequent lookups always refer
+         * to same window.
+         */
+        private String windowHandle;
 
         public ViewWebDriverTarget(View view, ParentContext parentContext) {
             this.view = Objects.requireNonNull(view, "view");
@@ -305,18 +312,16 @@ public abstract class WebDriverTargets {
 
         @Override
         public WebDriver switchTo(TargetLocator targetLocator) {
-            for (String windowHandle : targetLocator.defaultContent().getWindowHandles()) {
-                Browser forWindowHandle = By.id(windowHandle).find(Browser.class, parentContext);
-
-                view.setContext(forWindowHandle);
-
-                if (view.isLoaded()) {
-                    return targetLocator.window(windowHandle);
-                }
+            if (windowHandle == null) {
+                windowHandle = findWindow(targetLocator);
             }
 
-            throw new NoSuchWindowException("No window in driver found which has " + view + " "
-                    + "currently loaded.");
+            return targetLocator.window(windowHandle);
+        }
+
+        @Override
+        public void invalidateCache() {
+            windowHandle = null;
         }
 
         @Override
@@ -341,6 +346,21 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "ViewWebDriverTarget: {view: " + view + ", parentContext: "
                     + parentContext + "}";
+        }
+
+        private String findWindow(TargetLocator targetLocator) {
+            for (String windowHandle : targetLocator.defaultContent().getWindowHandles()) {
+                Browser forWindowHandle = By.id(windowHandle).find(Browser.class, parentContext);
+
+                view.setContext(forWindowHandle);
+
+                if (view.isLoaded()) {
+                    return windowHandle;
+                }
+            }
+
+            throw new NoSuchWindowException("No window in driver found which has " + view + " "
+                    + "currently loaded.");
         }
     }
 }

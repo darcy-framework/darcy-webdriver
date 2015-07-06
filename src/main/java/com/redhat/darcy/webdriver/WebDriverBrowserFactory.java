@@ -23,9 +23,6 @@ import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.BrowserFactory;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
-import com.redhat.darcy.webdriver.internal.DefaultWebDriverElementContext;
-import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
-import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriverParentContext;
 import com.redhat.darcy.webdriver.internal.WebDriverTarget;
 import com.redhat.darcy.webdriver.internal.WebDriverTargets;
@@ -49,16 +46,17 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
 
     /**
      * Boiler plate code to take a freshly minted driver, an {@link ElementConstructorMap}, and
-     * spit out a Browser.
+     * construct a {@link WebDriverParentContext} which is used to create a browser assigned to the
+     * current driver's target window.
      */
     protected static Browser makeBrowser(WebDriver driver, ElementConstructorMap elementMap) {
-        WebDriverTarget target = WebDriverTargets.window(driver.getWindowHandle());
+        String currentWindowHandle = driver.getWindowHandle();
+        WebDriverTarget target = WebDriverTargets.window(currentWindowHandle);
 
         CachingTargetLocator cachingLocator = new CachingTargetLocator(target, driver);
-        TargetedWebDriver targetedDriver = new ForwardingTargetedWebDriver(cachingLocator, target);
+        WebDriverParentContext context = new TargetedWebDriverParentContext(target, cachingLocator,
+                elementMap);
 
-        return new WebDriverBrowser(targetedDriver,
-                new TargetedWebDriverParentContext(targetedDriver, elementMap),
-                new DefaultWebDriverElementContext(targetedDriver, elementMap));
+        return context.findById(Browser.class, currentWindowHandle);
     }
 }

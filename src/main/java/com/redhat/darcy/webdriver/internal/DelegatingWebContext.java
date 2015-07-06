@@ -332,7 +332,7 @@ public class DelegatingWebContext implements WebDriverWebContext {
             FindsByAttribute context = (FindsByAttribute) contextForType(type);
 
             return context.findByAttribute(type, attribute, value);
-        } catch (ClassCastException cce) {
+        } catch (ClassCastException e) {
             throw unsupportedLocatorForType("HTML attribute, " + attribute + "'", type);
         }
     }
@@ -366,12 +366,12 @@ public class DelegatingWebContext implements WebDriverWebContext {
      * @param type The type of thing we're looking for.
      */
     private Context contextForType(Class<?> type) {
-        if (Element.class.isAssignableFrom(type)) {
-            return elementContext;
-        }
-
         if (Context.class.isAssignableFrom(type)) {
             return parentContext;
+        }
+
+        if (Element.class.isAssignableFrom(type)) {
+            return elementContext;
         }
 
         throw new UnsupportedOperationException("WebContexts can only find elements and other "

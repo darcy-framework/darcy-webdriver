@@ -20,10 +20,9 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,16 +32,15 @@ import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.testing.doubles.NeverLoadedView;
-import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInDriver;
+import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInTarget;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.ArgumentMatcher;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsDriver;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -52,9 +50,9 @@ public class ViewWebDriverTargetTest {
 
     private TestBrowser browserWithView = mock(TestBrowser.class);
     private TestBrowser browserWithoutView = mock(TestBrowser.class);
-    private WebDriver driverWithView = mock(WebDriver.class);
-    private WebDriver driverWithoutView = mock(WebDriver.class);
-    private WebDriver.TargetLocator locator = mock(WebDriver.TargetLocator.class);
+    private TargetedWebDriver driverWithView = mock(TargetedWebDriver.class);
+    private TargetedWebDriver driverWithoutView = mock(TargetedWebDriver.class);
+    private TargetedTargetLocator locator = mock(TargetedTargetLocator.class);
     private TestContext context = mock(TestContext.class);
 
     @Before
@@ -66,6 +64,8 @@ public class ViewWebDriverTargetTest {
 
         when(driverWithoutView.switchTo()).thenReturn(locator);
         when(driverWithView.switchTo()).thenReturn(locator);
+        when(driverWithoutView.getWebDriverTarget()).thenReturn(WebDriverTargets.window("foo"));
+        when(driverWithView.getWebDriverTarget()).thenReturn(WebDriverTargets.window("hasView"));
 
         when(locator.defaultContent()).thenReturn(driverWithoutView);
         when(locator.window(anyString())).thenReturn(driverWithoutView);
@@ -80,13 +80,33 @@ public class ViewWebDriverTargetTest {
 
     @Test
     public void shouldTargetAWindowInWhichViewIsLoaded() {
-        View view = new ViewLoadedInDriver(driverWithView);
+        View view = new ViewLoadedInTarget(WebDriverTargets.window("hasView"));
 
         WebDriverTarget target = WebDriverTargets.withViewLoaded(view, context);
 
         WebDriver result = target.switchTo(locator);
 
         assertEquals(driverWithView, result);
+    }
+
+    @Test
+    public void shouldCacheWindowHandleOnceFound() {
+        ControllableView view = new ControllableView();
+        view.setIsLoaded(true);
+
+        WebDriverTarget target = WebDriverTargets.withViewLoaded(view, context);
+
+        WebDriver firstSwitch = target.switchTo(locator);
+
+        view.setIsLoaded(false);
+
+        try {
+            WebDriver secondSwitch = target.switchTo(locator);
+
+            assertEquals(firstSwitch, secondSwitch);
+        } catch (NotFoundException e) {
+            fail("Second switch tried to find window again:\n" + e);
+        }
     }
 
 
@@ -102,6 +122,29 @@ public class ViewWebDriverTargetTest {
     interface TestContext extends ParentContext, FindsById {
     }
 
-    interface TestBrowser extends Browser, WrapsDriver {
+    interface TestBrowser extends Browser, WrapsTargetedDriver {
+    }
+
+    private static class ControllableView implements View {
+        boolean isLoaded = false;
+
+        @Override
+        public void setContext(ElementContext context) {
+
+        }
+
+        @Override
+        public ElementContext getContext() {
+            return null;
+        }
+
+        @Override
+        public boolean isLoaded() {
+            return isLoaded;
+        }
+
+        public void setIsLoaded(boolean isLoaded) {
+            this.isLoaded = isLoaded;
+        }
     }
 }
