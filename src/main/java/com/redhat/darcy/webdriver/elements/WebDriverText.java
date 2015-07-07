@@ -20,7 +20,6 @@
 package com.redhat.darcy.webdriver.elements;
 
 import com.redhat.darcy.ui.api.ElementContext;
-import com.redhat.darcy.ui.api.elements.Text;
 import com.redhat.darcy.web.api.elements.HtmlText;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 

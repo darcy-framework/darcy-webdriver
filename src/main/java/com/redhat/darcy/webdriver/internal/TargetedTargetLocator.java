@@ -21,7 +21,6 @@ package com.redhat.darcy.webdriver.internal;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class TargetedTargetLocator implements TargetLocator {

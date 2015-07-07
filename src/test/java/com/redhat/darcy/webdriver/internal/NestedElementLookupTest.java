@@ -22,7 +22,6 @@ package com.redhat.darcy.webdriver.internal;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.redhat.darcy.web.By;

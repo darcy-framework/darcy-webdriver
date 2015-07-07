@@ -17,14 +17,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.redhat.darcy.webdriver;
+package com.redhat.darcy.webdriver.testing.doubles;
 
-import com.redhat.darcy.ui.api.ParentContext;
-import com.redhat.darcy.ui.internal.FindsById;
-import com.redhat.darcy.ui.internal.FindsByName;
-import com.redhat.darcy.ui.internal.FindsByView;
-import com.redhat.darcy.web.api.Alert;
-
-public interface WebDriverParentContext extends ParentContext, FindsById, FindsByName, FindsByView {
-    Alert alert();
+public class NeverLoadedView extends StubView {
+    @Override
+    public boolean isLoaded() {
+        return false;
+    }
 }

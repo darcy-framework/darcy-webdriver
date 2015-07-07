@@ -27,9 +27,9 @@ import com.redhat.darcy.ui.api.Transition;
 import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.ui.internal.SimpleTransition;
-import com.redhat.darcy.web.api.CookieManager;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.web.api.CookieManager;
 import com.redhat.darcy.web.api.Frame;
 import com.redhat.darcy.web.api.ViewUrl;
 import com.redhat.darcy.web.api.WebSelection;
@@ -38,12 +38,11 @@ import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
 import com.redhat.darcy.webdriver.internal.WebDriverCookieManager;
 import com.redhat.darcy.webdriver.internal.WebDriverWebContext;
 import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
+import com.redhat.darcy.webdriver.internal.WrapsTargetedDriver;
 import com.redhat.synq.Event;
 
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.internal.WrapsDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.util.List;
@@ -66,7 +65,7 @@ import java.util.function.Supplier;
  *
  * @see com.redhat.darcy.webdriver.internal.TargetedWebDriver
  */
-public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, WrapsDriver {
+public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, WrapsTargetedDriver {
     private final TargetedWebDriver driver;
     private final WebDriverWebContext webContext;
 
@@ -78,17 +77,19 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
      *                   implementation.
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverWebContext webContext) {
-        this.driver = Objects.requireNonNull(driver);
-        this.webContext = Objects.requireNonNull(webContext);
+        this.driver = Objects.requireNonNull(driver, "driver");
+        this.webContext = Objects.requireNonNull(webContext, "webContext");
     }
 
     /**
      * @param driver A WebDriver implementation to wrap, pointed at some target (like a specific
      *               frame or window).
      * @param parentContext A parent context that can find other contexts (windows, frames). This
-     *                      class implements ParentContext by forwarding to this implementation.
+     *                      class implements ParentContext by forwarding to this implementation. The
+     *                      parent context must be scoped to the same target as {@code driver}.
      * @param elementContext An element context that can find other elements. This class implements
-     *                       ElementContext by forwarding to this implementation.
+     *                       ElementContext by forwarding to this implementation. The element
+     *                       context must be scoped to the same target as {@code driver}.
      */
     public WebDriverBrowser(TargetedWebDriver driver, WebDriverParentContext parentContext,
                     WebDriverElementContext elementContext) {
@@ -307,7 +308,17 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public WebDriver getWrappedDriver() {
+    public <T> List<T> findAllByView(Class<T> type, View view) {
+        return attemptAndGet(() -> webContext.findAllByView(type, view));
+    }
+
+    @Override
+    public <T> T findByView(Class<T> type, View view) {
+        return attemptAndGet(() -> webContext.findByView(type, view));
+    }
+
+    @Override
+    public TargetedWebDriver getWrappedDriver() {
         return driver;
     }
 

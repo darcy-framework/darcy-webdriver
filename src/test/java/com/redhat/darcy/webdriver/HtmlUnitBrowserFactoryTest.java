@@ -19,14 +19,14 @@
 
 package com.redhat.darcy.webdriver;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertThat;
+
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
 import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertThat;
 
 public class HtmlUnitBrowserFactoryTest {
     @Test

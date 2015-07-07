@@ -21,8 +21,6 @@ package com.redhat.darcy.webdriver.internal;
 
 import org.openqa.selenium.WebElement;
 
-import java.util.function.Supplier;
-
 public interface ElementLookup {
     /**
      * Attempts to retrieve a WebElement reference, which may throw a
