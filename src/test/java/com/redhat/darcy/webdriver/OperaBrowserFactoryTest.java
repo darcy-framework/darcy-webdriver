@@ -19,17 +19,17 @@
 
 package com.redhat.darcy.webdriver;
 
-import com.opera.core.systems.OperaDriver;
-import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
-import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
+
+import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
+import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
+
+import com.opera.core.systems.OperaDriver;
+import org.junit.Before;
+import org.junit.Test;
 
 public class OperaBrowserFactoryTest {
     @Before

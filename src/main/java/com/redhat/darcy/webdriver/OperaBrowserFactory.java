@@ -19,11 +19,12 @@
 
 package com.redhat.darcy.webdriver;
 
+import com.redhat.darcy.web.api.Browser;
+import com.redhat.darcy.webdriver.elements.WebDriverElement;
+
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.OperaSettings;
-import com.redhat.darcy.web.api.Browser;
-import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import org.openqa.selenium.Capabilities;
 
 /**

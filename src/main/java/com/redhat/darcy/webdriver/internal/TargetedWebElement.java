@@ -21,8 +21,6 @@ package com.redhat.darcy.webdriver.internal;
 
 import static org.openqa.selenium.WebDriver.TargetLocator;
 
-import com.redhat.darcy.ui.api.elements.Findable;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;

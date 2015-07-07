@@ -22,7 +22,6 @@ package com.redhat.darcy.webdriver.internal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,7 +34,6 @@ import com.redhat.darcy.webdriver.ElementConstructorMap;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.testing.doubles.AlwaysLoadedView;
 import com.redhat.darcy.webdriver.testing.doubles.NeverLoadedView;
-import com.redhat.darcy.webdriver.testing.doubles.ViewLoadedInTarget;
 
 import org.junit.Before;
 import org.junit.Test;

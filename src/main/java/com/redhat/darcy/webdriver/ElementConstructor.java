@@ -24,8 +24,6 @@ import com.redhat.darcy.ui.api.elements.Element;
 import com.redhat.darcy.webdriver.elements.WebDriverElement;
 import com.redhat.darcy.webdriver.internal.ElementLookup;
 
-import org.openqa.selenium.WebElement;
-
 /**
  * A {@link FunctionalInterface} to represent {@link WebDriverElement}s' and subclasses'
  * constructors.
