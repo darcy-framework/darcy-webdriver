@@ -322,7 +322,7 @@ public class DelegatingWebContext implements WebDriverWebContext {
 
             return context.findAllByAttribute(type, attribute, value);
         } catch (ClassCastException e) {
-            throw unsupportedLocatorForType("HTML attribute, " + attribute + "'", type);
+            throw unsupportedLocatorForType("HTML attribute, <" + attribute + ">", type);
         }
     }
 
@@ -333,7 +333,7 @@ public class DelegatingWebContext implements WebDriverWebContext {
 
             return context.findByAttribute(type, attribute, value);
         } catch (ClassCastException e) {
-            throw unsupportedLocatorForType("HTML attribute, " + attribute + "'", type);
+            throw unsupportedLocatorForType("HTML attribute, <" + attribute + ">", type);
         }
     }
 
