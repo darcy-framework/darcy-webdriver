@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.redhat.darcy</groupId>
             <artifactId>darcy-web</artifactId>
-            <version>0.2.2-SNAPSHOT</version>
+            <version>0.2.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.redhat.synq</groupId>
