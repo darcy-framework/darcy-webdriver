@@ -1,6 +1,7 @@
 language: java
 jdk:
 - oraclejdk8
+sudo: false
 
 before_script:
   - git clone -b travis `git config --get remote.origin.url` target/travis
