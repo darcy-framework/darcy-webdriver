@@ -33,7 +33,6 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 @RunWith(JUnit4.class)
