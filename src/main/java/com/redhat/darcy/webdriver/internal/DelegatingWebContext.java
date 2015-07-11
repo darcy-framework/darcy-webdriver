@@ -31,6 +31,7 @@ import com.redhat.darcy.ui.internal.FindsByName;
 import com.redhat.darcy.ui.internal.FindsByNested;
 import com.redhat.darcy.ui.internal.FindsByPartialTextContent;
 import com.redhat.darcy.ui.internal.FindsByTextContent;
+import com.redhat.darcy.ui.internal.FindsByTitle;
 import com.redhat.darcy.ui.internal.FindsByView;
 import com.redhat.darcy.ui.internal.FindsByXPath;
 import com.redhat.darcy.web.api.Alert;
@@ -356,6 +357,28 @@ public class DelegatingWebContext implements WebDriverWebContext {
             return context.findByView(type, view);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("view, " + view, type);
+        }
+    }
+
+    @Override
+    public <T> List<T> findAllByTitle(Class<T> type, String title) {
+        try {
+            FindsByTitle context = (FindsByTitle) contextForType(type);
+
+            return context.findAllByTitle(type, title);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("title, " + title, type);
+        }
+    }
+
+    @Override
+    public <T> T findByTitle(Class<T> type, String title) {
+        try {
+            FindsByTitle context = (FindsByTitle) contextForType(type);
+
+            return context.findByTitle(type, title);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("title, " + title, type);
         }
     }
 

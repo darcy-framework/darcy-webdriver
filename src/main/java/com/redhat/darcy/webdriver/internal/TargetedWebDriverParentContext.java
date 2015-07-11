@@ -91,6 +91,24 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         return findByNameOrId(type, name);
     }
 
+    public <T> List<T> findAllByNameOrId(Class<T> type, String nameOrId) {
+        return Collections.singletonList(findByNameOrId(type, nameOrId));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T findByNameOrId(Class<T> type, String nameOrId) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        WebDriverTarget newTarget = Frame.class.equals(type)
+                ? WebDriverTargets.frame(myTarget, nameOrId)
+                : WebDriverTargets.window(nameOrId);
+
+        return (T) newBrowser(newTarget);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findAllByView(Class<T> type, View view) {
         if (!type.isAssignableFrom(WebDriverBrowser.class)) {
@@ -120,21 +138,34 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
         return (T) newBrowser(WebDriverTargets.withViewLoaded(view, this));
     }
 
-    public <T> List<T> findAllByNameOrId(Class<T> type, String nameOrId) {
-        return Collections.singletonList(findByNameOrId(type, nameOrId));
-    }
-
     @SuppressWarnings("unchecked")
-    public <T> T findByNameOrId(Class<T> type, String nameOrId) {
+    @Override
+    public <T> List<T> findAllByTitle(Class<T> type, String title) {
         if (!type.isAssignableFrom(WebDriverBrowser.class)) {
             throw new DarcyException("Cannot find contexts of type: " + type);
         }
 
-        WebDriverTarget newTarget = Frame.class.equals(type)
-                ? WebDriverTargets.frame(myTarget, nameOrId)
-                : WebDriverTargets.window(nameOrId);
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by title. Unable to iterate through all "
+                    + "available frames.");
+        }
 
-        return (T) newBrowser(newTarget);
+        return (List<T>) new LazyList<Browser>(new FoundByTitleSupplier(title));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T findByTitle(Class<T> type, String title) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by title. Unable to iterate through all "
+                    + "available frames.");
+        }
+
+        return (T) newBrowser(WebDriverTargets.windowByTitle(title));
     }
 
     @Override
@@ -196,6 +227,27 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
 
                 if (priorContext != null) {
                     view.setContext(priorContext);
+                }
+            }
+
+            return found;
+        }
+    }
+
+    class FoundByTitleSupplier implements Supplier<List<Browser>> {
+        private final String title;
+
+        FoundByTitleSupplier(String title) {
+            this.title = title;
+        }
+
+        @Override
+        public List<Browser> get() {
+            List<Browser> found = new ArrayList<>();
+
+            for (String windowHandle : locator.defaultContent().getWindowHandles()) {
+                if (locator.window(windowHandle).getTitle().equals(title)) {
+                    found.add(findById(Browser.class, windowHandle));
                 }
             }
 
