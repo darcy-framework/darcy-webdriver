@@ -20,9 +20,12 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +42,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.internal.WrapsDriver;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -126,6 +130,52 @@ public class TargetedWebDriverParentContextTest {
         Browser browser = context.findByView(Browser.class, view);
 
         assertFalse(browser.isPresent());
+    }
+
+    @Test
+    public void shouldFindBrowsersByTitle() {
+        TargetedWebDriver fooWindow = mock(TargetedWebDriver.class);
+        TargetedWebDriver barWindow = mock(TargetedWebDriver.class);
+
+        when(fooWindow.getTitle()).thenReturn("foo");
+        when(barWindow.getTitle()).thenReturn("bar");
+
+        when(mockTargetedDriver.getWindowHandles())
+                .thenReturn(new HashSet<>(Arrays.asList("fooWindow", "barWindow")));
+        when(mockTargetedLocator.window("fooWindow")).thenReturn(fooWindow);
+        when(mockTargetedLocator.window("barWindow")).thenReturn(barWindow);
+
+        Browser browser = context.findByTitle(Browser.class, "awesome window");
+
+        assertFalse(browser.isPresent());
+
+        when(fooWindow.getTitle()).thenReturn("awesome window");
+
+        assertTrue(browser.isPresent());
+    }
+
+    @Test
+    public void shouldFindAllBrowsersByTitle() {
+        TargetedWebDriver window1 = mock(TargetedWebDriver.class);
+        TargetedWebDriver window2 = mock(TargetedWebDriver.class);
+
+        when(window1.getTitle()).thenReturn("shared title");
+        when(window2.getTitle()).thenReturn("shared title");
+
+        when(mockTargetedDriver.getWindowHandles())
+                .thenReturn(new HashSet<>(Arrays.asList("window1", "window2")));
+        when(mockTargetedLocator.window("window1")).thenReturn(window1);
+        when(mockTargetedLocator.window("window2")).thenReturn(window2);
+
+        List<Browser> browsers = context.findAllByTitle(Browser.class, "shared title");
+
+        assertThat(browsers.stream()
+                .map(b -> (WebDriverBrowser) b)
+                .map(WebDriverBrowser::getWrappedDriver)
+                .map(TargetedWebDriver::getWebDriverTarget)
+                .collect(Collectors.toList()),
+                containsInAnyOrder(WebDriverTargets.window("window1"),
+                        WebDriverTargets.window("window2")));
     }
 
     @Test(expected = DarcyException.class)

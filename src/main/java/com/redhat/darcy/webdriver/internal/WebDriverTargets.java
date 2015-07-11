@@ -61,6 +61,10 @@ public abstract class WebDriverTargets {
         return new ViewWebDriverTarget(view, parentContext);
     }
 
+    public static WebDriverTarget windowByTitle(String title) {
+        return new WindowTitleWebDriverTarget(title);
+    }
+
     /**
      * Determines the parent target of the specified
      * {@link com.redhat.darcy.webdriver.internal.WebDriverTarget}. If the target has no parent
@@ -75,14 +79,14 @@ public abstract class WebDriverTargets {
 
         return target;
     }
-    
+
     public static class WindowWebDriverTarget implements WebDriverTarget {
         private final String nameOrHandle;
-        
+
         WindowWebDriverTarget(String nameOrHandle) {
             this.nameOrHandle = Objects.requireNonNull(nameOrHandle, "nameOrHandle");
         }
-        
+
         @Override
         public WebDriver switchTo(TargetLocator targetLocator) {
             return targetLocator.window(nameOrHandle);
@@ -92,22 +96,22 @@ public abstract class WebDriverTargets {
         public int hashCode() {
             return Objects.hash(nameOrHandle);
         }
-        
+
         @Override
         public boolean equals(Object object) {
             if (this == object) {
                 return true;
             }
-            
+
             if (!(object instanceof WindowWebDriverTarget)) {
                 return false;
             }
-            
+
             WindowWebDriverTarget other = (WindowWebDriverTarget) object;
-            
+
             return this.nameOrHandle.equals(other.nameOrHandle);
         }
-        
+
         @Override
         public String toString() {
             return "WindowWebDriverTarget: {nameOrHandle: " + nameOrHandle + "}";
@@ -361,6 +365,68 @@ public abstract class WebDriverTargets {
 
             throw new NoSuchWindowException("No window in driver found which has " + view + " "
                     + "currently loaded.");
+        }
+    }
+
+    private static class WindowTitleWebDriverTarget implements WebDriverTarget, Caching {
+        private final String title;
+
+        /**
+         * Stores window handle of window which has the title so subsequent lookups always refer to
+         * the same window.
+         */
+        private String windowHandle;
+
+        public WindowTitleWebDriverTarget(String title) {
+            this.title = Objects.requireNonNull(title, "title");
+        }
+
+        @Override
+        public WebDriver switchTo(TargetLocator targetLocator) {
+            if (windowHandle == null) {
+                windowHandle = findWindow(targetLocator);
+            }
+
+            return targetLocator.window(windowHandle);
+        }
+
+        @Override
+        public void invalidateCache() {
+            windowHandle = null;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WindowTitleWebDriverTarget that = (WindowTitleWebDriverTarget) o;
+            return Objects.equals(title, that.title);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(title);
+        }
+
+        @Override
+        public String toString() {
+            return "WindowTitleWebDriverTarget{" +
+                    "title='" + title + '\'' +
+                    '}';
+        }
+
+        private String findWindow(TargetLocator targetLocator) {
+            for (String windowHandle : targetLocator.defaultContent().getWindowHandles()) {
+                if (targetLocator.window(windowHandle).getTitle().equals(title)) {
+                    return windowHandle;
+                }
+            }
+
+            throw new NoSuchWindowException("No window in driver found which has title: " + title);
         }
     }
 }

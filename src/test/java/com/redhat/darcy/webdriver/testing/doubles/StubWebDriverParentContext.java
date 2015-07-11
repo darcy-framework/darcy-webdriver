@@ -53,11 +53,21 @@ public class StubWebDriverParentContext implements WebDriverParentContext {
 
     @Override
     public <T> List<T> findAllByView(Class<T> type, View view) {
-        throw new UnsupportedOperationException("findllByView");
+        throw new UnsupportedOperationException("findAllByView");
     }
 
     @Override
     public <T> T findByView(Class<T> type, View view) {
         throw new UnsupportedOperationException("findByView");
+    }
+
+    @Override
+    public <T> List<T> findAllByTitle(Class<T> type, String title) {
+        throw new UnsupportedOperationException("findAllByTitle");
+    }
+
+    @Override
+    public <T> T findByTitle(Class<T> type, String title) {
+        throw new UnsupportedOperationException("findByTitle");
     }
 }
