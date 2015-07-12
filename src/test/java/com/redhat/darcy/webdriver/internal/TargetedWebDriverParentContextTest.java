@@ -171,10 +171,10 @@ public class TargetedWebDriverParentContextTest {
         List<Browser> browsers = context.findAllByTitle(Browser.class, "shared title");
 
         assertThat(browsers.stream()
-                        .map(b -> (WebDriverBrowser) b)
-                        .map(WebDriverBrowser::getWrappedDriver)
-                        .map(TargetedWebDriver::getWebDriverTarget)
-                        .collect(Collectors.toList()),
+                .map(b -> (WebDriverBrowser) b)
+                .map(WebDriverBrowser::getWrappedDriver)
+                .map(TargetedWebDriver::getWebDriverTarget)
+                .collect(Collectors.toList()),
                 containsInAnyOrder(WebDriverTargets.window("window1"),
                         WebDriverTargets.window("window2")));
     }
@@ -217,10 +217,10 @@ public class TargetedWebDriverParentContextTest {
         List<Browser> browsers = context.findAllByUrl(Browser.class, equalTo("shared title"));
 
         assertThat(browsers.stream()
-                        .map(b -> (WebDriverBrowser) b)
-                        .map(WebDriverBrowser::getWrappedDriver)
-                        .map(TargetedWebDriver::getWebDriverTarget)
-                        .collect(Collectors.toList()),
+                .map(b -> (WebDriverBrowser) b)
+                .map(WebDriverBrowser::getWrappedDriver)
+                .map(TargetedWebDriver::getWebDriverTarget)
+                .collect(Collectors.toList()),
                 containsInAnyOrder(WebDriverTargets.window("window1"),
                         WebDriverTargets.window("window2")));
     }
