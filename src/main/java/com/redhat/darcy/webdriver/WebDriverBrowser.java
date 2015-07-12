@@ -41,6 +41,7 @@ import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import com.redhat.darcy.webdriver.internal.WrapsTargetedDriver;
 import com.redhat.synq.Event;
 
+import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.remote.SessionNotFoundException;
@@ -325,6 +326,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     @Override
     public <T> T findByTitle(Class<T> type, String title) {
         return attemptAndGet(() -> webContext.findByTitle(type, title));
+    }
+
+    @Override
+    public <T> List<T> findAllByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        return attemptAndGet(() -> webContext.findAllByUrl(type, urlMatcher));
+    }
+
+    @Override
+    public <T> T findByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        return attemptAndGet(() -> webContext.findByUrl(type, urlMatcher));
     }
 
     @Override

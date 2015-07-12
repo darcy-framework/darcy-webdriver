@@ -25,8 +25,9 @@ import com.redhat.darcy.ui.internal.FindsByName;
 import com.redhat.darcy.ui.internal.FindsByTitle;
 import com.redhat.darcy.ui.internal.FindsByView;
 import com.redhat.darcy.web.api.Alert;
+import com.redhat.darcy.web.internal.FindsByUrl;
 
 public interface WebDriverParentContext extends ParentContext, FindsById, FindsByName, FindsByView,
-        FindsByTitle {
+        FindsByTitle, FindsByUrl {
     Alert alert();
 }
