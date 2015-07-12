@@ -26,6 +26,7 @@ import com.redhat.darcy.ui.internal.FindsById;
 import com.redhat.darcy.util.Caching;
 import com.redhat.darcy.web.api.Browser;
 
+import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -63,6 +64,10 @@ public abstract class WebDriverTargets {
 
     public static WebDriverTarget windowByTitle(String title) {
         return new WindowTitleWebDriverTarget(title);
+    }
+
+    public static WebDriverTarget windowByUrl(Matcher<? super String> urlMatcher) {
+        return new WindowUrlWebDriverTarget(urlMatcher);
     }
 
     /**
@@ -348,8 +353,11 @@ public abstract class WebDriverTargets {
 
         @Override
         public String toString() {
-            return "ViewWebDriverTarget: {view: " + view + ", parentContext: "
-                    + parentContext + "}";
+            return "ViewWebDriverTarget{" +
+                    "view=" + view +
+                    ", parentContext=" + parentContext +
+                    ", windowHandle='" + windowHandle + '\'' +
+                    '}';
         }
 
         private String findWindow(TargetLocator targetLocator) {
@@ -416,6 +424,7 @@ public abstract class WebDriverTargets {
         public String toString() {
             return "WindowTitleWebDriverTarget{" +
                     "title='" + title + '\'' +
+                    ", windowHandle='" + windowHandle + '\'' +
                     '}';
         }
 
@@ -427,6 +436,70 @@ public abstract class WebDriverTargets {
             }
 
             throw new NoSuchWindowException("No window in driver found which has title: " + title);
+        }
+    }
+
+    public static class WindowUrlWebDriverTarget implements WebDriverTarget, Caching {
+        private final Matcher<? super String> urlMatcher;
+
+        /**
+         * Stores window handle of window which has the title so subsequent lookups always refer to
+         * the same window.
+         */
+        private String windowHandle;
+
+        public WindowUrlWebDriverTarget(Matcher<? super String> urlMatcher) {
+            this.urlMatcher = Objects.requireNonNull(urlMatcher, "urlMatcher");
+        }
+
+        @Override
+        public WebDriver switchTo(TargetLocator targetLocator) {
+            if (windowHandle == null) {
+                windowHandle = findWindow(targetLocator);
+            }
+
+            return targetLocator.window(windowHandle);
+        }
+
+        @Override
+        public void invalidateCache() {
+            windowHandle = null;
+        }
+
+        private String findWindow(TargetLocator targetLocator) {
+            for (String windowHandle : targetLocator.defaultContent().getWindowHandles()) {
+                if (urlMatcher.matches(targetLocator.window(windowHandle).getCurrentUrl())) {
+                    return windowHandle;
+                }
+            }
+
+            throw new NoSuchWindowException("No window in driver found which has url matching: " + urlMatcher);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            WindowUrlWebDriverTarget that = (WindowUrlWebDriverTarget) o;
+            return Objects.equals(urlMatcher, that.urlMatcher) &&
+                    Objects.equals(windowHandle, that.windowHandle);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(urlMatcher, windowHandle);
+        }
+
+        @Override
+        public String toString() {
+            return "WindowUrlWebDriverTarget{" +
+                    "urlMatcher=" + urlMatcher +
+                    ", windowHandle='" + windowHandle + '\'' +
+                    '}';
         }
     }
 }

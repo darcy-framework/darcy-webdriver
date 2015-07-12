@@ -39,8 +39,11 @@ import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.web.internal.FindsByClassName;
 import com.redhat.darcy.web.internal.FindsByCss;
 import com.redhat.darcy.web.internal.FindsByHtmlTag;
+import com.redhat.darcy.web.internal.FindsByUrl;
 import com.redhat.darcy.webdriver.WebDriverElementContext;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
+
+import org.hamcrest.Matcher;
 
 import java.util.List;
 import java.util.Objects;
@@ -379,6 +382,28 @@ public class DelegatingWebContext implements WebDriverWebContext {
             return context.findByTitle(type, title);
         } catch (ClassCastException e) {
             throw unsupportedLocatorForType("title, " + title, type);
+        }
+    }
+
+    @Override
+    public <T> List<T> findAllByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        try {
+            FindsByUrl context = (FindsByUrl) contextForType(type);
+
+            return context.findAllByUrl(type, urlMatcher);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("url matching, " + urlMatcher, type);
+        }
+    }
+
+    @Override
+    public <T> T findByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        try {
+            FindsByUrl context = (FindsByUrl) contextForType(type);
+
+            return context.findByUrl(type, urlMatcher);
+        } catch (ClassCastException e) {
+            throw unsupportedLocatorForType("url matching, " + urlMatcher, type);
         }
     }
 

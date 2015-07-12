@@ -23,6 +23,8 @@ import com.redhat.darcy.ui.api.View;
 import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
+import org.hamcrest.Matcher;
+
 import java.util.List;
 
 public class StubWebDriverParentContext implements WebDriverParentContext {
@@ -69,5 +71,15 @@ public class StubWebDriverParentContext implements WebDriverParentContext {
     @Override
     public <T> T findByTitle(Class<T> type, String title) {
         throw new UnsupportedOperationException("findByTitle");
+    }
+
+    @Override
+    public <T> List<T> findAllByUrl(Class<T> type, Matcher<? super String> url) {
+        throw new UnsupportedOperationException("findAllByUrl");
+    }
+
+    @Override
+    public <T> T findByUrl(Class<T> type, Matcher<? super String> url) {
+        throw new UnsupportedOperationException("findByUrl");
     }
 }

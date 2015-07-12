@@ -32,6 +32,7 @@ import com.redhat.darcy.webdriver.WebDriverAlert;
 import com.redhat.darcy.webdriver.WebDriverBrowser;
 import com.redhat.darcy.webdriver.WebDriverParentContext;
 
+import org.hamcrest.Matcher;
 import org.openqa.selenium.WebDriver.TargetLocator;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
- * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other 
+ * {@link ParentContext} for {@link TargetedWebDriver}s that instantiates other
  * {@link com.redhat.darcy.webdriver.WebDriverBrowser}s with {@link TargetedWebDriver}s assigned to
  * them that point to the found driver.
  */
@@ -169,6 +170,34 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
     }
 
     @Override
+    public <T> List<T> findAllByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by url. Unable to iterate through all "
+                    + "available frames.");
+        }
+
+        return (List<T>) new LazyList<Browser>(new FoundByUrlSupplier(urlMatcher));
+    }
+
+    @Override
+    public <T> T findByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        if (!type.isAssignableFrom(WebDriverBrowser.class)) {
+            throw new DarcyException("Cannot find contexts of type: " + type);
+        }
+
+        if (Frame.class.equals(type)) {
+            throw new DarcyException("Cannot find Frames by url. Unable to iterate through all "
+                    + "available frames.");
+        }
+
+        return (T) newBrowser(WebDriverTargets.windowByUrl(urlMatcher));
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -247,6 +276,27 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
 
             for (String windowHandle : locator.defaultContent().getWindowHandles()) {
                 if (locator.window(windowHandle).getTitle().equals(title)) {
+                    found.add(findById(Browser.class, windowHandle));
+                }
+            }
+
+            return found;
+        }
+    }
+
+    private class FoundByUrlSupplier implements Supplier<List<Browser>> {
+        private final Matcher<? super String> urlMatcher;
+
+        public FoundByUrlSupplier(Matcher<? super String> urlMatcher) {
+            this.urlMatcher = urlMatcher;
+        }
+
+        @Override
+        public List<Browser> get() {
+            List<Browser> found = new ArrayList<>();
+
+            for (String windowHandle : locator.defaultContent().getWindowHandles()) {
+                if (urlMatcher.matches(locator.window(windowHandle).getCurrentUrl())) {
                     found.add(findById(Browser.class, windowHandle));
                 }
             }
