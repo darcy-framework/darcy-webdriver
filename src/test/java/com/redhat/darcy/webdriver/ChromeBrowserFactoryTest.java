@@ -41,7 +41,9 @@ public class ChromeBrowserFactoryTest {
 
     @After
     public void closeBrowser() {
-        browser.close();
+        if (browser != null) {
+            browser.close();
+        }
     }
 
     @Test

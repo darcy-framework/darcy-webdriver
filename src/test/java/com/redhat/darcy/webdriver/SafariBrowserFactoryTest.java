@@ -41,7 +41,9 @@ public class SafariBrowserFactoryTest {
 
     @After
     public void closeDriver() {
-        browser.close();
+        if (browser != null) {
+            browser.close();
+        }
     }
 
     @Test

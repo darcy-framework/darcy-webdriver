@@ -34,7 +34,9 @@ public class HtmlUnitBrowserFactoryTest {
 
     @After
     public void closeDriver() {
-        browser.close();
+        if (browser != null) {
+            browser.close();
+        }
     }
     @Test
     public void shouldBeInstanceOfUntargetedHtmlUnitDriver() {
