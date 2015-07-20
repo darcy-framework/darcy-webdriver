@@ -28,24 +28,32 @@ import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
 import com.opera.core.systems.OperaDriver;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class OperaBrowserFactoryTest {
+    private WebDriverBrowser browser;
+
     @Before
     public void checkForDriver() {
         assumeTrue(System.getProperty("java.class.path").contains("operadriver"));
         assumeNotNull(System.getProperty("webdriver.opera.driver"));
     }
+
+    @After
+    public void closeDriver() {
+        browser.close();
+    }
+
     @Test
     public void shouldBeInstanceOfUntargetedOperaDriver() {
         WebDriverBrowserFactory browserFactory = new OperaBrowserFactory();
 
-        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        browser = (WebDriverBrowser) browserFactory.newBrowser();
         ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
         CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
 
         assertThat(targetLocator.getUntargetedDriver(), instanceOf(OperaDriver.class));
-        browser.close();
     }
 }

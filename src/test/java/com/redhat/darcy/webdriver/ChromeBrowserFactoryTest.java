@@ -26,25 +26,32 @@ import static org.junit.Assume.assumeNotNull;
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ChromeBrowserFactoryTest {
+    private WebDriverBrowser browser;
+
     @Before
     public void checkForDriver() {
         assumeNotNull(System.getProperty("webdriver.chrome.driver"));
+    }
+
+    @After
+    public void closeBrowser() {
+        browser.close();
     }
 
     @Test
     public void shouldBeInstanceOfUntargetedChromeDriver() {
         WebDriverBrowserFactory browserFactory = new ChromeBrowserFactory();
 
-        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        browser = (WebDriverBrowser) browserFactory.newBrowser();
         ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
         CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
 
         assertThat(targetLocator.getUntargetedDriver(), instanceOf(ChromeDriver.class));
-        browser.close();
     }
 }

@@ -25,19 +25,25 @@ import static org.junit.Assert.assertThat;
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
+import org.junit.After;
 import org.junit.Test;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class HtmlUnitBrowserFactoryTest {
+    private WebDriverBrowser browser;
+
+    @After
+    public void closeDriver() {
+        browser.close();
+    }
     @Test
     public void shouldBeInstanceOfUntargetedHtmlUnitDriver() {
         WebDriverBrowserFactory browserFactory = new HtmlUnitBrowserFactory();
 
-        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        browser = (WebDriverBrowser) browserFactory.newBrowser();
         ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
         CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
 
         assertThat(targetLocator.getUntargetedDriver(), instanceOf(HtmlUnitDriver.class));
-        browser.close();
     }
 }
