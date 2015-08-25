@@ -31,6 +31,7 @@ import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.CookieManager;
 import com.redhat.darcy.web.api.Frame;
+import com.redhat.darcy.web.api.OutputType;
 import com.redhat.darcy.web.api.ViewUrl;
 import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
@@ -171,6 +172,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public void closeAll() {
         // TODO: Any harm in calling this with no windows open?
         driver.quit();
+    }
+
+    @Override
+    public <T> T takeScreenshot(OutputType<T> target) {
+        return driver.getScreenshotAs((ScreenshotOutputType<T>) target);
     }
 
     @Override

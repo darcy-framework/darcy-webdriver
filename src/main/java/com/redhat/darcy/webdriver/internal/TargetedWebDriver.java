@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver.internal;
 
 import com.redhat.darcy.ui.api.elements.Findable;
 
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -33,7 +34,7 @@ import org.openqa.selenium.WebDriver;
  * Elements found by this driver should also be targeted. That is, elements are associated with a
  * driver and target and will ensure the driver is switched before interacting with the element.
  */
-public interface TargetedWebDriver extends WebDriver, Findable {
+public interface TargetedWebDriver extends WebDriver, Findable, TakesScreenshot {
     WebDriverTarget getWebDriverTarget();
 
     /**
