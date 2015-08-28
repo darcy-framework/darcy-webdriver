@@ -31,7 +31,6 @@ import com.redhat.darcy.web.api.Alert;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.web.api.CookieManager;
 import com.redhat.darcy.web.api.Frame;
-import com.redhat.darcy.web.api.OutputType;
 import com.redhat.darcy.web.api.ViewUrl;
 import com.redhat.darcy.web.api.WebSelection;
 import com.redhat.darcy.webdriver.internal.DelegatingWebContext;
@@ -45,8 +44,10 @@ import com.redhat.synq.Event;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -175,8 +176,8 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public <T> T takeScreenshot(OutputType<T> target) {
-        return driver.getScreenshotAs((ScreenshotOutputType<T>) target);
+    public File takeScreenshot() {
+        return driver.getScreenshotAs(OutputType.FILE);
     }
 
     @Override

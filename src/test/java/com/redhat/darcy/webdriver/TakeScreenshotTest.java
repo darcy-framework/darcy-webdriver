@@ -12,9 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openqa.selenium.OutputType;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetScreenshotTest {
+public class TakeScreenshotTest {
     @Mock
     TargetedWebDriver mockedDriver;
 
@@ -30,20 +31,8 @@ public class GetScreenshotTest {
     }
 
     @Test
-    public void shouldGetScreenAsFile() {
-        browser.takeScreenshot(ScreenshotOutputType.FILE);
-        verify(mockedDriver).getScreenshotAs(ScreenshotOutputType.FILE);
-    }
-
-    @Test
-    public void shouldGetScreenAsBase64() {
-        browser.takeScreenshot(ScreenshotOutputType.BASE64);
-        verify(mockedDriver).getScreenshotAs(ScreenshotOutputType.BASE64);
-    }
-
-    @Test
-    public void shouldGetScreenAsBinary() {
-        browser.takeScreenshot(ScreenshotOutputType.BYTES);
-        verify(mockedDriver).getScreenshotAs(ScreenshotOutputType.BYTES);
+    public void shouldTakeScreenshot() {
+        browser.takeScreenshot();
+        verify(mockedDriver).getScreenshotAs(OutputType.FILE);
     }
 }
