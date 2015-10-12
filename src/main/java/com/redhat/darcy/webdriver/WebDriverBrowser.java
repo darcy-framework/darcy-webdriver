@@ -46,6 +46,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -171,6 +172,11 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public void closeAll() {
         // TODO: Any harm in calling this with no windows open?
         driver.quit();
+    }
+
+    @Override
+    public File takeScreenshot() {
+        return null;
     }
 
     @Override
