@@ -177,7 +177,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
     @Override
     public File takeScreenshot() {
-        return driver.getScreenshotAs(OutputType.FILE);
+        return attemptAndGet(() -> driver.getScreenshotAs(OutputType.FILE));
     }
 
     @Override
