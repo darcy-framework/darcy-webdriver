@@ -44,6 +44,7 @@ import com.redhat.synq.Event;
 import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.io.File;
@@ -176,7 +177,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
     @Override
     public File takeScreenshot() {
-        return null;
+        return attemptAndGet(() -> driver.getScreenshotAs(OutputType.FILE));
     }
 
     @Override

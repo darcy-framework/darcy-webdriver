@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 
 public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByClassName,
         FindsByCssSelector, FindsById, FindsByLinkText, FindsByName, FindsByTagName, FindsByXPath,
-        TakesScreenshot, JavascriptExecutor, WrapsDriver {
+        JavascriptExecutor, WrapsDriver {
     private final TargetLocator locator;
     private final WebDriverTarget target;
 

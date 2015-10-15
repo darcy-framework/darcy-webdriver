@@ -26,25 +26,34 @@ import static org.junit.Assume.assumeNotNull;
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
 public class InternetExplorerBrowserFactoryTest {
+    private WebDriverBrowser browser;
+
     @Before
     public void checkForDriver() {
         assumeNotNull(System.getProperty("webdriver.ie.driver"));
+    }
+
+    @After
+    public void closeBrowser() {
+        if (browser != null) {
+            browser.close();
+        }
     }
 
     @Test
     public void shouldBeInstanceOfUntargetedInternetExplorerDriver() {
         WebDriverBrowserFactory browserFactory = new InternetExplorerBrowserFactory();
 
-        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        browser = (WebDriverBrowser) browserFactory.newBrowser();
         ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
         CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
 
         assertThat(targetLocator.getUntargetedDriver(), instanceOf(InternetExplorerDriver.class));
-        browser.close();
     }
 }
