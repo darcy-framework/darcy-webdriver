@@ -47,7 +47,8 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -176,8 +177,15 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
-    public File takeScreenshot() {
-        return attemptAndGet(() -> driver.getScreenshotAs(OutputType.FILE));
+    public void takeScreenshot(OutputStream outputStream) {
+        byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
+        try {
+            outputStream.write(data);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
