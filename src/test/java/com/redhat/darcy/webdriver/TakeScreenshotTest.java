@@ -1,5 +1,7 @@
 package com.redhat.darcy.webdriver;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,6 +18,7 @@ import org.junit.runners.JUnit4;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -24,7 +27,7 @@ public class TakeScreenshotTest {
     @Test
     public void shouldTakeScreenshotAndWriteToOutputStream() throws IOException {
         TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
-        OutputStream mockedOutputStream = mock(OutputStream.class);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Browser browser = new WebDriverBrowser(mockedDriver,
                 new StubWebDriverParentContext(),
                 new StubWebDriverElementContext());
@@ -34,12 +37,10 @@ public class TakeScreenshotTest {
         when(mockedDriver.getScreenshotAs(OutputType.BYTES))
                 .thenReturn(data);
 
-        browser.takeScreenshot(mockedOutputStream);
+        browser.takeScreenshot(baos);
 
         verify(mockedDriver).getScreenshotAs(OutputType.BYTES);
-        verify(mockedOutputStream).write(data);
-        verify(mockedOutputStream).flush();
-        verify(mockedOutputStream).close();
+        assertThat(baos.toByteArray(), equalTo(data));
     }
 
     @SuppressWarnings("unchecked")
