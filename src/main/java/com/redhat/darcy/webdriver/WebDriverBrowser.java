@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static com.redhat.synq.Synq.after;
 
+import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
@@ -184,7 +185,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
             outputStream.flush();
             outputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DarcyException("Could not take screenshot", e);
         }
     }
 

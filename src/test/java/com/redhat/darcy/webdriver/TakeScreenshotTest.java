@@ -2,10 +2,12 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.web.api.Browser;
 import com.redhat.darcy.webdriver.internal.TargetedWebDriver;
@@ -55,5 +57,18 @@ public class TakeScreenshotTest {
         when(mockedDriver.getScreenshotAs(OutputType.BYTES))
                 .thenThrow(NoSuchWindowException.class);
         browser.takeScreenshot(mockedOutputStream);
+    }
+
+    @Test(expected = DarcyException.class)
+    public void shouldThrowDarcyExceptionWhenAnIOExceptionOccurs() throws IOException {
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
+        Browser browser = new WebDriverBrowser(mockedDriver,
+                new StubWebDriverParentContext(),
+                new StubWebDriverElementContext());
+
+        OutputStream outputStream = mock(OutputStream.class);
+        doThrow(new IOException()).when(outputStream).close();
+
+        browser.takeScreenshot(outputStream);
     }
 }
