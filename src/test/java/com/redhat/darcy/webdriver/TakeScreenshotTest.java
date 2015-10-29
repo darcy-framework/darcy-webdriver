@@ -3,8 +3,8 @@ package com.redhat.darcy.webdriver;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.redhat.darcy.ui.DarcyException;
@@ -17,6 +17,7 @@ import com.redhat.darcy.webdriver.testing.doubles.StubWebDriverParentContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.mockito.InOrder;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 
@@ -41,8 +42,28 @@ public class TakeScreenshotTest {
 
         browser.takeScreenshot(baos);
 
-        verify(mockedDriver).getScreenshotAs(OutputType.BYTES);
         assertThat(baos.toByteArray(), equalTo(data));
+    }
+
+    @Test
+    public void shouldTakeScreenshotAndWriteToOutputStreamThenFlushAndCloseInOrder() throws IOException {
+        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
+        OutputStream outputStream = mock(OutputStream.class);
+        Browser browser = new WebDriverBrowser(mockedDriver,
+                new StubWebDriverParentContext(),
+                new StubWebDriverElementContext());
+
+        byte[] data = new byte[] { 1, 2, 3 };
+
+        when(mockedDriver.getScreenshotAs(OutputType.BYTES))
+                .thenReturn(data);
+        InOrder inOrder = inOrder(outputStream);
+
+        browser.takeScreenshot(outputStream);
+
+        inOrder.verify(outputStream).write(data);
+        inOrder.verify(outputStream).flush();
+        inOrder.verify(outputStream).close();
     }
 
     @SuppressWarnings("unchecked")
