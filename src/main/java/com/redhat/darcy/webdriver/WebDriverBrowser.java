@@ -177,13 +177,14 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         driver.quit();
     }
 
+
     @Override
     public void takeScreenshot(OutputStream outputStream) {
         byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
-        try {
-            outputStream.write(data);
-            outputStream.flush();
-            outputStream.close();
+
+        try (OutputStream stream = outputStream) {
+            stream.write(data);
+            stream.flush();
         } catch (IOException e) {
             throw new DarcyException("Could not take screenshot", e);
         }

@@ -2,9 +2,11 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.redhat.darcy.ui.DarcyException;
@@ -53,37 +55,35 @@ public class TakeScreenshotTest {
                 new StubWebDriverParentContext(),
                 new StubWebDriverElementContext());
 
-        byte[] data = new byte[] { 1, 2, 3 };
-
-        when(mockedDriver.getScreenshotAs(OutputType.BYTES))
-                .thenReturn(data);
         InOrder inOrder = inOrder(outputStream);
 
         browser.takeScreenshot(outputStream);
 
-        inOrder.verify(outputStream).write(data);
+        inOrder.verify(outputStream).write(any(byte[].class));
         inOrder.verify(outputStream).flush();
         inOrder.verify(outputStream).close();
     }
 
     @SuppressWarnings("unchecked")
     @Test(expected = FindableNotPresentException.class)
-    public void shouldThrowFindableNotPresentExceptionIfDriverIsNotPresent() {
-        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
-        OutputStream mockedOutputStream = mock(OutputStream.class);
-        Browser browser = new WebDriverBrowser(mockedDriver,
+    public void shouldThrowFindableNotPresentExceptionIfDriverIsNotPresent() throws IOException {
+        TargetedWebDriver driver = mock(TargetedWebDriver.class);
+        OutputStream outputStream = mock(OutputStream.class);
+        Browser browser = new WebDriverBrowser(driver,
                 new StubWebDriverParentContext(),
                 new StubWebDriverElementContext());
 
-        when(mockedDriver.getScreenshotAs(OutputType.BYTES))
+        when(driver.getScreenshotAs(OutputType.BYTES))
                 .thenThrow(NoSuchWindowException.class);
-        browser.takeScreenshot(mockedOutputStream);
+        browser.takeScreenshot(outputStream);
+
+        verify(outputStream).close();
     }
 
     @Test(expected = DarcyException.class)
     public void shouldThrowDarcyExceptionWhenAnIOExceptionOccurs() throws IOException {
-        TargetedWebDriver mockedDriver = mock(TargetedWebDriver.class);
-        Browser browser = new WebDriverBrowser(mockedDriver,
+        TargetedWebDriver driver = mock(TargetedWebDriver.class);
+        Browser browser = new WebDriverBrowser(driver,
                 new StubWebDriverParentContext(),
                 new StubWebDriverElementContext());
 
@@ -91,5 +91,7 @@ public class TakeScreenshotTest {
         doThrow(new IOException()).when(outputStream).close();
 
         browser.takeScreenshot(outputStream);
+
+        verify(outputStream).close();
     }
 }
