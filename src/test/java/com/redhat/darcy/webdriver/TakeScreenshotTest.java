@@ -65,7 +65,7 @@ public class TakeScreenshotTest {
     }
 
     @SuppressWarnings("unchecked")
-    @Test(expected = FindableNotPresentException.class)
+    @Test
     public void shouldThrowFindableNotPresentExceptionIfDriverIsNotPresent() throws IOException {
         TargetedWebDriver driver = mock(TargetedWebDriver.class);
         OutputStream outputStream = mock(OutputStream.class);
@@ -75,7 +75,11 @@ public class TakeScreenshotTest {
 
         when(driver.getScreenshotAs(OutputType.BYTES))
                 .thenThrow(NoSuchWindowException.class);
-        browser.takeScreenshot(outputStream);
+        try {
+            browser.takeScreenshot(outputStream);
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(FindableNotPresentException.class));
+        }
 
         verify(outputStream).close();
     }

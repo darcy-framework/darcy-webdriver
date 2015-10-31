@@ -180,9 +180,8 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
 
     @Override
     public void takeScreenshot(OutputStream outputStream) {
-        byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
-
         try (OutputStream stream = outputStream) {
+            byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
             stream.write(data);
             stream.flush();
         } catch (IOException e) {
