@@ -78,13 +78,14 @@ public class TakeScreenshotTest {
         try {
             browser.takeScreenshot(outputStream);
         } catch (Exception e) {
-            assertThat(e.getClass(), equalTo(FindableNotPresentException.class));
+            assertThat("Expected FindableNotPresentException to be thrown",
+                    e.getClass(), equalTo(FindableNotPresentException.class));
         }
 
         verify(outputStream).close();
     }
 
-    @Test(expected = DarcyException.class)
+    @Test
     public void shouldThrowDarcyExceptionWhenAnIOExceptionOccurs() throws IOException {
         TargetedWebDriver driver = mock(TargetedWebDriver.class);
         Browser browser = new WebDriverBrowser(driver,
@@ -94,7 +95,12 @@ public class TakeScreenshotTest {
         OutputStream outputStream = mock(OutputStream.class);
         doThrow(new IOException()).when(outputStream).close();
 
-        browser.takeScreenshot(outputStream);
+        try {
+            browser.takeScreenshot(outputStream);
+        } catch (Exception e) {
+            assertThat("Expected DarcyException to be thrown" ,
+                    e.getClass(), equalTo(DarcyException.class));
+        }
 
         verify(outputStream).close();
     }
