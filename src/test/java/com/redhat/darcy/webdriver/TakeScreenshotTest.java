@@ -2,6 +2,7 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -77,6 +78,7 @@ public class TakeScreenshotTest {
                 .thenThrow(NoSuchWindowException.class);
         try {
             browser.takeScreenshot(outputStream);
+            fail("Expected FindableNotPresentException to be thrown");
         } catch (Exception e) {
             assertThat("Expected FindableNotPresentException to be thrown",
                     e.getClass(), equalTo(FindableNotPresentException.class));
@@ -97,6 +99,7 @@ public class TakeScreenshotTest {
 
         try {
             browser.takeScreenshot(outputStream);
+            fail("Expected DarcyException to be thrown");
         } catch (Exception e) {
             assertThat("Expected DarcyException to be thrown" ,
                     e.getClass(), equalTo(DarcyException.class));
