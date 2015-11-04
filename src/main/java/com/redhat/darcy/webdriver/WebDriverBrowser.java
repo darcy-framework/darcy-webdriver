@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static com.redhat.synq.Synq.after;
 
+import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
@@ -47,7 +48,8 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -175,9 +177,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
         driver.quit();
     }
 
+
     @Override
-    public File takeScreenshot() {
-        return attemptAndGet(() -> driver.getScreenshotAs(OutputType.FILE));
+    public void takeScreenshot(OutputStream outputStream) {
+        try (OutputStream stream = outputStream) {
+            byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
+            stream.write(data);
+            stream.flush();
+        } catch (IOException e) {
+            throw new DarcyException("Could not take screenshot", e);
+        }
     }
 
     @Override
