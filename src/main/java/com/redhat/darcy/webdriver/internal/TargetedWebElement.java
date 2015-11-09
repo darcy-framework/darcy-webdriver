@@ -211,6 +211,12 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
         return targetedWebElements(((FindsByXPath) element()).findElementsByXPath(using));
     }
 
+
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
+        return element().getScreenshotAs(outputType);
+    }
+
     /**
      * @return The backing {@link org.openqa.selenium.WebElement}, with the driver switched to the
      * appropriate target.
@@ -229,10 +235,5 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
                 .stream()
                 .map(e -> new TargetedWebElement(locator, target, e))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
-        return null;
     }
 }
