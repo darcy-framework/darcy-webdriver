@@ -12,7 +12,7 @@ maven
 <dependency>
     <groupId>com.redhat.darcy</groupId>
     <artifactId>darcy-webdriver</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.3.1-SNAPSHOT</version>
 </dependency>
 ```
 

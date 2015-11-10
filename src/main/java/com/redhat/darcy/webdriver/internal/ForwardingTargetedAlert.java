@@ -62,6 +62,11 @@ public class ForwardingTargetedAlert implements TargetedAlert {
     }
 
     @Override
+    public void setCredentials(Credentials credentials) {
+        alert().setCredentials(credentials);
+    }
+
+    @Override
     public void authenticateUsing(Credentials credentials) {
         alert().authenticateUsing(credentials);
     }
