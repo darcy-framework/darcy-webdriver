@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -43,7 +42,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.internal.WrapsDriver;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,7 +56,7 @@ public class TargetedWebDriverParentContextTest {
 
     private TargetedWebDriverParentContext context =
             new TargetedWebDriverParentContext(contextTarget, mockTargetedLocator,
-                    mock(ElementConstructorMap.class));
+                    mockTargetedDriver::getWindowHandles, mock(ElementConstructorMap.class));
 
     @Before
     public void stubMocks() {
