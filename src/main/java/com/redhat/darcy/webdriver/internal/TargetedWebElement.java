@@ -25,6 +25,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.FindsByClassName;
@@ -124,6 +125,11 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
     @Override
     public Dimension getSize() {
         return element().getSize();
+    }
+
+    @Override
+    public Rectangle getRect() {
+        return element().getRect();
     }
 
     @Override
