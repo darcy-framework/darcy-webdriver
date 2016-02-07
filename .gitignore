@@ -5,3 +5,5 @@
 *.iml
 /bin/
 .idea
+*.releaseBackup
+release.properties
