@@ -52,12 +52,34 @@ public class ByPartialAttribute extends By {
       return ((FindsByXPath) context).findElementByXPath(".//*["
           + attributeContains(attribute, word) + "]");
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByPartialAttribute other = (ByPartialAttribute) obj;
+        if (attribute == null) {
+            if (other.attribute != null)
+                return false;
+        } else if (!attribute.equals(other.attribute))
+            return false;
+        if (word == null) {
+            if (other.word != null)
+                return false;
+        } else if (!word.equals(other.word))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
       return "ByPartialAttribute(\"" + attribute + "\"): " + word;

@@ -65,12 +65,34 @@ public class ByVisibleText extends By {
         
         return result;
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByVisibleText other = (ByVisibleText) obj;
+        if (byPartialVisibleText == null) {
+            if (other.byPartialVisibleText != null)
+                return false;
+        } else if (!byPartialVisibleText.equals(other.byPartialVisibleText))
+            return false;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "ByVisibleText: " + text;

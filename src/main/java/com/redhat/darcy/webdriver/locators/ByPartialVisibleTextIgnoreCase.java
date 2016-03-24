@@ -50,12 +50,29 @@ public class ByPartialVisibleTextIgnoreCase extends By {
         return ((FindsByXPath) context).findElementByXPath(".//*["
                 + textContainsIgnoringCase(text) + "]");
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByPartialVisibleTextIgnoreCase other = (ByPartialVisibleTextIgnoreCase) obj;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "ByPartialVisibleTextIgnoreCase: " + text;

@@ -75,7 +75,29 @@ public class ByAttribute extends By {
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByAttribute other = (ByAttribute) obj;
+        if (attribute == null) {
+            if (other.attribute != null)
+                return false;
+        } else if (!attribute.equals(other.attribute))
+            return false;
+        if (word == null) {
+            if (other.word != null)
+                return false;
+        } else if (!word.equals(other.word))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
       return "ByAttribute(\"" + attribute + "\"): " + word;

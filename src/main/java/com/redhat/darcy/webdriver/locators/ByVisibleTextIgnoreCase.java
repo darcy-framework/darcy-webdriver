@@ -67,12 +67,35 @@ public class ByVisibleTextIgnoreCase extends By {
         
         return result;
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByVisibleTextIgnoreCase other = (ByVisibleTextIgnoreCase) obj;
+        if (byPartialVisibleTextIgnoreCase == null) {
+            if (other.byPartialVisibleTextIgnoreCase != null)
+                return false;
+        } else if (!byPartialVisibleTextIgnoreCase
+                .equals(other.byPartialVisibleTextIgnoreCase))
+            return false;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "ByVisibleTextIgnoreCase: " + text;
