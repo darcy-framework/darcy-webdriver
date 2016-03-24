@@ -131,7 +131,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
                     + "available frames.");
         }
 
-        return (List<T>) new LazyList<Browser>(new FoundByViewSupplier(view));
+        return (List<T>) new LazyList<>(new FoundByViewSupplier(view));
     }
 
     @SuppressWarnings("unchecked")
@@ -161,7 +161,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
                     + "available frames.");
         }
 
-        return (List<T>) new LazyList<Browser>(new FoundByTitleSupplier(title));
+        return (List<T>) new LazyList<>(new FoundByTitleSupplier(title));
     }
 
     @SuppressWarnings("unchecked")
@@ -190,7 +190,7 @@ public class TargetedWebDriverParentContext implements WebDriverParentContext {
                     + "available frames.");
         }
 
-        return (List<T>) new LazyList<Browser>(new FoundByUrlSupplier(urlMatcher));
+        return (List<T>) new LazyList<>(new FoundByUrlSupplier(urlMatcher));
     }
 
     @Override
