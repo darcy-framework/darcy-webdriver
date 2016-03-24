@@ -35,12 +35,12 @@ import java.util.List;
 public class ByPartialVisibleText extends By {
     private final String text;
     
-    public static By ignoringCase(String text) {
-        return new ByPartialVisibleTextIgnoreCase(text);
-    }
-    
     public ByPartialVisibleText(String text) {
         this.text = text;
+    }
+    
+    public static By ignoringCase(String text) {
+        return new ByPartialVisibleTextIgnoreCase(text);
     }
 
     @Override

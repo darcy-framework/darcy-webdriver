@@ -37,14 +37,6 @@ public enum Browsers implements BrowserType {
     OPERA(DesiredCapabilities.opera(), new OperaBrowserFactory()),
     SAFARI(DesiredCapabilities.safari(), new SafariBrowserFactory());
 
-    /**
-     * Picks a browser type based off of the "darcy.browser" environment variable. Case-insensitive.
-     * Defaults to Firefox.
-     */
-    public static Browsers getBrowserFromEnv() {
-        return valueOf(System.getProperty("darcy.browser", "firefox").toUpperCase());
-    }
-
     private final DesiredCapabilities caps;
     private final BrowserFactory factory;
 
@@ -61,5 +53,13 @@ public enum Browsers implements BrowserType {
     @Override
     public BrowserFactory asBrowserFactory() {
         return factory;
+    }
+    
+    /**
+     * Picks a browser type based off of the "darcy.browser" environment variable. Case-insensitive.
+     * Defaults to Firefox.
+     */
+    public static Browsers getBrowserFromEnv() {
+        return valueOf(System.getProperty("darcy.browser", "firefox").toUpperCase());
     }
 }
