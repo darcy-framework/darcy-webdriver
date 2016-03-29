@@ -71,7 +71,7 @@ public class ByChained extends By {
             }
         }
 
-        return found.stream()
+        return found == null ? null : found.stream()
                 .map(WebDriverElement::getWrappedElement)
                 .collect(Collectors.toList());
     }

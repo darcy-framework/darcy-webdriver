@@ -48,7 +48,7 @@ public class ByVisibleText extends By {
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        List<WebElement> result = new ArrayList<WebElement>();
+        List<WebElement> result = new ArrayList<>();
         
         // First find any elements that *contain* this text.
         List<WebElement> elems = byPartialVisibleText.findElements(context);
