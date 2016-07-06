@@ -71,7 +71,7 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
         try {
             driver().getTitle();
             return true;
-        } catch (NotFoundException | SessionNotFoundException e) {
+        } catch (NotFoundException e) {
             return false;
         }
     }
