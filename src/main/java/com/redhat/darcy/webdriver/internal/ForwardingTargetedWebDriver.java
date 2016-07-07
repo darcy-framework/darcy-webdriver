@@ -35,7 +35,6 @@ import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 import org.openqa.selenium.internal.WrapsDriver;
-import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +70,7 @@ public class ForwardingTargetedWebDriver implements TargetedWebDriver, FindsByCl
         try {
             driver().getTitle();
             return true;
-        } catch (NotFoundException | SessionNotFoundException e) {
+        } catch (NotFoundException e) {
             return false;
         }
     }
