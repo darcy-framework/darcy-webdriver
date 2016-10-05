@@ -37,15 +37,15 @@ public class ByVisibleText extends By {
     protected final String text;
     private final ByPartialVisibleText byPartialVisibleText;
     
-    public static By ignoringCase(String text) {
-        return new ByVisibleTextIgnoreCase(text);
-    }
-    
     public ByVisibleText(String text) {
         this.text = text.trim();
         this.byPartialVisibleText = new ByPartialVisibleText(text);
     }
-
+    
+    public static By ignoringCase(String text) {
+        return new ByVisibleTextIgnoreCase(text);
+    }
+    
     @Override
     public List<WebElement> findElements(SearchContext context) {
         List<WebElement> result = new ArrayList<>();

@@ -36,6 +36,11 @@ public class ByAttribute extends By {
     protected final String attribute;
     protected final String word;
     
+    public ByAttribute(String attribute, String word) {
+        this.attribute = attribute;
+        this.word = word;
+    }
+    
     /**
      * Returns instance of ByAttribute that will search under the "value" 
      * attribute.
@@ -52,11 +57,6 @@ public class ByAttribute extends By {
     
     public static By labelFor(String what) {
         return new ByAttribute("for", what);
-    }
-    
-    public ByAttribute(String attribute, String word) {
-        this.attribute = attribute;
-        this.word = word;
     }
     
     @Override
