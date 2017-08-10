@@ -44,9 +44,9 @@ import com.redhat.synq.Event;
 
 import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.remote.SessionNotFoundException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -365,7 +365,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private void attempt(Runnable action) {
         try {
             action.run();
-        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | NoSuchSessionException e) {
             throw new FindableNotPresentException(this, e);
         }
     }
@@ -377,7 +377,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private <T> T attemptAndGet(Supplier<T> action) {
         try {
             return action.get();
-        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | NoSuchSessionException e) {
             throw new FindableNotPresentException(this, e);
         }
     }
