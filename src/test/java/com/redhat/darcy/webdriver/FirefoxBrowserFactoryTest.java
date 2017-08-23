@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
@@ -37,6 +38,7 @@ public class FirefoxBrowserFactoryTest {
     @Before
     public void checkForDriver() {
         assumeTrue(System.getProperty("java.class.path").contains("firefox-driver"));
+        assumeNotNull(System.getProperty("webdriver.gecko.driver"));
     }
 
     @After
