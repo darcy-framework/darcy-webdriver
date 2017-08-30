@@ -54,12 +54,29 @@ public class ByPartialVisibleText extends By {
         return ((FindsByXPath) context).findElementByXPath(".//*["
                 + textContains(text) + "]");
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ByPartialVisibleText other = (ByPartialVisibleText) obj;
+        if (text == null) {
+            if (other.text != null)
+                return false;
+        } else if (!text.equals(other.text))
+            return false;
+        return true;
+    }
+
     @Override
     public String toString() {
         return "ByPartialVisibleText: " + text;
