@@ -23,7 +23,10 @@ import static org.openqa.selenium.WebDriver.TargetLocator;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.FindsByClassName;
 import org.openqa.selenium.internal.FindsByCssSelector;
@@ -125,6 +128,11 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
     }
 
     @Override
+    public Rectangle getRect() {
+        return element().getRect();
+    }
+
+    @Override
     public String getCssValue(String propertyName) {
         return element().getCssValue(propertyName);
     }
@@ -207,6 +215,12 @@ public class TargetedWebElement implements WebElement, FindsByClassName,
     @Override
     public List<WebElement> findElementsByXPath(String using) {
         return targetedWebElements(((FindsByXPath) element()).findElementsByXPath(using));
+    }
+
+
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> outputType) throws WebDriverException {
+        return element().getScreenshotAs(outputType);
     }
 
     /**

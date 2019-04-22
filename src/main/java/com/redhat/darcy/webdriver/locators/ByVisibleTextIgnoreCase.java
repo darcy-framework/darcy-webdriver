@@ -45,7 +45,7 @@ public class ByVisibleTextIgnoreCase extends By {
 
     @Override
     public List<WebElement> findElements(SearchContext context) {
-        List<WebElement> result = new ArrayList<WebElement>();
+        List<WebElement> result = new ArrayList<>();
         
         // First find any elements that *contain* this text.
         List<WebElement> elems = byPartialVisibleTextIgnoreCase.findElements(context);
@@ -60,7 +60,7 @@ public class ByVisibleTextIgnoreCase extends By {
             }
         }
         
-        if (result.size() == 0) {
+        if (result.isEmpty()) {
             throw new NoSuchElementException("Cannot locate an element using "
                     + toString());
         }

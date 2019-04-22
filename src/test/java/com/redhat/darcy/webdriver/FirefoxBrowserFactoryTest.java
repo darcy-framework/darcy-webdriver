@@ -21,26 +21,38 @@ package com.redhat.darcy.webdriver;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 
 import com.redhat.darcy.webdriver.internal.CachingTargetLocator;
 import com.redhat.darcy.webdriver.internal.ForwardingTargetedWebDriver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class FirefoxBrowserFactoryTest {
+    WebDriverBrowser browser;
+
     @Before
     public void checkForDriver() {
         assumeTrue(System.getProperty("java.class.path").contains("firefox-driver"));
+        assumeNotNull(System.getProperty("webdriver.gecko.driver"));
+    }
+
+    @After
+    public void closeBrowser() {
+        if (browser != null) {
+            browser.close();
+        }
     }
 
     @Test
     public void shouldBeInstanceOfUntargetedFirefoxDriver() {
         WebDriverBrowserFactory browserFactory = new FirefoxBrowserFactory();
 
-        WebDriverBrowser browser = (WebDriverBrowser) browserFactory.newBrowser();
+        browser = (WebDriverBrowser) browserFactory.newBrowser();
         ForwardingTargetedWebDriver webDriver = (ForwardingTargetedWebDriver) browser.getWrappedDriver();
         CachingTargetLocator targetLocator = (CachingTargetLocator) webDriver.getTargetLocator();
 

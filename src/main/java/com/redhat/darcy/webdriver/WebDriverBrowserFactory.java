@@ -55,7 +55,7 @@ public abstract class WebDriverBrowserFactory<T extends WebDriverBrowserFactory<
 
         CachingTargetLocator cachingLocator = new CachingTargetLocator(target, driver);
         WebDriverParentContext context = new TargetedWebDriverParentContext(target, cachingLocator,
-                elementMap);
+                driver::getWindowHandles, elementMap);
 
         return context.findById(Browser.class, currentWindowHandle);
     }

@@ -21,6 +21,7 @@ package com.redhat.darcy.webdriver;
 
 import static com.redhat.synq.Synq.after;
 
+import com.redhat.darcy.ui.DarcyException;
 import com.redhat.darcy.ui.FindableNotPresentException;
 import com.redhat.darcy.ui.api.Locator;
 import com.redhat.darcy.ui.api.Transition;
@@ -41,10 +42,14 @@ import com.redhat.darcy.webdriver.internal.WebDriverWebSelection;
 import com.redhat.darcy.webdriver.internal.WrapsTargetedDriver;
 import com.redhat.synq.Event;
 
+import org.hamcrest.Matcher;
 import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.remote.SessionNotFoundException;
+import org.openqa.selenium.OutputType;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -170,6 +175,18 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     public void closeAll() {
         // TODO: Any harm in calling this with no windows open?
         driver.quit();
+    }
+
+
+    @Override
+    public void takeScreenshot(OutputStream outputStream) {
+        try (OutputStream stream = outputStream) {
+            byte[] data = attemptAndGet(() -> driver.getScreenshotAs(OutputType.BYTES));
+            stream.write(data);
+            stream.flush();
+        } catch (IOException e) {
+            throw new DarcyException("Could not take screenshot", e);
+        }
     }
 
     @Override
@@ -328,6 +345,16 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     }
 
     @Override
+    public <T> List<T> findAllByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        return attemptAndGet(() -> webContext.findAllByUrl(type, urlMatcher));
+    }
+
+    @Override
+    public <T> T findByUrl(Class<T> type, Matcher<? super String> urlMatcher) {
+        return attemptAndGet(() -> webContext.findByUrl(type, urlMatcher));
+    }
+
+    @Override
     public TargetedWebDriver getWrappedDriver() {
         return driver;
     }
@@ -338,7 +365,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private void attempt(Runnable action) {
         try {
             action.run();
-        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | NoSuchSessionException e) {
             throw new FindableNotPresentException(this, e);
         }
     }
@@ -350,7 +377,7 @@ public class WebDriverBrowser implements Browser, Frame, WebDriverWebContext, Wr
     private <T> T attemptAndGet(Supplier<T> action) {
         try {
             return action.get();
-        } catch (NoSuchFrameException | NoSuchWindowException | SessionNotFoundException e) {
+        } catch (NoSuchFrameException | NoSuchWindowException | NoSuchSessionException e) {
             throw new FindableNotPresentException(this, e);
         }
     }

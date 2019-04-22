@@ -20,6 +20,7 @@
 package com.redhat.darcy.webdriver.internal;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,23 +32,22 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriver.TargetLocator;
 
 import java.util.HashSet;
 
 @RunWith(JUnit4.class)
-public class WindowTitleWebDriverTargetTest {
+public class WindowUrlWebDriverTargetTest {
     private final WebDriver driver = mock(WebDriver.class);
     private final WebDriver fooWindow = mock(WebDriver.class);
     private final WebDriver barWindow = mock(WebDriver.class);
-    private final TargetLocator locator = mock(TargetLocator.class);
+    private final WebDriver.TargetLocator locator = mock(WebDriver.TargetLocator.class);
 
     @Before
     public void stubMocks() {
         when(driver.getWindowHandles()).thenReturn(new HashSet<>(asList("fooWindow", "barWindow")));
 
-        when(fooWindow.getTitle()).thenReturn("foo");
-        when(barWindow.getTitle()).thenReturn("bar");
+        when(fooWindow.getCurrentUrl()).thenReturn("foo");
+        when(barWindow.getCurrentUrl()).thenReturn("bar");
 
         when(locator.defaultContent()).thenReturn(driver);
         when(locator.window("fooWindow")).thenReturn(fooWindow);
@@ -55,29 +55,29 @@ public class WindowTitleWebDriverTargetTest {
     }
 
     @Test
-    public void shouldTargetAWindowWhichExactlyMatchesTitle() {
-        WebDriverTarget target = WebDriverTargets.windowByTitle("foo");
+    public void shouldTargetAWindowWhichMatchesTheUrlMatcher() {
+        WebDriverTarget target = WebDriverTargets.windowByUrl(equalTo("foo"));
         WebDriver found = target.switchTo(locator);
 
-        assertThat(found.getTitle(), is("foo"));
+        assertThat(found.getCurrentUrl(), is("foo"));
     }
 
     @Test
-    public void shouldKeepFindingTheSameWindowEvenIfItsTitleLaterChanges() {
-        WebDriverTarget target = WebDriverTargets.windowByTitle("foo");
+    public void shouldKeepFindingTheSameWindowEvenIfItsUrlLaterDoesNotMatch() {
+        WebDriverTarget target = WebDriverTargets.windowByUrl(equalTo("foo"));
 
         WebDriver found = target.switchTo(locator);
-        assertThat(found.getTitle(), is("foo"));
+        assertThat(found.getCurrentUrl(), is("foo"));
 
-        when(fooWindow.getTitle()).thenReturn("no longer foo");
+        when(fooWindow.getCurrentUrl()).thenReturn("no longer foo");
 
         WebDriver foundAgain = target.switchTo(locator);
-        assertThat(foundAgain.getTitle(), is("no longer foo"));
+        assertThat(foundAgain.getCurrentUrl(), is("no longer foo"));
     }
 
     @Test(expected = NoSuchWindowException.class)
-    public void shouldThrowNoSuchWindowExceptionIfNoWindowsCanBeFoundWithTitle() {
-        WebDriverTarget target = WebDriverTargets.windowByTitle("awesome window");
+    public void shouldThrowNoSuchWindowExceptionIfNoWindowsCanBeFoundMatchingTheUrlMatcher() {
+        WebDriverTarget target = WebDriverTargets.windowByUrl(equalTo("awesome window"));
 
         target.switchTo(locator);
     }
